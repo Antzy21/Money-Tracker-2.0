@@ -9,5 +9,11 @@ namespace MoneyTracker.Data
             : base(options)
         {
         }
+
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Reference> References { get; set; }
+        public DbSet<ContactGroup> ContactGroups { get; set; }
+        public DbSet<ReferenceGroup> ReferenceGroups { get; set; }
     }
 }
