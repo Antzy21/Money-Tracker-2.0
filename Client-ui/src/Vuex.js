@@ -101,6 +101,11 @@ const store = new Vuex.Store({
         const updatedTransaction = { ...this.transaction, 'reference': reference };
         this.updateTransaction(updatedTransaction);
       });
+    },
+    uploadCsv(store, file) {
+      postCsv(file).then(() => {
+        console.log('posted csv')
+      });
     }
   },
 })
