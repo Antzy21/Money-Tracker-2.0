@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Money_Tracker_2._0.Controllers
 {
@@ -17,6 +18,13 @@ namespace Money_Tracker_2._0.Controllers
         [HttpGet]
         public bool Get()
         {
+            return true;
+        }
+
+        [HttpPost]
+        public bool Post(object o)
+        {
+            Console.WriteLine("HttpPost success");
             return true;
         }
     }
