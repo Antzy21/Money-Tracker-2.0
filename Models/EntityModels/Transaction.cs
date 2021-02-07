@@ -8,13 +8,8 @@ namespace MoneyTracker.Models
     {
         [Key]
         public int Id { get; set; }
-        public int Number { get; set; }
         public DateTime Date { get; set; }
-        public int SortCode { get; set; }
-        public int Account { get; set; }
         public float Amount { get; set; }
-        public string Subcategory { get; set; }
-        public string TransactionType { get; set; }
 
         public int ContactId { get; set; }
         [ForeignKey("ContactId")]
