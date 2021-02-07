@@ -22,10 +22,8 @@ export default {
         ...mapActions(['uploadCsv']),
         onFileChange(e) {
             var files = e.target.files || e.dataTransfer.files;
-            console.log(files)
             if (!files.length)
                 return;
-            console.log(files[0].name)
             if (!files[0].name.includes(".csv")) {
                 this.errorMessage = "Please enter CSV file"
                 return;
@@ -33,7 +31,6 @@ export default {
             else {
                 this.errorMessage = ""
             }
-
             this.uploadCsv(files[0]);
         },
     },

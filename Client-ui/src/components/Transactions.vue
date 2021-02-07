@@ -4,7 +4,7 @@
     <Uncatagorised :transactions="uncategorisedTransactions"/>
     <Contacts />
     <References />
-    <!-- <UploadCsv /> -->
+    <UploadCsv />
   </div>
 </template>
 
@@ -13,7 +13,7 @@ import { mapState } from 'vuex'
 import Uncatagorised from './Uncatagorised.vue'
 import Contacts from './Contacts.vue'
 import References from './References.vue'
-//import UploadCsv from './UploadCsv.vue'
+import UploadCsv from './UploadCsv.vue'
 
 export default {
   name: 'Transactions',
@@ -21,7 +21,7 @@ export default {
     Uncatagorised,
     Contacts,
     References,
-    //UploadCsv,
+    UploadCsv,
   },
   computed: {
     ...mapState(['transactions', 'contacts', 'references']),
