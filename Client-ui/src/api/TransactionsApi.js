@@ -1,38 +1,37 @@
-const path = `http://localhost:${port}/api`
 
 import {
     get,
     put,
     post,
-    port
+    postFile,
 } from './ApiBase.js'
 
 function getTransactions() {
-    return get(`${path}/Transactions`)
+    return get('Transactions')
 }
 
 function getTransaction(id) {
-    return get(`${path}/Transactions/${id}`)
+    return get(`Transactions/${id}`)
 }
 
 function putTransaction(id, data) {
-    return put(`${path}/Transactions/${id}`, data)
+    return put(`Transactions/${id}`, data)
 }
 
 function getContacts() {
-    return get(`${path}/Contacts`);
+    return get('Contacts');
 }
 
 function postContact(data) {
-    return post(`${path}/Contacts`, data);
+    return post('Contacts', data);
 }
 
 function getReferences() {
-    return get(`${path}/References`);
+    return get('References');
 }
 
 function postReference(data) {
-    return post(`${path}/References`, data);
+    return post('References', data);
 }
 
 export {

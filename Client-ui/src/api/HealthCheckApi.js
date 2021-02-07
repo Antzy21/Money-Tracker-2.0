@@ -1,18 +1,14 @@
-const path = `https://localhost:${port}`
-
-
 import {
     get,
     post,
-    port
 } from './ApiBase.js'
 
 function healthcheck() {
-    return get(`${path}/healthcheck`)
+    return get('healthcheck');
 }
 
 function posthealthcheck(file) {
-    return post(`${path}/healthcheck`, file)
+    return post('healthcheck', file);
 }
 
 export {

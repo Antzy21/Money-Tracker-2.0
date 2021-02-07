@@ -35,26 +35,26 @@ function apifetchWithBody(url, method, data) {
 }
 
 function get(url) {
-    return apifetch(url, 'get')
+    return apifetch(`${path}/${url}`, 'get')
 }
 
 function post(url, data) {
     console.log('post data')
     console.log(data)
-    return apifetchWithBody(url, 'post', data)
+    return apifetchWithBody(`${path}/${url}`, 'post', data)
 }
 
 function put(url, data) {
     console.log('put data')
     console.log(data)
-    return apifetchWithBody(url, 'put', data)
+    return apifetchWithBody(`${path}/${url}`, 'put', data)
 }
 
 const port = '5001'
+const path = `https://localhost:${port}`
 
 export {
     get,
     post,
     put,
-    port,
 }
