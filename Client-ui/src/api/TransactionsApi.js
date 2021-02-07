@@ -34,6 +34,10 @@ function postReference(data) {
     return post('References', data);
 }
 
+function postCsv(file) {
+    return postFile('Upload', file)
+}
+
 export {
     getTransaction,
     getTransactions,
@@ -42,4 +46,5 @@ export {
     postContact,
     getReferences,
     postReference,
+    postCsv,
 }
