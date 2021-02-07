@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MoneyTracker.Data;
+using MoneyTracker.Services;
 
 namespace Money_Tracker_2._0
 {
@@ -22,6 +23,8 @@ namespace Money_Tracker_2._0
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<TransactionImportService>();
 
             services.AddDbContext<BankContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BankContext")));
 
