@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MoneyTracker.Services;
 
-namespace Money_Tracker_2._0.Controllers
+namespace MoneyTracker2.Controllers
 {
     [Route("[controller]")]
     [ApiController]

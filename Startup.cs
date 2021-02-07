@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using MoneyTracker.Data;
 using MoneyTracker.Services;
 
-namespace Money_Tracker_2._0
+namespace MoneyTracker2
 {
     public class Startup
     {
