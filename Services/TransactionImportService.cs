@@ -17,7 +17,7 @@ namespace MoneyTracker.Services
             _context = context;
         }
 
-        public void ImportTransactionsFromFile(IFormFile file)
+        public IList<Transaction> ImportTransactionsFromFile(IFormFile file)
         {
             var csvTransactions = _csvService.ReadCsvTo<CsvTransaction>(file);
 
@@ -47,6 +47,10 @@ namespace MoneyTracker.Services
             _context.Transactions.AddRange(newTransactions);
 
             _context.SaveChanges();
+
+            var newTransactionIds = newTransactions.Select(nt => nt.Id).ToList();
+
+            return _context.Transactions.Where(t => newTransactionIds.Contains(t.Id)).ToList();
         }
 
         private void CheckForExistingContacts(List<Transaction> newTransactions)

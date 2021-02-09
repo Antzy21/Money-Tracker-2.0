@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoneyTracker.Services;
+using System.Linq;
 
 namespace MoneyTracker2.Controllers
 {
@@ -23,9 +24,9 @@ namespace MoneyTracker2.Controllers
                 return new JsonResult("Failed");
             }
 
-            _transactionImportService.ImportTransactionsFromFile(file);
+            var newlyAddedTransactions = _transactionImportService.ImportTransactionsFromFile(file).ToList();
 
-            return new JsonResult("ImportSuccess!");
+            return new JsonResult(newlyAddedTransactions);
         }
     }
 }

@@ -6,6 +6,9 @@
         <div v-if="errorMessage">
             {{errorMessage}}
         </div>
+        <div v-if="newlyAddedCount > 0">
+            {{newlyAddedCount}} Newly Added Transaction
+        </div>
     </div>
 </template>
 
@@ -15,12 +18,14 @@ export default {
     name: 'UploadCsv',
     data() {
         return {
-            errorMessage: ""
+            errorMessage: "",
+            newlyAddedCount: 0,
         }
     },
     methods: {
         ...mapActions(['uploadCsv']),
         onFileChange(e) {
+            this.newlyAddedCount = 0
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length)
                 return;
@@ -31,7 +36,10 @@ export default {
             else {
                 this.errorMessage = ""
             }
-            this.uploadCsv(files[0]);
+            this.uploadCsv(files[0]).then((newlyAddedCount) => {
+                console.log(newlyAddedCount);
+                this.newlyAddedCount = newlyAddedCount;
+            });
         },
     },
 }
