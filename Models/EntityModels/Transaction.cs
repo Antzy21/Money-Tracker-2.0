@@ -10,11 +10,13 @@ namespace MoneyTracker.Models
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public float Amount { get; set; }
+        public string RecordedContact { get; set; }
+        public string RecordedReference { get; set; }
 
-        public int ContactId { get; set; }
+        public int? ContactId { get; set; }
         [ForeignKey("ContactId")]
         public Contact Contact { get; set; }
-        public int ReferenceId { get; set; }
+        public int? ReferenceId { get; set; }
         [ForeignKey("ReferenceId")]
         public Reference Reference { get; set; }
     }
