@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace MoneyTracker.Services
 {
@@ -54,11 +55,25 @@ namespace MoneyTracker.Services
 
             foreach (var property in properties)
             {
-                var entry = row[property.Name];
-                property.SetValue(obj, entry);
+                string value = row[property.Name];
+                AssignProperty(obj, property, value);
             }
 
             return obj;
+        }
+
+        private static void AssignProperty<T>(T obj, PropertyInfo property, string value) where T : new()
+        {
+            if (property.PropertyType == typeof(float))
+            {
+                float entry = float.Parse(value);
+                property.SetValue(obj, entry);
+            }
+            else
+            {
+                var entry = value;
+                property.SetValue(obj, entry);
+            }
         }
     }
 }
