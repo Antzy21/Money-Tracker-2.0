@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -67,6 +68,11 @@ namespace MoneyTracker.Services
             if (property.PropertyType == typeof(float))
             {
                 float entry = float.Parse(value);
+                property.SetValue(obj, entry);
+            }
+            else if (property.PropertyType == typeof(DateTime))
+            {
+                DateTime entry = DateTime.Parse(value);
                 property.SetValue(obj, entry);
             }
             else
