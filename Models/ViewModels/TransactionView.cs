@@ -9,10 +9,21 @@ namespace MoneyTracker.Models
             Id = transaction.Id;
             Date = transaction.Date;
             Amount = transaction.Amount;
+
+            RecordedContact = transaction.RecordedContact;
+            RecordedReference = transaction.RecordedReference;
+
+            Contact = new ContactView(transaction.Contact);
+            Reference = new ReferenceView(transaction.Reference);
         }
 
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public float Amount { get; set; }
+        public string RecordedContact { get; set; }
+        public string RecordedReference { get; set; }
+
+        public ContactView Contact { get; set; }
+        public ReferenceView Reference { get; set; }
     }
 }
