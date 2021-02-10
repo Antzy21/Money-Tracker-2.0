@@ -11,7 +11,7 @@ namespace MoneyTracker.Models
         public string Name { get; set; }
         public string Colour { get; set; }
 
-        public int ReferenceGroupId { get; set; }
+        public int? ReferenceGroupId { get; set; }
         [ForeignKey("ReferenceGroupId")]
         public ReferenceGroup ReferenceGroup { get; set; }
         public List<Transaction> Transactions { get; set; }
