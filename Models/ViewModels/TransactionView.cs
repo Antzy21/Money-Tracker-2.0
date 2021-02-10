@@ -13,8 +13,14 @@ namespace MoneyTracker.Models
             RecordedContact = transaction.RecordedContact;
             RecordedReference = transaction.RecordedReference;
 
-            Contact = new ContactView(transaction.Contact);
-            Reference = new ReferenceView(transaction.Reference);
+            if (transaction.Contact != null)
+            {
+                Contact = new ContactView(transaction.Contact);
+            }
+            if (transaction.Reference != null)
+            {
+                Reference = new ReferenceView(transaction.Reference);
+            }
         }
 
         public int Id { get; set; }
