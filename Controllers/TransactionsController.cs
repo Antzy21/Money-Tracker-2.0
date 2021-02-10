@@ -53,16 +53,19 @@ namespace MoneyTracker.Controllers
                 return BadRequest();
             }
 
-            var t = _context.Transactions
-                .Include(t => t.Contact)
-                .Include(t => t.Reference)
+            var transactionEntity = _context.Transactions
                 .FirstOrDefault(t => t.Id == id);
-            t = transaction;
-            t.Reference = transaction.Reference;
-            t.Contact = transaction.Contact;
 
-            _context.Entry(transaction).State = EntityState.Modified;
+            transactionEntity.Amount = transaction.Amount;
+            transactionEntity.Date = transaction.Date;
 
+            transactionEntity.RecordedReference = transaction.RecordedReference;
+            transactionEntity.RecordedContact = transaction.RecordedContact;
+
+            transactionEntity.Reference = transaction.Reference;
+            transactionEntity.Contact = transaction.Contact;
+
+            _context.Entry(transactionEntity).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
