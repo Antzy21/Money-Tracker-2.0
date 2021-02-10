@@ -20,25 +20,29 @@ namespace MoneyTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Transaction>>> Get()
+        public async Task<ActionResult<IEnumerable<TransactionView>>> Get()
         {
             return await _context.Transactions
                 .Include(t => t.Contact)
                 .Include(t => t.Reference)
+                .Select(t => new TransactionView(t))
                 .ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Transaction>> GetTransaction(int id)
+        public async Task<ActionResult<TransactionView>> GetTransaction(int id)
         {
-            var transaction = await _context.Transactions.FindAsync(id);
+            var transaction = await _context.Transactions
+                .Include(t => t.Contact)
+                .Include(t => t.Reference)
+                .SingleOrDefaultAsync(t => t.Id == id);
 
             if (transaction == null)
             {
                 return NotFound();
             }
 
-            return transaction;
+            return new TransactionView(transaction);
         }
 
         [HttpPut("{id}")]
@@ -75,7 +79,7 @@ namespace MoneyTracker.Controllers
                 }
             }
 
-            return await _context.Transactions.FindAsync(id);
+            return new JsonResult(new TransactionView(transactionEntity));
         }
 
         private bool TransactionExists(int id)

@@ -21,14 +21,15 @@ namespace MoneyTracker.Controllers
 
         // GET: api/References
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reference>>> GetReferences()
+        public async Task<ActionResult<IEnumerable<ReferenceView>>> GetReferences()
         {
-            return await _context.References.ToListAsync();
+            return await _context.References.Include(r => r.Transactions)
+                .Select(r => new ReferenceView(r)).ToListAsync();
         }
 
         // GET: api/References/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Reference>> GetReference(int id)
+        public async Task<ActionResult<ReferenceView>> GetReference(int id)
         {
             var reference = await _context.References.FindAsync(id);
 
@@ -37,7 +38,7 @@ namespace MoneyTracker.Controllers
                 return NotFound();
             }
 
-            return reference;
+            return new ReferenceView(reference);
         }
 
         // PUT: api/References/5

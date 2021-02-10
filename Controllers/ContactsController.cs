@@ -21,14 +21,15 @@ namespace MoneyTracker.Controllers
 
         // GET: api/Contacts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
+        public async Task<ActionResult<IEnumerable<ContactView>>> GetContacts()
         {
-            return await _context.Contacts.Include(c => c.Transactions).ToListAsync();
+            return await _context.Contacts.Include(c => c.Transactions)
+                .Select(c => new ContactView(c)).ToListAsync();
         }
 
         // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contact>> GetContact(int id)
+        public async Task<ActionResult<ContactView>> GetContact(int id)
         {
             var contact = await _context.Contacts.FindAsync(id);
 
@@ -37,7 +38,7 @@ namespace MoneyTracker.Controllers
                 return NotFound();
             }
 
-            return contact;
+            return new ContactView(contact);
         }
 
         // PUT: api/Contacts/5
