@@ -37,7 +37,6 @@ export default {
                 this.errorMessage = ""
             }
             this.uploadCsv(files[0]).then((newlyAddedCount) => {
-                console.log(newlyAddedCount);
                 this.newlyAddedCount = newlyAddedCount;
             });
         },

@@ -65,17 +65,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['linkReferenceToTransaction']),
+    ...mapActions(['linkReferenceToTransaction', 'updateTransaction']),
     selectContact() {
       this.showContactChoices = !this.showContactChoices && this.transaction.contact == null
     },
     onChangeContact(event) {
       const value = event.target.value;
-      console.log(value)
       if (value) {
         const contact = this.contacts.find(o => o.id == value);
         const updatedTransaction = { ...this.transaction, 'contact': contact };
-        updatedTransaction.Amount = 10001;
         this.updateTransaction(updatedTransaction);
       }
       this.selectContact();
@@ -85,7 +83,6 @@ export default {
     },
     onChangeReference(event) {
       const value = event.target.value;
-      console.log(value)
       if (value) {
         const reference = this.references.find(o => o.id == value);
         reference.transactions.push(this.transaction)

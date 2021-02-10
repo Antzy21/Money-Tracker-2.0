@@ -63,6 +63,7 @@ const store = new Vuex.Store({
     },
     updateTransaction(store, transaction) {
       putTransaction(transaction.id, transaction).then(data => {
+        console.log('returned value', data);
         store.commit('setTransaction', data);
       }).catch((error) => {
         console.log('caught error')
@@ -88,11 +89,17 @@ const store = new Vuex.Store({
     addContact(store, newContact) {
       postContact(newContact).then(data => {
         store.commit('setContact', data);
+      }).catch(error => {
+        console.log('caught error')
+        return error;
       });
     },
     addReference(store, newReference) {
       postReference(newReference).then(data => {
         store.commit('setReference', data);
+      }).catch(error => {
+        console.log('caught error')
+        return error;
       });      
     },
     linkReferenceToTransaction(store, reference, transaction) {
@@ -100,11 +107,20 @@ const store = new Vuex.Store({
       this.updateReference(reference).then(()=>{
         const updatedTransaction = { ...this.transaction, 'reference': reference };
         this.updateTransaction(updatedTransaction);
+      }).catch(error => {
+        console.log('caught error')
+        return error;
       });
     },
     uploadCsv(store, file) {
-      postCsv(file).then(() => {
-        console.log('posted csv')
+      return postCsv(file).then((newlyAddedTransactions) => {
+        newlyAddedTransactions.forEach(newlyAddedTransaction => {
+          store.commit('setTransaction', newlyAddedTransaction);
+        });
+        return newlyAddedTransactions.length;
+      }).catch(error => {
+        console.log('caught error')
+        return error;
       });
     }
   },

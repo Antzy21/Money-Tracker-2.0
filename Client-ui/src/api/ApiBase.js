@@ -58,20 +58,17 @@ function get(url) {
 }
 
 function post(url, data) {
-    console.log('post data')
-    console.log(data)
+    console.log('post data', data)
     return apifetchWithBody(`${path}/${url}`, 'post', data)
 }
 
 function postFile(url, file) {
-    console.log('post file')
-    console.log(file)
+    console.log('post file', file)
     return apifetchWithFile(`${path}/${url}`, 'post', file)
 }
 
 function put(url, data) {
-    console.log('put data')
-    console.log(data)
+    console.log('put data', data)
     return apifetchWithBody(`${path}/${url}`, 'put', data)
 }
 
