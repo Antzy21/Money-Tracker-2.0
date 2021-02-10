@@ -8,7 +8,7 @@
       </th>
       <th v-else>
         <select :name="'Contact'" @change="onChangeContact($event)">
-          <option value="">{{transaction.contactStr}}</option>
+          <option value="">{{transaction.recordedContact}}</option>
           <option v-for="contact in contacts"
             :key="contact.id"
             :value="contact.id">
@@ -23,7 +23,7 @@
       </th>
       <th v-else>
         <select :name="'Reference'" @change="onChangeReference($event)">
-          <option value="">{{transaction.referenceStr}}</option>
+          <option value="">{{transaction.recordedReference}}</option>
           <option v-for="reference in references"
             :key="reference.id"
             :value="reference.id">
@@ -49,13 +49,13 @@ export default {
       if (this.transaction.contact) {
         return this.transaction.contact.name;
       }
-      return this.transaction.contactStr;
+      return this.transaction.recordedContact;
     },
     ReferenceName() {
       if (this.transaction.reference) {
         return this.transaction.reference.name;
       }
-      return this.transaction.referenceStr;
+      return this.transaction.recordedReference;
     },
   },
   data() {
