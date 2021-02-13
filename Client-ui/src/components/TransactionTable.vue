@@ -22,7 +22,10 @@ export default {
     TransactionRow,
   },
   props: {
-    transactions: Array,
+    transactions: {
+      type: Array,
+      default: () => [],
+    },
     showCount: {
       type: Boolean,
       default: false
