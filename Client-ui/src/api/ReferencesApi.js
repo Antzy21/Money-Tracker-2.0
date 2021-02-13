@@ -17,8 +17,13 @@ function postReference(data) {
     return post(controllerName, data);
 }
 
+function linkReference(recordedReference, reference) {
+    return put(controllerName, {'recordedReference': recordedReference, 'reference': reference})
+}
+
 export {
     getReferences,
     putReference,
     postReference,
+    linkReference
 }

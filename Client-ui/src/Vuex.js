@@ -15,6 +15,7 @@ import {
   getReferences,
   postReference,
   putReference,
+  linkReference,
 } from './api/ReferencesApi.js'
 import {
   getTransactions,
@@ -119,11 +120,11 @@ const store = new Vuex.Store({
         return error;
       });      
     },
-    linkReferenceToTransaction(store, reference, transaction) {
-      reference.transactions.push(transaction);
-      this.updateReference(reference).then(()=>{
-        const updatedTransaction = { ...this.transaction, 'reference': reference };
-        this.updateTransaction(updatedTransaction);
+    linkReferenceToTransaction(store, { recordedReference, reference }) {
+        linkReference(recordedReference, reference).then((updatedTransactions)=>{
+        updatedTransactions.forEach(updatedTransactions => {
+          store.commit('setTransaction', updatedTransactions);
+        });
       }).catch(error => {
         console.log('caught error')
         return error;

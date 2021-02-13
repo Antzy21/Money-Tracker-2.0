@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoneyTracker.Data;
 using MoneyTracker.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -67,6 +68,27 @@ namespace MoneyTracker2.Data.DataAccessLayers
                    .SingleAsync(t => t.Id == transaction.Id);
 
                 return new TransactionView(transactionEntity);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<int>> LinkReferenceAsync(string recordedReference, ReferenceView reference)
+        {
+            try
+            {
+                var transactions = await _context.Transactions.Where(t => t.RecordedReference == recordedReference).ToListAsync();
+
+                foreach (var transaction in transactions)
+                {
+                    transaction.ReferenceId = reference.Id;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return transactions.Select(t => t.Id).ToList();
             }
             catch (DbUpdateConcurrencyException)
             {

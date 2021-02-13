@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MoneyTracker.Data;
 using MoneyTracker.Models;
+using MoneyTracker2.Data.DataAccessLayers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +14,12 @@ namespace MoneyTracker.Controllers
     public class ReferencesController : ControllerBase
     {
         private readonly BankContext _context;
+        private readonly TransactionRepository _transactionRepository;
 
-        public ReferencesController(BankContext context)
+        public ReferencesController(BankContext context, TransactionRepository transactionRepository)
         {
             _context = context;
+            _transactionRepository = transactionRepository;
         }
 
         // GET: api/References
@@ -71,6 +74,26 @@ namespace MoneyTracker.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> LinkReference(LinkReferenceObject linkReference)
+        {
+            if (linkReference.recordedReference == null || linkReference.reference == null)
+            {
+                return BadRequest();
+            }
+
+            var updatedTransactionIds = await _transactionRepository.LinkReferenceAsync(linkReference.recordedReference, linkReference.reference);
+
+            var updatedTransactions = await _transactionRepository.GetTransactions(updatedTransactionIds);
+
+            return new JsonResult(updatedTransactions.ToList());
+        }
+        public class LinkReferenceObject
+        {
+            public string recordedReference { get; set; }
+            public ReferenceView reference { get; set; }
         }
 
         // POST: api/References
