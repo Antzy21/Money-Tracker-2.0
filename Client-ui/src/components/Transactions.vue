@@ -1,7 +1,10 @@
 <template>
   <div>
     <h1>Transactions</h1>
-    <TransactionTable :transactions="transactions"/>
+    <TransactionTable
+      :transactions="transactions"
+      :showCount="true"
+    />
     <Uncatagorised :transactions="uncategorisedTransactions"/>
     <Contacts />
     <References />

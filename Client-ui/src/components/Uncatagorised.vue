@@ -1,7 +1,10 @@
 <template>
   <div>
     <h1>Uncatagorised</h1>
-    <TransactionTable :transactions="transactions"/>
+    <TransactionTable
+      :transactions="transactions"
+      :showCount="true"
+    />
   </div>
 </template>
 

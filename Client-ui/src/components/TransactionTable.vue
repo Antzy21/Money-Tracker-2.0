@@ -1,5 +1,8 @@
 <template>
   <table>
+    <div v-if="showCount">
+      Number of Transactions: {{numberOfTransactions}}
+    </div>
     <tr>
         <th>Id</th>
         <th>Contact</th>
@@ -20,6 +23,15 @@ export default {
   },
   props: {
     transactions: Array,
+    showCount: {
+      type: Boolean,
+      default: false
+    },
+  },
+  computed: {
+    numberOfTransactions() {
+      return this.transactions.length;
+    }
   },
   methods: {
   }
