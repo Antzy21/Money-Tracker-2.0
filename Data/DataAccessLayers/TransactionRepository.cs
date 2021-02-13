@@ -15,6 +15,33 @@ namespace MoneyTracker2.Data.DataAccessLayers
             _context = context;
         }
 
+        public async Task<TransactionView> GetTransaction(int id)
+        {
+            var transactionEntity = await _context.Transactions
+                .Include(t => t.Contact)
+                .Include(t => t.Reference)
+                .SingleOrDefaultAsync(t => t.Id == id);
+
+            return new TransactionView(transactionEntity);
+        }
+        public async Task<IList<TransactionView>> GetTransactions()
+        {
+            return await _context.Transactions
+                .Include(t => t.Contact)
+                .Include(t => t.Reference)
+                .Select(t => new TransactionView(t))
+                .ToListAsync();
+        }
+        public async Task<IList<TransactionView>> GetTransactions(List<int> ids)
+        {
+            return await _context.Transactions
+                .Include(t => t.Contact)
+                .Include(t => t.Reference)
+                .Where(t => ids.Contains(t.Id))
+                .Select(t => new TransactionView(t))
+                .ToListAsync();
+        }
+
         public async Task<TransactionView> SaveTransaction(TransactionView transaction)
         {
             try

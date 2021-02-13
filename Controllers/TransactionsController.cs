@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MoneyTracker.Data;
 using MoneyTracker.Models;
 using MoneyTracker2.Data.DataAccessLayers;
 using System;
@@ -14,39 +12,32 @@ namespace MoneyTracker.Controllers
     [ApiController]
     public class TransactionsController : ControllerBase
     {
-        private readonly BankContext _context;
         private TransactionRepository _transactionRepo;
 
-        public TransactionsController(BankContext context, TransactionRepository transactionRepo)
+        public TransactionsController(TransactionRepository transactionRepo)
         {
-            _context = context;
             _transactionRepo = transactionRepo;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TransactionView>>> Get()
         {
-            return await _context.Transactions
-                .Include(t => t.Contact)
-                .Include(t => t.Reference)
-                .Select(t => new TransactionView(t))
-                .ToListAsync();
+            var transactions = await _transactionRepo.GetTransactions();
+
+            return new JsonResult(transactions.ToList());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TransactionView>> GetTransaction(int id)
         {
-            var transaction = await _context.Transactions
-                .Include(t => t.Contact)
-                .Include(t => t.Reference)
-                .SingleOrDefaultAsync(t => t.Id == id);
+            var transaction = await _transactionRepo.GetTransaction(id);
 
             if (transaction == null)
             {
                 return NotFound();
             }
 
-            return new TransactionView(transaction);
+            return transaction;
         }
 
         [HttpPut("{id}")]
