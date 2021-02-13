@@ -85,8 +85,8 @@ export default {
       const value = event.target.value;
       if (value) {
         const reference = this.references.find(o => o.id == value);
-        reference.transactions.push(this.transaction)
-        this.linkReferenceToTransaction(reference);
+        const updatedTransaction = { ...this.transaction, 'reference': reference };
+        this.updateTransaction(updatedTransaction);
       }
       this.selectReference();
     },
