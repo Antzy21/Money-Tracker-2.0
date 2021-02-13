@@ -2,6 +2,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import {
+  healthcheck,
+  //posthealthcheck,
+} from './api/HealthCheckApi.js'
+
+import {
   getContacts,
   postContact,
   putContact,
@@ -62,9 +67,16 @@ const store = new Vuex.Store({
   },
   actions: {
     initialise() {
-      getTransactions().then(data => store.commit('setTransactions', data));
-      getContacts().then(data => store.commit('setContacts', data));
-      getReferences().then(data => store.commit('setReferences', data));
+      healthcheck().then((response) => {
+        if (response == undefined) {
+          console.error('Health Check Failed');
+        }
+        else {
+          getTransactions().then(data => store.commit('setTransactions', data));
+          getContacts().then(data => store.commit('setContacts', data));
+          getReferences().then(data => store.commit('setReferences', data));
+        }
+      });
     },
     updateTransaction(store, transaction) {
       putTransaction(transaction.id, transaction).then(data => {
