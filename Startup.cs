@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MoneyTracker.Data;
 using MoneyTracker.Services;
+using MoneyTracker2.Data.DataAccessLayers;
 
 namespace MoneyTracker2
 {
@@ -27,6 +28,8 @@ namespace MoneyTracker2
             services.AddScoped<TransactionImportService>();
 
             services.AddDbContext<BankContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BankContext")));
+
+            services.AddScoped<TransactionRepository>();
 
             services.AddCors(options =>
             {

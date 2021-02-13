@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using MoneyTracker.Data;
 using MoneyTracker.Models;
+using MoneyTracker2.Data.DataAccessLayers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +15,12 @@ namespace MoneyTracker.Controllers
     public class TransactionsController : ControllerBase
     {
         private readonly BankContext _context;
+        private TransactionRepository _transactionRepo;
 
-        public TransactionsController(BankContext context)
+        public TransactionsController(BankContext context, TransactionRepository transactionRepo)
         {
             _context = context;
+            _transactionRepo = transactionRepo;
         }
 
         [HttpGet]
@@ -46,48 +50,22 @@ namespace MoneyTracker.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Transaction>> PutTransaction(int id, Transaction transaction)
+        public async Task<ActionResult<TransactionView>> PutTransaction(int id, TransactionView transaction)
         {
             if (id != transaction.Id)
             {
                 return BadRequest();
             }
 
-            var transactionEntity = _context.Transactions
-                .FirstOrDefault(t => t.Id == id);
-
-            transactionEntity.Amount = transaction.Amount;
-            transactionEntity.Date = transaction.Date;
-
-            transactionEntity.RecordedReference = transaction.RecordedReference;
-            transactionEntity.RecordedContact = transaction.RecordedContact;
-
-            transactionEntity.Reference = transaction.Reference;
-            transactionEntity.Contact = transaction.Contact;
-
-            _context.Entry(transactionEntity).State = EntityState.Modified;
             try
             {
-                await _context.SaveChangesAsync();
+                var savedTransaction = await _transactionRepo.SaveTransaction(transaction);
+                return new JsonResult(savedTransaction);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!TransactionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw ex;
             }
-
-            return new JsonResult(new TransactionView(transactionEntity));
-        }
-
-        private bool TransactionExists(int id)
-        {
-            return _context.Transactions.Any(e => e.Id == id);
         }
     }
 }
