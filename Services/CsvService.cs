@@ -30,12 +30,19 @@ namespace MoneyTracker.Services
             {
                 if (line.Trim().Length > 0)
                 {
-                    var row = new Dictionary<string, string>();
-                    foreach (var cell in line.Split(',').Select((l, i) => new { element = l, idx = i }))
+                    try
                     {
-                        row.Add(headers[cell.idx], cell.element);
+                        var row = new Dictionary<string, string>();
+                        foreach (var cell in line.Split(',').Select((l, i) => new { element = l, idx = i }))
+                        {
+                            row.Add(headers[cell.idx], cell.element);
+                        }
+                        rows.Add(row);
                     }
-                    rows.Add(row);
+                    catch
+                    {
+                        Console.WriteLine($"Error adding line: {line}");
+                    }
                 }
                 line = streamReader.ReadLine();
             }
