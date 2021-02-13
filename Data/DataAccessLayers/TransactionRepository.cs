@@ -95,5 +95,26 @@ namespace MoneyTracker2.Data.DataAccessLayers
                 throw;
             }
         }
+
+        public async Task<List<int>> LinkContactAsync(string recordedContact, ContactView contact)
+        {
+            try
+            {
+                var transactions = await _context.Transactions.Where(t => t.RecordedContact == recordedContact).ToListAsync();
+
+                foreach (var transaction in transactions)
+                {
+                    transaction.ContactId = contact.Id;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return transactions.Select(t => t.Id).ToList();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+        }
     }
 }

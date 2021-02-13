@@ -10,6 +10,7 @@ import {
   getContacts,
   postContact,
   putContact,
+  linkContact,
 } from './api/ContactsApi.js'
 import {
   getReferences,
@@ -122,6 +123,16 @@ const store = new Vuex.Store({
     },
     linkReferenceToTransaction(store, { recordedReference, reference }) {
         linkReference(recordedReference, reference).then((updatedTransactions)=>{
+        updatedTransactions.forEach(updatedTransactions => {
+          store.commit('setTransaction', updatedTransactions);
+        });
+      }).catch(error => {
+        console.log('caught error')
+        return error;
+      });
+    },
+    linkContactToTransaction(store, { recordedContact, contact }) {
+        linkContact(recordedContact, contact).then((updatedTransactions)=>{
         updatedTransactions.forEach(updatedTransactions => {
           store.commit('setTransaction', updatedTransactions);
         });

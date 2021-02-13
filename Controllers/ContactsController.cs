@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MoneyTracker.Data;
 using MoneyTracker.Models;
+using MoneyTracker2.Data.DataAccessLayers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +14,12 @@ namespace MoneyTracker.Controllers
     public class ContactsController : ControllerBase
     {
         private readonly BankContext _context;
+        private readonly TransactionRepository _transactionRepository;
 
-        public ContactsController(BankContext context)
+        public ContactsController(BankContext context, TransactionRepository transactionRepository)
         {
             _context = context;
+            _transactionRepository = transactionRepository;
         }
 
         // GET: api/Contacts
@@ -71,6 +74,26 @@ namespace MoneyTracker.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> LinkContact(LinkContactObject linkContact)
+        {
+            if (linkContact.recordedContact == null || linkContact.reference == null)
+            {
+                return BadRequest();
+            }
+
+            var updatedTransactionIds = await _transactionRepository.LinkContactAsync(linkContact.recordedContact, linkContact.reference);
+
+            var updatedTransactions = await _transactionRepository.GetTransactions(updatedTransactionIds);
+
+            return new JsonResult(updatedTransactions.ToList());
+        }
+        public class LinkContactObject
+        {
+            public string recordedContact { get; set; }
+            public ContactView reference { get; set; }
         }
 
         // POST: api/Contacts

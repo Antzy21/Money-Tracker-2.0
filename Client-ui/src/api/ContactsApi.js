@@ -1,6 +1,7 @@
 import {
     get,
     post,
+    put,
 } from './ApiBase.js'
 
 const controllerName =  'Contacts'
@@ -16,8 +17,13 @@ function postContact(data) {
     return post(controllerName, data);
 }
 
+function linkContact(recordedContact, contact) {
+    return put(controllerName, {'recordedContact': recordedContact, 'contact': contact})
+}
+
 export {
     getContacts,
     putContact,
     postContact,
+    linkContact,
 }
