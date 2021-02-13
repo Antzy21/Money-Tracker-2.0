@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Transactions</h1>
+    <TransactionTable :transactions="transactions"/>
     <Uncatagorised :transactions="uncategorisedTransactions"/>
     <Contacts />
     <References />
@@ -11,6 +12,7 @@
 <script>
 import { mapState } from 'vuex'
 import Uncatagorised from './Uncatagorised.vue'
+import TransactionTable from './TransactionTable.vue'
 import Contacts from './Contacts.vue'
 import References from './References.vue'
 import UploadCsv from './UploadCsv.vue'
@@ -22,6 +24,7 @@ export default {
     Contacts,
     References,
     UploadCsv,
+    TransactionTable
   },
   computed: {
     ...mapState(['transactions', 'contacts', 'references']),
