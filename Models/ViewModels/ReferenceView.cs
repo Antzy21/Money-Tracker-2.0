@@ -2,6 +2,10 @@
 {
     public class ReferenceView
     {
+        public ReferenceView()
+        {
+        }
+
         public ReferenceView(Reference reference)
         {
             Id = reference.Id;

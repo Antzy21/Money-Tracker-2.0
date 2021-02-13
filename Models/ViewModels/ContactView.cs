@@ -2,6 +2,10 @@
 {
     public class ContactView
     {
+        public ContactView()
+        {
+        }
+
         public ContactView(Contact contact)
         {
             Id = contact.Id;
