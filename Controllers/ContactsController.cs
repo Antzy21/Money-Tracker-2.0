@@ -79,12 +79,12 @@ namespace MoneyTracker.Controllers
         [HttpPut]
         public async Task<IActionResult> LinkContact(LinkContactObject linkContact)
         {
-            if (linkContact.recordedContact == null || linkContact.reference == null)
+            if (linkContact.recordedContact == null || linkContact.contact == null)
             {
                 return BadRequest();
             }
 
-            var updatedTransactionIds = await _transactionRepository.LinkContactAsync(linkContact.recordedContact, linkContact.reference);
+            var updatedTransactionIds = await _transactionRepository.LinkContactAsync(linkContact.recordedContact, linkContact.contact);
 
             var updatedTransactions = await _transactionRepository.GetTransactions(updatedTransactionIds);
 
@@ -93,7 +93,7 @@ namespace MoneyTracker.Controllers
         public class LinkContactObject
         {
             public string recordedContact { get; set; }
-            public ContactView reference { get; set; }
+            public ContactView contact { get; set; }
         }
 
         // POST: api/Contacts
