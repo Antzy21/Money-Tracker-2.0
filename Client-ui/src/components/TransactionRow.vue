@@ -2,7 +2,7 @@
   <tr>
       <th>{{transaction.id}}</th>
       <th v-if="!showContactChoices"
-        @click="selectContact"
+        @click="toggleShowContactChoices"
         :class="{ uncategorised: transaction.contact==null }">
         {{contactName}}
       </th>
@@ -17,7 +17,7 @@
         </select>
       </th>
       <th v-if="!showReferenceChoices"
-        @click="selectReference"
+        @click="toggleShowReferenceChoices"
         :class="{ uncategorised: transaction.reference==null }">
         {{ReferenceName}}
       </th>
@@ -65,20 +65,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['linkReferenceToTransaction', 'updateTransaction']),
-    selectContact() {
+    ...mapActions(['linkReferenceToTransaction', 'linkContactToTransaction']),
+    toggleShowContactChoices() {
       this.showContactChoices = !this.showContactChoices && this.transaction.contact == null
     },
     onChangeContact(event) {
       const value = event.target.value;
       if (value) {
         const contact = this.contacts.find(o => o.id == value);
-        const updatedTransaction = { ...this.transaction, 'contact': contact };
-        this.updateTransaction(updatedTransaction);
+        const recordedContact = this.transaction.recordedContact;
+        this.linkContactToTransaction({ recordedContact, contact });
       }
-      this.selectContact();
+      this.toggleShowContactChoices();
     },
-    selectReference() {
+    toggleShowReferenceChoices() {
       this.showReferenceChoices = !this.showReferenceChoices && this.transaction.reference == null
     },
     onChangeReference(event) {
@@ -88,7 +88,7 @@ export default {
         const recordedReference = this.transaction.recordedReference;
         this.linkReferenceToTransaction({ recordedReference, reference });
       }
-      this.selectReference();
+      this.toggleShowReferenceChoices();
     },
   },
 }
