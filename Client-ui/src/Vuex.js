@@ -3,13 +3,18 @@ import Vuex from 'vuex'
 
 import {
   getContacts,
-  getReferences,
-  getTransactions,
-  putTransaction,
   postContact,
   putContact,
+} from './api/ContactsApi.js'
+import {
+  getReferences,
   postReference,
   putReference,
+} from './api/ReferencesApi.js'
+import {
+  getTransactions,
+  putTransaction,
+  postCsv,
 } from './api/TransactionsApi.js'
 
 Vue.use(Vuex)
