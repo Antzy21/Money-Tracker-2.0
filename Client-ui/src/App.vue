@@ -2,22 +2,17 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/temp">Temp</router-link>
     </div>
     <router-view/>
-    <Transactions />
   </div>
 </template>
 
 <script>
 import {mapActions} from 'vuex'
-import Transactions from './components/Transactions.vue'
 
 export default {
   name: 'App',
-  components: {
-    Transactions,
-  },
   created() {
     this.initialise();
   },
