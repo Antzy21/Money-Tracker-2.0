@@ -1,15 +1,16 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <div>
-      Welcome to Your Vue.js App
-    </div>
+    <BarChart />
   </div>
 </template>
 
 <script>
+import BarChart from '../components/charts/BarChart.vue'
 
 export default {
   name: 'Home',
+  components: {
+    BarChart,
+  }
 }
 </script>
