@@ -1,10 +1,15 @@
 <template>
   <div>
+    <TransactionTable v-for="group in timeSplitTransactions"
+      :key="group.key"
+      :transactions="group.data"
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import TransactionTable from '../TransactionTable.vue'
 
 const timeSpans = {
   Years: 0,
@@ -15,10 +20,11 @@ const timeSpans = {
 export default {
   name: 'BarChart',
   components: {
+    TransactionTable,
   },
   data() {
     return {
-      timePeriodSplit: timeSpans.Days,
+      timePeriodSplit: timeSpans.Years,
     }
   },
   computed: {
@@ -28,11 +34,15 @@ export default {
       copiedTransactions = copiedTransactions.sort((t1, t2) => Date.parse(t1.date) - Date.parse(t2.date));
 
       let groupKey = 0;
-      const transactionGroups = copiedTransactions.reduce((r, transaction) => {
+      const transactionGroups = copiedTransactions.reduce((groupedTransactions, transaction) => {
         var timeSplit = transaction.date.split(('-'))[this.timePeriodSplit];
-        (r[timeSplit])? r[timeSplit].data.push(transaction) : r[timeSplit] = {group: String(groupKey++), data: [transaction]};
-        return r;
-      });
+        if (groupedTransactions[timeSplit] == undefined){
+          groupedTransactions[timeSplit] = {key: groupKey++, data: []};
+        }
+        groupedTransactions[timeSplit].data.push(transaction)
+        return groupedTransactions;
+      }, {});
+      
       return transactionGroups;
     }
   },
