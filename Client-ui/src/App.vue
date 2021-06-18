@@ -10,6 +10,7 @@
 
 <script>
 import {mapActions} from 'vuex'
+import 'bootstrap/scss/bootstrap.scss'
 
 export default {
   name: 'App',
