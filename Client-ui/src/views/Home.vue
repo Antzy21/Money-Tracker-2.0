@@ -1,16 +1,16 @@
 <template>
   <div class="home">
-    <BarChart />
+    <TransactionChartWrapper />
   </div>
 </template>
 
 <script>
-import BarChart from '../components/charts/BarChart.vue'
+import TransactionChartWrapper from '../components/charts/TransactionChartWrapper.vue'
 
 export default {
   name: 'Home',
   components: {
-    BarChart,
+    TransactionChartWrapper,
   }
 }
 </script>
