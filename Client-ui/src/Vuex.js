@@ -82,7 +82,6 @@ const store = new Vuex.Store({
     },
     updateTransaction(store, transaction) {
       putTransaction(transaction.id, transaction).then(data => {
-        console.log('returned value', data);
         store.commit('setTransaction', data);
       }).catch((error) => {
         console.log('caught error')
