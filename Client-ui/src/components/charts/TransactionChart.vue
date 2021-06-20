@@ -1,9 +1,21 @@
-<template>
-  <div />
-</template>
-
 <script>
-export default {
-  
-};
+import { defineComponent } from 'vue'
+import { HorizontalBar } from 'vue3-chart-v2'
+
+export default defineComponent({
+  extends: HorizontalBar,
+  props: {
+    chartData: {
+      type: Object,
+      required: true
+    },
+    chartOptions: {
+      type: Object,
+      required: false
+    },
+  },
+  mounted () {
+    this.renderChart(this.chartData, this.chartOptions)
+  }
+})
 </script>
