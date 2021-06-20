@@ -1,32 +1,29 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 
 import {
   healthcheck,
   //posthealthcheck,
-} from './api/HealthCheckApi.js'
+} from '../api/HealthCheckApi.js'
 
 import {
   getContacts,
   postContact,
   putContact,
   linkContact,
-} from './api/ContactsApi.js'
+} from '../api/ContactsApi.js'
 import {
   getReferences,
   postReference,
   putReference,
   linkReference,
-} from './api/ReferencesApi.js'
+} from '../api/ReferencesApi.js'
 import {
   getTransactions,
   putTransaction,
   postCsv,
-} from './api/TransactionsApi.js'
+} from '../api/TransactionsApi.js'
 
-Vue.use(Vuex)
-
-const store = new Vuex.Store({
+export default createStore({
   state: {
     transactions: [],
     contacts: [],
@@ -68,7 +65,7 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    initialise() {
+    initialise(store) {
       healthcheck().then((response) => {
         if (response == undefined) {
           console.error('Health Check Failed');
@@ -152,6 +149,6 @@ const store = new Vuex.Store({
       });
     }
   },
+  modules: {
+  }
 })
-
-export default store;
