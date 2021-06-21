@@ -13,8 +13,9 @@ import TransactionChart from './TransactionChart.vue'
 
 const timeSpans = {
   Years: 0,
-  Weeks: 1,
-  Days: 2
+  Months: 1,
+  Weeks: 2,
+  Days: 3
 }
 
 export default {
@@ -34,7 +35,7 @@ export default {
 
       let groupKey = 0;
       const transactionGroups = copiedTransactions.reduce((groupedTransactions, transaction) => {
-        var timeSplit = transaction.date.split(('-'))[this.timePeriodSplit];
+        var timeSplit = this.getTimeSplit(transaction);
         if (groupedTransactions[timeSplit] == undefined){
           groupedTransactions[timeSplit] = {key: groupKey++, data: []};
         }
@@ -93,5 +94,22 @@ export default {
       }
     }
   },
+  methods: {
+    getTimeSplit(transaction) {
+      switch (this.timePeriodSplit) {
+        case timeSpans.Years:
+          return transaction.date.split(('-'))[0];
+        case timeSpans.Months:
+          return transaction.date.substring(0,7);
+        case timeSpans.Weeks:
+          var x = new Date(transaction.date);
+          var firstDateOfWeek = new Date(x.setDate(x.getDate()-x.getDay()))
+          var weekDate = `${firstDateOfWeek.getFullYear()}-${firstDateOfWeek.getMonth()}-${firstDateOfWeek.getDate()}`
+          return weekDate;
+        case timeSpans.Days:
+          return transaction.date.substring(0,10);
+      }
+    }
+  }
 }
 </script>
