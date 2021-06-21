@@ -1,5 +1,11 @@
 <template>
   <div class="container">
+    <div v-for="(value, key) in timeSpans" class="form-check" :key="key">
+      <input v-model="timePeriodSplit" :value="value" class="form-check-input" type="radio" name="flexRadioDefault" id="timePeriodSplit">
+      <label class="form-check-label" for="timePeriodSplit">
+        {{key}}
+      </label>
+    </div>
     <TransactionChart
       :chartData="chartData"
       :chartOptions="chartOptions"
@@ -11,20 +17,19 @@
 import { mapState } from 'vuex'
 import TransactionChart from './TransactionChart.vue'
 
-const timeSpans = {
-  Years: 0,
-  Months: 1,
-  Weeks: 2,
-  Days: 3
-}
-
 export default {
   components: {
     TransactionChart,
   },
   data() {
     return {
-      timePeriodSplit: timeSpans.Years,
+      timePeriodSplit: 0,
+      timeSpans: {
+        "Years": 0,
+        "Months": 1,
+        "Weeks": 2,
+        "Days": 3
+      },
     }    
   },
   computed: {
@@ -97,16 +102,16 @@ export default {
   methods: {
     getTimeSplit(transaction) {
       switch (this.timePeriodSplit) {
-        case timeSpans.Years:
+        case this.timeSpans.Years:
           return transaction.date.split(('-'))[0];
-        case timeSpans.Months:
+        case this.timeSpans.Months:
           return transaction.date.substring(0,7);
-        case timeSpans.Weeks:
+        case this.timeSpans.Weeks:
           var x = new Date(transaction.date);
           var firstDateOfWeek = new Date(x.setDate(x.getDate()-x.getDay()))
           var weekDate = `${firstDateOfWeek.getFullYear()}-${firstDateOfWeek.getMonth()}-${firstDateOfWeek.getDate()}`
           return weekDate;
-        case timeSpans.Days:
+        case this.timeSpans.Days:
           return transaction.date.substring(0,10);
       }
     }
