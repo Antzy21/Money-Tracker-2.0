@@ -37,16 +37,16 @@ export default {
     timeSplitTransactions() {
       let copiedTransactions = [ ...this.transactions ];
       copiedTransactions = copiedTransactions.sort((t1, t2) => Date.parse(t1.date) - Date.parse(t2.date));
-
-      let groupKey = 0;
       const transactionGroups = copiedTransactions.reduce((groupedTransactions, transaction) => {
+        console.log(groupedTransactions);
         var timeSplit = this.getTimeSplit(transaction);
-        if (groupedTransactions[timeSplit] == undefined){
-          groupedTransactions[timeSplit] = {key: groupKey++, data: []};
+        console.log(timeSplit);
+        if (groupedTransactions.find(gt => gt.key == timeSplit) == undefined) {
+          groupedTransactions.push({key: timeSplit, data: []});
         }
-        groupedTransactions[timeSplit].data.push(transaction)
+        groupedTransactions.find(gt => gt.key == timeSplit).data.push(transaction)
         return groupedTransactions;
-      }, {});
+      }, []);
       
       return transactionGroups;
     },
