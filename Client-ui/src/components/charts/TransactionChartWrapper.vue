@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      timePeriodSplit: 0,
+      timePeriodSplit: 1,
       timeSpans: {
         "Years": 0,
         "Months": 1,
@@ -38,9 +38,7 @@ export default {
       let copiedTransactions = [ ...this.transactions ];
       copiedTransactions = copiedTransactions.sort((t1, t2) => Date.parse(t1.date) - Date.parse(t2.date));
       const transactionGroups = copiedTransactions.reduce((groupedTransactions, transaction) => {
-        console.log(groupedTransactions);
         var timeSplit = this.getTimeSplit(transaction);
-        console.log(timeSplit);
         if (groupedTransactions.find(gt => gt.key == timeSplit) == undefined) {
           groupedTransactions.push({key: timeSplit, data: []});
         }
@@ -50,30 +48,31 @@ export default {
       
       return transactionGroups;
     },
+    formattedData() {
+      return this.timeSplitTransactions.map(t => {
+        return t.data.reduce((accumulatedValue, tran) => {
+          return accumulatedValue + parseFloat(tran.amount)*100
+        },0) / 100
+      })
+    },
+    formattedLabels() {
+      return this.timeSplitTransactions.map(t => t.key)
+    },
     chartData() {
       return {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: this.formattedLabels,
         datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 5,
-          indexAxis: 'y',
+            categoryPercentage: 1,
+            barPercentage: 1,
+            borderWidth: 10,
+            borderRadius: 20,
+            //grouped: true,
+            //barThickness: 4,
+            //maxBarThickness: 38,
+            //minBarLength: 2,
+            backgroundColor: 'rgb(220,120,165)',
+            hoverBackgroundColor: 'rgb(200,100,145)',
+            data: this.formattedData,
         }]
       }
     },
