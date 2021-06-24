@@ -1,15 +1,34 @@
 <template>
   <div class="container">
-    <div v-for="(value, key) in timeSpans" class="form-check" :key="key">
-      <input v-model="timePeriodSplit" :value="value" class="form-check-input" type="radio" name="flexRadioDefault" id="timePeriodSplit">
-      <label class="form-check-label" for="timePeriodSplit">
-        {{key}}
-      </label>
+    <div class="row">
+      <div class="col-3">
+        <h3>Options</h3>
+        <hr/>
+        <h4>Timespan</h4>
+        <div v-for="(value, key) in timeSpans" class="form-check" :key="key">
+          <input v-model="timePeriodSplit" :value="value" class="form-check-input" type="radio" name="timePeriodSplitRadio" id="timePeriodSplit">
+          <label class="form-check-label" for="timePeriodSplit">
+            {{key}}
+          </label>
+        </div>
+        <hr/>
+        <h4>Display</h4>
+        <div v-for="(value, key) in chartTypes" class="form-check" :key="key">
+          <input v-model="chartType" :value="value" class="form-check-input" type="radio" name="chartTypeRadio" id="chartType">
+          <label class="form-check-label" for="chartType">
+            {{key}}
+          </label>
+        </div>
+        <hr/>
+
+      </div>
+      <div class="col">
+        <TransactionChart
+          :chartData="chartData"
+          :chartOptions="chartOptions"
+        />
+      </div>
     </div>
-    <TransactionChart
-      :chartData="chartData"
-      :chartOptions="chartOptions"
-    />
   </div>
 </template>
 
@@ -24,11 +43,26 @@ export default {
   data() {
     return {
       timePeriodSplit: 1,
+      chartType: 1,
       timeSpans: {
         "Years": 0,
         "Months": 1,
         "Weeks": 2,
         "Days": 3
+      },
+      chartTypes: {
+        "Combined": 0,
+        "PosNeg": 1,
+      },
+      basicDataSetValues: {
+        categoryPercentage: 0.8,
+        barPercentage: 1,
+        borderWidth: 10,
+        borderRadius: 20,
+        //grouped: true,
+        //barThickness: 4,
+        //maxBarThickness: 38,
+        //minBarLength: 2,
       },
     }    
   },
@@ -48,32 +82,70 @@ export default {
       
       return transactionGroups;
     },
+    formattedPositiveData() {
+      return this.timeSplitTransactions.map(t => {
+        return t.data.reduce((accumulatedValue, tran) => {
+          const tranAmount = parseFloat(tran.amount)
+          if (tranAmount < 0) {
+            return accumulatedValue
+          }
+          return accumulatedValue + tranAmount*100
+        },0) / 100
+      })
+    },
+    formattedNegativeData() {
+      return this.timeSplitTransactions.map(t => {
+        return t.data.reduce((accumulatedValue, tran) => {
+          const tranAmount = parseFloat(tran.amount)
+          if (tranAmount > 0) {
+            return accumulatedValue
+          }
+          return accumulatedValue + tranAmount*100
+        },0) / 100
+      })
+    },
     formattedData() {
       return this.timeSplitTransactions.map(t => {
         return t.data.reduce((accumulatedValue, tran) => {
-          return accumulatedValue + parseFloat(tran.amount)*100
+          const tranAmount = parseFloat(tran.amount)
+          return accumulatedValue + tranAmount*100
         },0) / 100
       })
     },
     formattedLabels() {
       return this.timeSplitTransactions.map(t => t.key)
     },
+    chartDataSets() {
+      switch (this.chartType) {
+        case this.chartTypes.Combined:
+          return [{
+            ...this.basicDataSetValues,
+            backgroundColor: 'rgb(220,120,165)',
+            hoverBackgroundColor: 'rgb(200,100,145)',
+            data: this.formattedPositiveData,
+          }]
+        case this.chartTypes.PosNeg:
+        default:
+          return [
+            {
+              ...this.basicDataSetValues,
+              backgroundColor: 'rgb(220,120,165)',
+              hoverBackgroundColor: 'rgb(200,100,145)',
+              data: this.formattedPositiveData,
+            },
+            {
+              ...this.basicDataSetValues,
+              backgroundColor: 'rgb(20,120,165)',
+              hoverBackgroundColor: 'rgb(20,100,145)',
+              data: this.formattedNegativeData,
+            },
+          ]  
+      }
+    },
     chartData() {
       return {
         labels: this.formattedLabels,
-        datasets: [{
-            categoryPercentage: 1,
-            barPercentage: 1,
-            borderWidth: 10,
-            borderRadius: 20,
-            //grouped: true,
-            //barThickness: 4,
-            //maxBarThickness: 38,
-            //minBarLength: 2,
-            backgroundColor: 'rgb(220,120,165)',
-            hoverBackgroundColor: 'rgb(200,100,145)',
-            data: this.formattedData,
-        }]
+        datasets: this.chartDataSets
       }
     },
     chartOptions() {
@@ -96,7 +168,7 @@ export default {
           }
         }
       }
-    }
+    },
   },
   methods: {
     getTimeSplit(transaction) {
