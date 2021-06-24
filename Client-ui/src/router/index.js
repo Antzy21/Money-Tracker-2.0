@@ -1,12 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import TempEverythingPage from '../views/TempEverythingPage.vue'
+import Contacts from '../views/Contacts.vue'
+import References from '../views/References.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/contacts',
+    name: 'Contacts',
+    component: Contacts
+  },
+  {
+    path: '/references',
+    name: 'References',
+    component: References
   },
   {
     path: '/temp',
