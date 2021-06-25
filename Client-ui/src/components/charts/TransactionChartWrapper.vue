@@ -57,8 +57,8 @@ export default {
       basicDataSetValues: {
         categoryPercentage: 0.8,
         barPercentage: 1,
-        borderWidth: 10,
-        borderRadius: 20,
+        borderWidth: 1,
+        //borderRadius: 20,
         //grouped: true,
         //barThickness: 4,
         //maxBarThickness: 38,
@@ -144,8 +144,8 @@ export default {
     },
     chartData() {
       return {
+        datasets: this.chartDataSets,
         labels: this.formattedLabels,
-        datasets: this.chartDataSets
       }
     },
     chartOptions() {
@@ -158,6 +158,14 @@ export default {
           }
         },
         responsive: true,
+        scales: {
+            x: {
+                stacked: true
+            },
+            y: {
+                stacked: true
+            }
+        },
         plugins: {
           legend: {
             position: 'right',

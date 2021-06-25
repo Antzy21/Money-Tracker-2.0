@@ -1,9 +1,17 @@
+<template>
+  <canvas ref="canvas" id="myChart" width="400" height="400"/>
+</template>
+
 <script>
 import { defineComponent } from 'vue'
-import { HorizontalBar } from 'vue3-chart-v2'
+import Chart from 'chart.js/auto'
 
 export default defineComponent({
-  extends: HorizontalBar,
+  data() {
+    return {
+      myChart: null
+    }
+  },
   props: {
     chartData: {
       type: Object,
@@ -14,8 +22,44 @@ export default defineComponent({
       required: false
     },
   },
-  mounted () {
-    this.renderChart(this.chartData, this.chartOptions)
-  }
+  watch: {
+    chartData(value) {
+      if (value.datasets) {
+        this.destroyChart();
+        this.initChart(value, this.chartOptions)
+      }
+    },
+    chartOptions(value) {
+      this.destroyChart();
+      this.initChart(this.chartData, value)
+    }
+  },
+  beforeDestroy() {
+    this.destroyChart();
+  },
+  mounted() {
+    this.initChart(this.chartData, this.chartOptions);
+  },
+  methods: {
+    initChart(data, options) {
+      console.log('initialising chart')
+      console.log(data)
+      console.log(options)
+      this.myChart = new Chart(
+        document.getElementById('myChart'),
+        {
+          type: 'bar',
+          data,
+          options,
+        }
+      );
+    },
+    destroyChart() {
+      if(this.myChart) {
+        console.log('destroying chart')
+        this.myChart.destroy();
+      } 
+    }
+  },
 })
 </script>
