@@ -122,6 +122,7 @@ export default {
             ...this.basicDataSetValues,
             backgroundColor: 'rgb(220,120,165)',
             hoverBackgroundColor: 'rgb(200,100,145)',
+            label: 'Net Income/Expenses',
             data: this.formattedPositiveData,
           }]
         case this.chartTypes.PosNeg:
@@ -131,12 +132,14 @@ export default {
               ...this.basicDataSetValues,
               backgroundColor: 'rgb(220,120,165)',
               hoverBackgroundColor: 'rgb(200,100,145)',
+              label: 'Income',
               data: this.formattedPositiveData,
             },
             {
               ...this.basicDataSetValues,
               backgroundColor: 'rgb(20,120,165)',
               hoverBackgroundColor: 'rgb(20,100,145)',
+              label: 'Expenses',
               data: this.formattedNegativeData,
             },
           ]  
