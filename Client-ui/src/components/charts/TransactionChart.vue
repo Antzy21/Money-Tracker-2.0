@@ -4,12 +4,13 @@
 
 <script>
 import { defineComponent } from 'vue'
+import debounce from 'lodash/debounce'
 import Chart from 'chart.js/auto'
 
 export default defineComponent({
   data() {
     return {
-      myChart: null
+      myChart: null,
     }
   },
   props: {
@@ -24,15 +25,14 @@ export default defineComponent({
   },
   watch: {
     chartData(value) {
-      if (value.datasets) {
-        this.destroyChart();
-        this.initChart(value, this.chartOptions)
-      }
+      //console.log(value);
+      //this.myChart.update();
+      this.debouncedRedraw(value, this.chartOptions);
     },
     chartOptions(value) {
-      this.destroyChart();
-      this.initChart(this.chartData, value)
-    }
+      //console.log(value);
+      this.debouncedRedraw(this.chartData, value);
+    },
   },
   beforeDestroy() {
     this.destroyChart();
@@ -40,11 +40,13 @@ export default defineComponent({
   mounted() {
     this.initChart(this.chartData, this.chartOptions);
   },
+  created() {
+    this.debouncedRedraw = debounce((chartData, chartOptions) => {
+      this.redrawChart(chartData, chartOptions)
+    }, 800);
+  },
   methods: {
     initChart(data, options) {
-      console.log('initialising chart')
-      console.log(data)
-      console.log(options)
       this.myChart = new Chart(
         document.getElementById('myChart'),
         {
@@ -56,10 +58,13 @@ export default defineComponent({
     },
     destroyChart() {
       if(this.myChart) {
-        console.log('destroying chart')
         this.myChart.destroy();
-      } 
-    }
+      }
+    },
+    redrawChart(chartData, chartOptions) {
+      this.destroyChart();
+      this.initChart(chartData, chartOptions);
+    },
   },
 })
 </script>
