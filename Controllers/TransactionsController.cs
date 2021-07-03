@@ -12,7 +12,7 @@ namespace MoneyTracker.Controllers
     [ApiController]
     public class TransactionsController : ControllerBase
     {
-        private TransactionRepository _transactionRepo;
+        private readonly TransactionRepository _transactionRepo;
 
         public TransactionsController(TransactionRepository transactionRepo)
         {
