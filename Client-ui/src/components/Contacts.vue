@@ -44,7 +44,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
   name: 'Contacts',
   computed: {
-    ...mapState(['contacts']),
+    ...mapState(['contacts', 'contactGroups']),
   },
   data() {
     return {

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MoneyTracker.Data;
 using MoneyTracker.Models;
+using MoneyTracker.Models.ViewModels;
 using MoneyTracker2.Data.DataAccessLayers;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,14 @@ namespace MoneyTracker.Controllers
         {
             return await _context.Contacts.Include(c => c.Transactions)
                 .Select(c => new ContactView(c)).ToListAsync();
+        }
+
+        // GET: api/Contacts
+        [HttpGet("groups")]
+        public async Task<ActionResult<IEnumerable<ContactGroupView>>> GetContactGroups()
+        {
+            return await _context.ContactGroups.Include(cg => cg.Contacts)
+                .Select(c => new ContactGroupView(c)).ToListAsync();
         }
 
         // GET: api/Contacts/5

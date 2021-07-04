@@ -9,6 +9,9 @@ const controllerName =  'Contacts'
 function getContacts() {
     return get(controllerName);
 }
+function getContactGroups() {
+    return get(`${controllerName}/groups`);
+}
 function putContact() {
     console.error('Not Implimented Exception');
     return;
@@ -26,4 +29,5 @@ export {
     putContact,
     postContact,
     linkContact,
+    getContactGroups,
 }

@@ -10,6 +10,7 @@ import {
   postContact,
   putContact,
   linkContact,
+  getContactGroups,
 } from '../api/ContactsApi.js'
 import {
   getReferences,
@@ -27,6 +28,7 @@ export default createStore({
   state: {
     transactions: [],
     contacts: [],
+    contactGroups: [],
     references: [],
   },
   mutations: {
@@ -52,6 +54,9 @@ export default createStore({
         state.contacts.push(data);
       }
     },
+    setContactGroups(state, data) {
+      state.contactGroups = data;
+    },
     setReferences(state, data) {
       state.references = data;
     },
@@ -73,6 +78,7 @@ export default createStore({
         else {
           getTransactions().then(data => store.commit('setTransactions', data));
           getContacts().then(data => store.commit('setContacts', data));
+          getContactGroups().then(data => store.commit('setContactGroups', data));
           getReferences().then(data => store.commit('setReferences', data));
         }
       });
@@ -147,7 +153,7 @@ export default createStore({
         console.log('caught error')
         return error;
       });
-    }
+    },
   },
   modules: {
   }
