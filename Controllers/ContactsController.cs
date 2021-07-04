@@ -53,6 +53,19 @@ namespace MoneyTracker.Controllers
             return new ContactView(contact);
         }
 
+        [HttpGet("groups/{id}")]
+        public async Task<ActionResult<ContactGroupView>> GetContactGroup(int id)
+        {
+            var contactGroup = await _context.ContactGroups.FindAsync(id);
+
+            if (contactGroup == null)
+            {
+                return NotFound();
+            }
+
+            return new ContactGroupView(contactGroup);
+        }
+
         // PUT: api/Contacts/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -115,6 +128,15 @@ namespace MoneyTracker.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
+        }
+
+        [HttpPost("group")]
+        public async Task<ActionResult<ContactGroup>> PostContactGroup(ContactGroup contactGroup)
+        {
+            _context.ContactGroups.Add(contactGroup);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetContactGroup", new { id = contactGroup.Id }, contactGroup);
         }
 
         // DELETE: api/Contacts/5

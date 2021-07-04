@@ -19,6 +19,9 @@ function putContact() {
 function postContact(data) {
     return post(controllerName, data);
 }
+function postContactGroup(data) {
+    return post(`${controllerName}/group`, data);
+}
 
 function linkContact(recordedContact, contact) {
     return put(controllerName, {'recordedContact': recordedContact, 'contact': contact})
@@ -30,4 +33,5 @@ export {
     postContact,
     linkContact,
     getContactGroups,
+    postContactGroup,
 }

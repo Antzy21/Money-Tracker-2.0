@@ -11,6 +11,7 @@ import {
   putContact,
   linkContact,
   getContactGroups,
+  postContactGroup,
 } from '../api/ContactsApi.js'
 import {
   getReferences,
@@ -56,6 +57,14 @@ export default createStore({
     },
     setContactGroups(state, data) {
       state.contactGroups = data;
+    },
+    setContactGroup(state, data) {
+      const contactGroup = state.contactGroups.find(c => c.id === data.id)
+      if (contactGroup) {
+        Object.assign(contactGroup, data);
+      } else {
+        state.contactGroups.push(data);
+      }
     },
     setReferences(state, data) {
       state.references = data;
@@ -110,6 +119,14 @@ export default createStore({
     addContact(store, newContact) {
       postContact(newContact).then(data => {
         store.commit('setContact', data);
+      }).catch(error => {
+        console.log('caught error')
+        return error;
+      });
+    },
+    addContactGroup(store, newContactGroup) {
+      postContactGroup(newContactGroup).then(data => {
+        store.commit('setContactGroup', data);
       }).catch(error => {
         console.log('caught error')
         return error;
