@@ -5,6 +5,7 @@
       <router-link to="/temp">Temp</router-link>
       <router-link to="/contacts">Contacts</router-link>
       <router-link to="/references">References</router-link>
+      <router-link to="/todo">To Do</router-link>
     </div>
     <router-view/>
   </div>

@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import TempEverythingPage from '../views/TempEverythingPage.vue'
 import Contacts from '../views/Contacts.vue'
 import References from '../views/References.vue'
+import ToDo from '../views/ToDo.vue'
 
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
     path: '/references',
     name: 'References',
     component: References
+  },
+  {
+    path: '/todo',
+    name: 'ToDo',
+    component: ToDo
   },
   {
     path: '/temp',
