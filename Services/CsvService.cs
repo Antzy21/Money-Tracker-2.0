@@ -13,7 +13,7 @@ namespace MoneyTracker.Services
         {
         }
 
-        public List<T> ReadCsvTo<T>(IFormFile file) where T : new()
+        public List<T> ReadCsvTo<T>(IFormFile file, LongLinePolicy longLinePolicy = LongLinePolicy.ThrowError) where T : new()
         {
             Stream stream = file.OpenReadStream();
             StreamReader streamReader = new StreamReader(stream);
@@ -33,7 +33,23 @@ namespace MoneyTracker.Services
                     try
                     {
                         var row = new Dictionary<string, string>();
-                        foreach (var cell in line.Split(',').Select((l, i) => new { element = l, idx = i }))
+                        var cells = line.Split(',');
+                        if (cells.Length != headers.Length)
+                        {
+                            switch (longLinePolicy)
+                            {
+                                case LongLinePolicy.Ignore:
+                                    cells = cells.Take(6).ToArray();
+                                    break;
+                                case LongLinePolicy.IncludeInLastLine:
+                                    cells = line.Split(',', 6);
+                                    break;
+                                case LongLinePolicy.ThrowError:
+                                    Console.WriteLine($"Line too long: {line}");
+                                    throw new ArgumentException($"Line too long: {line}");
+                            }
+                        }
+                        foreach (var cell in cells.Select((l, i) => new { element = l, idx = i }))
                         {
                             row.Add(headers[cell.idx], cell.element);
                         }
@@ -88,5 +104,12 @@ namespace MoneyTracker.Services
                 property.SetValue(obj, entry);
             }
         }
+    }
+
+    public enum LongLinePolicy
+    {
+        Ignore,
+        IncludeInLastLine,
+        ThrowError
     }
 }

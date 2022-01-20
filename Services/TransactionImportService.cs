@@ -19,7 +19,7 @@ namespace MoneyTracker.Services
 
         public IList<Transaction> ImportTransactionsFromFile(IFormFile file)
         {
-            var csvTransactions = _csvService.ReadCsvTo<CsvTransaction>(file);
+            var csvTransactions = _csvService.ReadCsvTo<CsvTransaction>(file, LongLinePolicy.IncludeInLastLine);
 
             var newTransactions = new List<Transaction>();
 
