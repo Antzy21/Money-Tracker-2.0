@@ -33,8 +33,8 @@ namespace MoneyTracker.Services
                 var additionalInfo = ct.Memo.Split("  ");
                 additionalInfo = additionalInfo.Where(a => a.Length > 0).ToArray();
 
-                transaction.RecordedContact = additionalInfo[0].Trim();
-                transaction.RecordedCategory = additionalInfo[1].Trim();
+                transaction.Contact = additionalInfo[0].Trim();
+                transaction.Reference = additionalInfo[1].Trim();
 
                 newTransactions.Add(transaction);
             }

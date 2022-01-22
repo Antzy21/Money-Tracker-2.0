@@ -14,8 +14,8 @@ namespace MoneyTracker.Models
             Date = transaction.Date;
             Amount = transaction.Amount;
 
-            RecordedContact = transaction.RecordedContact;
-            RecordedReference = transaction.RecordedCategory;
+            RecordedContact = transaction.Contact;
+            RecordedReference = transaction.Reference;
 
             if (transaction.CategoryId != null)
             {

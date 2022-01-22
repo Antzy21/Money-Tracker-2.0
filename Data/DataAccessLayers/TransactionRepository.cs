@@ -50,8 +50,8 @@ namespace MoneyTracker2.Data.DataAccessLayers
                 transactionEntity.Amount = transaction.Amount;
                 transactionEntity.Date = transaction.Date;
 
-                transactionEntity.RecordedCategory = transaction.RecordedReference;
-                transactionEntity.RecordedContact = transaction.RecordedContact;
+                transactionEntity.Reference = transaction.RecordedReference;
+                transactionEntity.Contact = transaction.RecordedContact;
 
                 transactionEntity.CategoryId = transaction.Category?.Id ?? null;
 
@@ -74,7 +74,7 @@ namespace MoneyTracker2.Data.DataAccessLayers
         {
             try
             {
-                var transactions = await _context.Transactions.Where(t => t.RecordedCategory == recordedReference).ToListAsync();
+                var transactions = await _context.Transactions.Where(t => t.Reference == recordedReference).ToListAsync();
 
                 foreach (var transaction in transactions)
                 {
@@ -95,7 +95,7 @@ namespace MoneyTracker2.Data.DataAccessLayers
         {
             try
             {
-                var transactions = await _context.Transactions.Where(t => t.RecordedContact == recordedContact).ToListAsync();
+                var transactions = await _context.Transactions.Where(t => t.Contact == recordedContact).ToListAsync();
 
                 foreach (var transaction in transactions)
                 {
