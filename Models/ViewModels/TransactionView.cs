@@ -1,5 +1,4 @@
-﻿using MoneyTracker.Models.ViewModels;
-using System;
+﻿using System;
 
 namespace MoneyTracker.Models
 {
@@ -16,15 +15,11 @@ namespace MoneyTracker.Models
             Amount = transaction.Amount;
 
             RecordedContact = transaction.RecordedContact;
-            RecordedReference = transaction.RecordedReference;
+            RecordedReference = transaction.RecordedCategory;
 
-            if (transaction.Contact != null)
+            if (transaction.CategoryId != null)
             {
-                Contact = new ContactView(transaction.Contact);
-            }
-            if (transaction.Reference != null)
-            {
-                Reference = new ReferenceView(transaction.Reference);
+                Category = new CategoryView(transaction.Category);
             }
         }
 
@@ -34,7 +29,6 @@ namespace MoneyTracker.Models
         public string RecordedContact { get; set; }
         public string RecordedReference { get; set; }
 
-        public ContactView Contact { get; set; }
-        public ReferenceView Reference { get; set; }
+        public CategoryView Category { get; set; }
     }
 }

@@ -48,15 +48,8 @@ namespace MoneyTracker.Controllers
                 return BadRequest();
             }
 
-            try
-            {
-                var savedTransaction = await _transactionRepo.SaveTransaction(transaction);
-                return new JsonResult(savedTransaction);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var savedTransaction = await _transactionRepo.SaveTransaction(transaction);
+            return new JsonResult(savedTransaction);
         }
     }
 }

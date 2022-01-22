@@ -4,16 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MoneyTracker.Models
 {
-    public class Reference
+    public class Category
     {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Colour { get; set; }
 
-        public int? ReferenceGroupId { get; set; }
-        [ForeignKey("ReferenceGroupId")]
-        public ReferenceGroup ReferenceGroup { get; set; }
+        public int? ParentCategoryId { get; set; }
+        [ForeignKey("ParentCategoryId")]
+        public Category ParentCategory { get; set; }
         public List<Transaction> Transactions { get; set; }
     }
 }

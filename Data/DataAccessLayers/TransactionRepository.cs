@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoneyTracker.Data;
 using MoneyTracker.Models;
-using MoneyTracker.Models.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,8 +19,7 @@ namespace MoneyTracker2.Data.DataAccessLayers
         public async Task<TransactionView> GetTransaction(int id)
         {
             var transactionEntity = await _context.Transactions
-                .Include(t => t.Contact)
-                .Include(t => t.Reference)
+                .Include(t => t.Category)
                 .SingleOrDefaultAsync(t => t.Id == id);
 
             return new TransactionView(transactionEntity);
@@ -29,16 +27,14 @@ namespace MoneyTracker2.Data.DataAccessLayers
         public async Task<IList<TransactionView>> GetTransactions()
         {
             return await _context.Transactions
-                .Include(t => t.Contact)
-                .Include(t => t.Reference)
+                .Include(t => t.Category)
                 .Select(t => new TransactionView(t))
                 .ToListAsync();
         }
         public async Task<IList<TransactionView>> GetTransactions(List<int> ids)
         {
             return await _context.Transactions
-                .Include(t => t.Contact)
-                .Include(t => t.Reference)
+                .Include(t => t.Category)
                 .Where(t => ids.Contains(t.Id))
                 .Select(t => new TransactionView(t))
                 .ToListAsync();
@@ -54,18 +50,16 @@ namespace MoneyTracker2.Data.DataAccessLayers
                 transactionEntity.Amount = transaction.Amount;
                 transactionEntity.Date = transaction.Date;
 
-                transactionEntity.RecordedReference = transaction.RecordedReference;
+                transactionEntity.RecordedCategory = transaction.RecordedReference;
                 transactionEntity.RecordedContact = transaction.RecordedContact;
 
-                transactionEntity.ReferenceId = transaction.Reference?.Id ?? null;
-                transactionEntity.ContactId = transaction.Contact?.Id ?? null;
+                transactionEntity.CategoryId = transaction.Category?.Id ?? null;
 
                 _context.Entry(transactionEntity).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
                 transactionEntity = await _context.Transactions
-                   .Include(t => t.Contact)
-                   .Include(t => t.Reference)
+                   .Include(t => t.Category)
                    .SingleAsync(t => t.Id == transaction.Id);
 
                 return new TransactionView(transactionEntity);
@@ -76,15 +70,15 @@ namespace MoneyTracker2.Data.DataAccessLayers
             }
         }
 
-        public async Task<List<int>> LinkReferenceAsync(string recordedReference, ReferenceView reference)
+        public async Task<List<int>> LinkReferenceAsync(string recordedReference, CategoryView category)
         {
             try
             {
-                var transactions = await _context.Transactions.Where(t => t.RecordedReference == recordedReference).ToListAsync();
+                var transactions = await _context.Transactions.Where(t => t.RecordedCategory == recordedReference).ToListAsync();
 
                 foreach (var transaction in transactions)
                 {
-                    transaction.ReferenceId = reference.Id;
+                    transaction.CategoryId = category.Id;
                 }
 
                 await _context.SaveChangesAsync();
@@ -97,7 +91,7 @@ namespace MoneyTracker2.Data.DataAccessLayers
             }
         }
 
-        public async Task<List<int>> LinkContactAsync(string recordedContact, ContactView contact)
+        public async Task<List<int>> LinkCategoryAsync(string recordedContact, CategoryView category)
         {
             try
             {
@@ -105,7 +99,7 @@ namespace MoneyTracker2.Data.DataAccessLayers
 
                 foreach (var transaction in transactions)
                 {
-                    transaction.ContactId = contact.Id;
+                    transaction.CategoryId = category.Id;
                 }
 
                 await _context.SaveChangesAsync();
