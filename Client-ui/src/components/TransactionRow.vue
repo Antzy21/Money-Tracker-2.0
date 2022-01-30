@@ -1,37 +1,24 @@
 <template>
   <tr>
       <th>{{transaction.id}}</th>
-      <th v-if="!showContactChoices"
-        @click="toggleShowContactChoices"
-        :class="{ uncategorised: transaction.contact==null }">
-        {{contactName}}
-      </th>
-      <th v-else>
-        <select :name="'Contact'" @change="onChangeContact($event)">
-          <option value="">{{transaction.recordedContact}}</option>
-          <option v-for="contact in contacts"
-            :key="contact.id"
-            :value="contact.id">
-            {{contact.name}}
-          </option>
-        </select>
-      </th>
-      <th v-if="!showReferenceChoices"
-        @click="toggleShowReferenceChoices"
-        :class="{ uncategorised: transaction.reference==null }">
-        {{ReferenceName}}
-      </th>
-      <th v-else>
-        <select :name="'Reference'" @change="onChangeReference($event)">
-          <option value="">{{transaction.recordedReference}}</option>
-          <option v-for="reference in references"
-            :key="reference.id"
-            :value="reference.id">
-            {{reference.name}}
-          </option>
-        </select>
-      </th>
+      <th>{{transaction.contact}}</th>
+      <th>{{transaction.reference}}</th>
       <th>{{transaction.amount}}</th>
+      <th v-if="!showCategoryChoices"
+        @click="toggleShowCategoryChoices"
+        :class="{ uncategorised: transaction.category==null }">
+        {{categoryName}}
+      </th>
+      <th v-else>
+        <select :name="'Category'" @change="onChangeCategory($event)">
+          <option value="">{{transaction.Category}}</option>
+          <option v-for="category in categories"
+            :key="category.id"
+            :value="category.id">
+            {{category.name}}
+          </option>
+        </select>
+      </th>
   </tr>
 </template>
 
@@ -44,51 +31,32 @@ export default {
     transaction: Object,
   },
   computed: {
-    ...mapState(['contacts', 'references']),
-    contactName() {
-      if (this.transaction.contact) {
-        return this.transaction.contact.name;
+    ...mapState(['categories']),
+    categoryName() {
+      if (this.transaction.category) {
+        return this.transaction.category.name;
       }
-      return this.transaction.recordedContact;
-    },
-    ReferenceName() {
-      if (this.transaction.reference) {
-        return this.transaction.reference.name;
-      }
-      return this.transaction.recordedReference;
+      return this.transaction.Category;
     },
   },
   data() {
     return {
-      showContactChoices: false,
-      showReferenceChoices: false,
+      showCategoryChoices: false,
     }
   },
   methods: {
-    ...mapActions(['linkReferenceToTransaction', 'linkContactToTransaction']),
-    toggleShowContactChoices() {
-      this.showContactChoices = !this.showContactChoices && this.transaction.contact == null
+    ...mapActions(['linkCategoryToTransaction']),
+    toggleShowCategoryChoices() {
+      this.showCategoryChoices = !this.showCategoryChoices && this.transaction.category == null
     },
-    onChangeContact(event) {
+    onChangeCategory(event) {
       const value = event.target.value;
       if (value) {
-        const contact = this.contacts.find(o => o.id == value);
-        const recordedContact = this.transaction.recordedContact;
-        this.linkContactToTransaction({ recordedContact, contact });
+        const category = this.categories.find(o => o.id == value);
+        const Category = this.transaction.Category;
+        this.linkCategoryToTransaction({ Category, category });
       }
-      this.toggleShowContactChoices();
-    },
-    toggleShowReferenceChoices() {
-      this.showReferenceChoices = !this.showReferenceChoices && this.transaction.reference == null
-    },
-    onChangeReference(event) {
-      const value = event.target.value;
-      if (value) {
-        const reference = this.references.find(o => o.id == value);
-        const recordedReference = this.transaction.recordedReference;
-        this.linkReferenceToTransaction({ recordedReference, reference });
-      }
-      this.toggleShowReferenceChoices();
+      this.toggleShowCategoryChoices();
     },
   },
 }

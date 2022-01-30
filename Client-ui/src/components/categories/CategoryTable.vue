@@ -10,25 +10,25 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="contactGroup in contactGroups" :key="contactGroup.id">
+            <tr v-for="categoryGroup in categoryGroups" :key="categoryGroup.id">
                 <td>
-                {{contactGroup.id}}
+                {{categoryGroup.id}}
                 </td>
                 <td>
-                {{contactGroup.name}}
+                {{categoryGroup.name}}
                 </td>
                 <td>
-                {{contactGroup.contactGroup}}
+                {{categoryGroup.categoryGroup}}
                 </td>
             </tr>
             <tr>
                 <td>
-                <button @click="onAddContactGroup">
+                <button @click="onAddCategoryGroup">
                     +
                 </button>
                 </td>
                 <td>
-                <input v-model="newContactGroup.name">
+                <input v-model="newCategoryGroup.name">
                 </td>
                 <td>
                 </td>
@@ -43,24 +43,24 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapState(['contactGroups']),
+    ...mapState(['categoryGroups']),
   },
   data() {
     return {
-      newContactGroup: {
+      newCategoryGroup: {
         name: '',
         colour: '#ffffff',
       }
     }
   },
   methods: {
-    ...mapActions(['addContactGroup']),
-    onAddContactGroup() {
-      this.addContactGroup(this.newContactGroup);
-      this.resetNewContactGroup();
+    ...mapActions(['addCategoryGroup']),
+    onAddCategoryGroup() {
+      this.addCategoryGroup(this.newCategoryGroup);
+      this.resetNewCategoryGroup();
     },
-    resetNewContactGroup() {
-      this.newContactGroup = {
+    resetNewCategoryGroup() {
+      this.newCategoryGroup = {
         name: '',
         colour: '#ffffff',
       }

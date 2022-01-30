@@ -6,19 +6,11 @@ import {
 } from '../api/HealthCheckApi.js'
 
 import {
-  getContacts,
-  postContact,
-  putContact,
-  linkContact,
-  getContactGroups,
-  postContactGroup,
-} from '../api/ContactsApi.js'
-import {
-  getReferences,
-  postReference,
-  putReference,
-  linkReference,
-} from '../api/ReferencesApi.js'
+  getCategories,
+  postCategory,
+  putCategory,
+  linkCategory,
+} from '../api/CategoriesApi.js'
 import {
   getTransactions,
   putTransaction,
@@ -28,9 +20,8 @@ import {
 export default createStore({
   state: {
     transactions: [],
-    contacts: [],
-    contactGroups: [],
-    references: [],
+    categories: [],
+    categoryGroups: [],
   },
   mutations: {
     setTransactions(state, data) {
@@ -44,37 +35,26 @@ export default createStore({
         state.transactions.push(data);
       }
     },
-    setContacts(state, data) {
-      state.contacts = data;
+    setCategories(state, data) {
+      state.categories = data;
     },
-    setContact(state, data) {
-      const contact = state.contacts.find(c => c.id === data.id)
-      if (contact) {
-        Object.assign(contact, data);
+    setCategory(state, data) {
+      const category = state.categories.find(c => c.id === data.id)
+      if (category) {
+        Object.assign(category, data);
       } else {
-        state.contacts.push(data);
+        state.categories.push(data);
       }
     },
-    setContactGroups(state, data) {
-      state.contactGroups = data;
+    setCategoryGroups(state, data) {
+      state.categoryGroups = data;
     },
-    setContactGroup(state, data) {
-      const contactGroup = state.contactGroups.find(c => c.id === data.id)
-      if (contactGroup) {
-        Object.assign(contactGroup, data);
+    setCategoryGroup(state, data) {
+      const categoryGroup = state.categoryGroups.find(c => c.id === data.id)
+      if (categoryGroup) {
+        Object.assign(categoryGroup, data);
       } else {
-        state.contactGroups.push(data);
-      }
-    },
-    setReferences(state, data) {
-      state.references = data;
-    },
-    setReference(state, data) {
-      const reference = state.references.find(c => c.id === data.id)
-      if (reference) {
-        Object.assign(reference, data);
-      } else {
-        state.references.push(data);
+        state.categoryGroups.push(data);
       }
     },
   },
@@ -86,9 +66,7 @@ export default createStore({
         }
         else {
           getTransactions().then(data => store.commit('setTransactions', data));
-          getContacts().then(data => store.commit('setContacts', data));
-          getContactGroups().then(data => store.commit('setContactGroups', data));
-          getReferences().then(data => store.commit('setReferences', data));
+          getCategories().then(data => store.commit('setCategories', data));
         }
       });
     },
@@ -100,58 +78,25 @@ export default createStore({
         return error;
       });
     },
-    updateContact(store, contact) {
-      putContact(contact.id, contact).then(data => {
-        store.commit('setContact', data);
+    updateCategory(store, category) {
+      putCategory(category.id, category).then(data => {
+        store.commit('setCategory', data);
       }).catch((error) => {
         console.log('caught error')
         return error;
       });
     },
-    updateReference(store, reference) {
-      putReference(reference.id, reference).then(data => {
-        store.commit('setReference', data);
-      }).catch((error) => {
-        console.log('caught error')
-        return error;
-      });
-    },
-    addContact(store, newContact) {
-      postContact(newContact).then(data => {
-        store.commit('setContact', data);
+    addCategory(store, newCategory) {
+      postCategory(newCategory).then(data => {
+        debugger;
+        store.commit('setCategory', data);
       }).catch(error => {
         console.log('caught error')
         return error;
       });
     },
-    addContactGroup(store, newContactGroup) {
-      postContactGroup(newContactGroup).then(data => {
-        store.commit('setContactGroup', data);
-      }).catch(error => {
-        console.log('caught error')
-        return error;
-      });
-    },
-    addReference(store, newReference) {
-      postReference(newReference).then(data => {
-        store.commit('setReference', data);
-      }).catch(error => {
-        console.log('caught error')
-        return error;
-      });      
-    },
-    linkReferenceToTransaction(store, { recordedReference, reference }) {
-        linkReference(recordedReference, reference).then((updatedTransactions)=>{
-        updatedTransactions.forEach(updatedTransactions => {
-          store.commit('setTransaction', updatedTransactions);
-        });
-      }).catch(error => {
-        console.log('caught error')
-        return error;
-      });
-    },
-    linkContactToTransaction(store, { recordedContact, contact }) {
-        linkContact(recordedContact, contact).then((updatedTransactions)=>{
+    linkCategoryToTransaction(store, { Category, category }) {
+        linkCategory(Category, category).then((updatedTransactions)=>{
         updatedTransactions.forEach(updatedTransactions => {
           store.commit('setTransaction', updatedTransactions);
         });

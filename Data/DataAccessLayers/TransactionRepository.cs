@@ -50,8 +50,8 @@ namespace MoneyTracker2.Data.DataAccessLayers
                 transactionEntity.Amount = transaction.Amount;
                 transactionEntity.Date = transaction.Date;
 
-                transactionEntity.Reference = transaction.RecordedReference;
-                transactionEntity.Contact = transaction.RecordedContact;
+                transactionEntity.Reference = transaction.Reference;
+                transactionEntity.Contact = transaction.Contact;
 
                 transactionEntity.CategoryId = transaction.Category?.Id ?? null;
 
@@ -70,32 +70,11 @@ namespace MoneyTracker2.Data.DataAccessLayers
             }
         }
 
-        public async Task<List<int>> LinkReferenceAsync(string recordedReference, CategoryView category)
+        public async Task<List<int>> LinkCategoryAsync(string contact, CategoryView category)
         {
             try
             {
-                var transactions = await _context.Transactions.Where(t => t.Reference == recordedReference).ToListAsync();
-
-                foreach (var transaction in transactions)
-                {
-                    transaction.CategoryId = category.Id;
-                }
-
-                await _context.SaveChangesAsync();
-
-                return transactions.Select(t => t.Id).ToList();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-        }
-
-        public async Task<List<int>> LinkCategoryAsync(string recordedContact, CategoryView category)
-        {
-            try
-            {
-                var transactions = await _context.Transactions.Where(t => t.Contact == recordedContact).ToListAsync();
+                var transactions = await _context.Transactions.Where(t => t.Contact == contact).ToListAsync();
 
                 foreach (var transaction in transactions)
                 {

@@ -67,7 +67,7 @@ export default {
     }    
   },
   computed: {
-    ...mapState(['transactions', 'contacts', 'references']),
+    ...mapState(['transactions', 'categories']),
     timeSplitTransactions() {
       let copiedTransactions = [ ...this.transactions ];
       copiedTransactions = copiedTransactions.sort((t1, t2) => Date.parse(t1.date) - Date.parse(t2.date));

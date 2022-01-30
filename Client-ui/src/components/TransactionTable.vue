@@ -8,6 +8,7 @@
         <th>Contact</th>
         <th>Reference</th>
         <th>Amount</th>
+        <th>Category</th>
     </tr>
     <TransactionRow v-for="t in transactions" :key="t.id" :transaction="t"/>
   </table>

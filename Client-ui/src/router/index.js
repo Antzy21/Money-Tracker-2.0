@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import TempEverythingPage from '../views/TempEverythingPage.vue'
-import Contacts from '../views/Contacts.vue'
-import References from '../views/References.vue'
+import Categories from '../views/Categories.vue'
 import ToDo from '../views/ToDo.vue'
 
 const routes = [
@@ -12,14 +11,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/contacts',
-    name: 'Contacts',
-    component: Contacts
-  },
-  {
-    path: '/references',
-    name: 'References',
-    component: References
+    path: '/categories',
+    name: 'Categories',
+    component: Categories
   },
   {
     path: '/todo',

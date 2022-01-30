@@ -11,12 +11,12 @@ namespace MoneyTracker.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly BankContext _context;
         private readonly TransactionRepository _transactionRepository;
 
-        public CategoryController(BankContext context, TransactionRepository transactionRepository)
+        public CategoriesController(BankContext context, TransactionRepository transactionRepository)
         {
             _context = context;
             _transactionRepository = transactionRepository;
@@ -24,10 +24,12 @@ namespace MoneyTracker.Controllers
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryView>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<CategoryView>>> Get()
         {
-            return await _context.Categories.Include(r => r.Transactions)
-                .Select(r => new CategoryView(r)).ToListAsync();
+            return await _context.Categories
+                .Include(c => c.Transactions)
+                .Select(c => new CategoryView(c))
+                .ToListAsync();
         }
 
         // GET: api/Categories/5
@@ -74,26 +76,6 @@ namespace MoneyTracker.Controllers
             }
 
             return NoContent();
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> LinkCategory(LinkCategoryObject linkCategory)
-        {
-            if (linkCategory.recordedCategory == null || linkCategory.category == null)
-            {
-                return BadRequest();
-            }
-
-            var updatedTransactionIds = await _transactionRepository.LinkCategoryAsync(linkCategory.recordedCategory, linkCategory.category);
-
-            var updatedTransactions = await _transactionRepository.GetTransactions(updatedTransactionIds);
-
-            return new JsonResult(updatedTransactions.ToList());
-        }
-        public class LinkCategoryObject
-        {
-            public string recordedCategory { get; set; }
-            public CategoryView category { get; set; }
         }
 
         // POST: api/Categories

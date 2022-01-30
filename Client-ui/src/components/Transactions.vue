@@ -6,8 +6,7 @@
       :showCount="true"
     />
     <Uncatagorised :transactions="uncategorisedTransactions"/>
-    <Contacts />
-    <References />
+    <Categories />
     <UploadCsv />
   </div>
 </template>
@@ -16,26 +15,24 @@
 import { mapState } from 'vuex'
 import Uncatagorised from './Uncatagorised.vue'
 import TransactionTable from './TransactionTable.vue'
-import Contacts from './Contacts.vue'
-import References from './References.vue'
+import Categories from './Categories.vue'
 import UploadCsv from './UploadCsv.vue'
 
 export default {
   name: 'Transactions',
   components: {
     Uncatagorised,
-    Contacts,
-    References,
+    Categories,
     UploadCsv,
     TransactionTable
   },
   computed: {
-    ...mapState(['transactions', 'contacts', 'references']),
+    ...mapState(['transactions', 'categories']),
     uncategorisedTransactions() {
       if (!this.transactions) {
         return [];
       }
-      return this.transactions.filter(t => t.contact == null || t.reference == null)
+      return this.transactions.filter(t => t.category == null)
     },
   },
 }
