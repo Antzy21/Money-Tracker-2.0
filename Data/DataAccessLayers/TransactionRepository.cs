@@ -42,53 +42,36 @@ namespace MoneyTracker2.Data.DataAccessLayers
 
         public async Task<TransactionView> SaveTransaction(TransactionView transaction)
         {
-            try
-            {
-                var transactionEntity = _context.Transactions
-                    .Single(t => t.Id == transaction.Id);
+            var transactionEntity = _context.Transactions
+                .Single(t => t.Id == transaction.Id);
 
-                transactionEntity.Amount = transaction.Amount;
-                transactionEntity.Date = transaction.Date;
+            transactionEntity.Amount = transaction.Amount;
+            transactionEntity.Date = transaction.Date;
+            transactionEntity.Reference = transaction.Reference;
+            transactionEntity.Contact = transaction.Contact;
+            transactionEntity.CategoryId = transaction.Category?.Id;
 
-                transactionEntity.Reference = transaction.Reference;
-                transactionEntity.Contact = transaction.Contact;
+            _context.Entry(transactionEntity).State = EntityState.Modified;
 
-                transactionEntity.CategoryId = transaction.Category?.Id ?? null;
+            await _context.SaveChangesAsync();
 
-                _context.Entry(transactionEntity).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-
-                transactionEntity = await _context.Transactions
-                   .Include(t => t.Category)
-                   .SingleAsync(t => t.Id == transaction.Id);
-
-                return new TransactionView(transactionEntity);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
+            return await GetTransaction(transactionEntity.Id);
         }
 
         public async Task<List<int>> LinkCategoryAsync(string contact, CategoryView category)
         {
-            try
+            var transactions = await _context.Transactions
+                .Where(t => t.Contact == contact)
+                .ToListAsync();
+
+            foreach (var transaction in transactions)
             {
-                var transactions = await _context.Transactions.Where(t => t.Contact == contact).ToListAsync();
-
-                foreach (var transaction in transactions)
-                {
-                    transaction.CategoryId = category.Id;
-                }
-
-                await _context.SaveChangesAsync();
-
-                return transactions.Select(t => t.Id).ToList();
+                transaction.CategoryId = category.Id;
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
+
+            await _context.SaveChangesAsync();
+
+            return transactions.Select(t => t.Id).ToList();
         }
     }
 }

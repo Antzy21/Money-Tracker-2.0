@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoneyTracker.Models;
 using MoneyTracker2.Data.DataAccessLayers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +22,6 @@ namespace MoneyTracker.Controllers
         public async Task<ActionResult<IEnumerable<TransactionView>>> Get()
         {
             var transactions = await _transactionRepo.GetTransactions();
-
             return new JsonResult(transactions.ToList());
         }
 
@@ -31,12 +29,10 @@ namespace MoneyTracker.Controllers
         public async Task<ActionResult<TransactionView>> GetTransaction(int id)
         {
             var transaction = await _transactionRepo.GetTransaction(id);
-
             if (transaction == null)
             {
                 return NotFound();
             }
-
             return transaction;
         }
 
@@ -47,7 +43,6 @@ namespace MoneyTracker.Controllers
             {
                 return BadRequest();
             }
-
             var savedTransaction = await _transactionRepo.SaveTransaction(transaction);
             return new JsonResult(savedTransaction);
         }

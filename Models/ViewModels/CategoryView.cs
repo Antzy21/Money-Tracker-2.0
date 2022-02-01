@@ -11,12 +11,12 @@
             Id = category.Id;
             Name = category.Name;
             Colour = category.Colour;
-            CategoryParentName = category.ParentCategory?.Name ?? "None";
+            ParentCategoryId = category.ParentCategoryId ?? 0;
         }
         public int Id { get; set; }
         public string Name { get; set; }
         public string Colour { get; set; }
-        public string CategoryParentName { get; set; }
+        public int ParentCategoryId { get; set; }
 
     }
 }
