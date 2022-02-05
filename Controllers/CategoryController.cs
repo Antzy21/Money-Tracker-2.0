@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoneyTracker.Models;
-using MoneyTracker2.Data.DataAccessLayers;
+using MoneyTracker.Data.DataAccessLayers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MoneyTracker.Models.ViewModels;
 
 namespace MoneyTracker.Controllers
 {
@@ -11,22 +12,21 @@ namespace MoneyTracker.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly CategoryRepo _categoryRepo;
+        private readonly CategoryRepository _categoryRepo;
 
-        public CategoriesController(CategoryRepo categoryRepo)
+        public CategoriesController(CategoryRepository categoryRepo)
         {
             _categoryRepo = categoryRepo;
         }
 
-        // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryView>>> Get()
+        public async Task<ActionResult<IEnumerable<CategoryNodeView>>> Get()
         {
-            var categories = await _categoryRepo.GetCategories();
+            var categories = await _categoryRepo.GetCategoriesTree();
+            
             return new JsonResult(categories.ToList());
         }
 
-        // GET: api/Categories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryView>> GetCategory(int id)
         {
@@ -63,7 +63,6 @@ namespace MoneyTracker.Controllers
             return CreatedAtAction("GetCategory", new { id = savedCategory.Id }, category);
         }
 
-        // DELETE: api/Categories/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<CategoryView>> DeleteCategory(int id)
         {

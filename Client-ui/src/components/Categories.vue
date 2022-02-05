@@ -1,89 +1,59 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col">
-        <h1>Categories</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Name</th>
-              <th>Group</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="category in categories" :key="category.id">
-              <td>
-                {{category.id}}
-              </td>
-              <td>
-                {{category.name}}
-              </td>
-              <td>
-                <select v-model="category.categoryGroupId">
-                  <option value="null">None</option>
-                  <option v-for="group in categoryGroups"
-                    :key="group.id"
-                    :value="group.id">
-                    {{group.name}}
-                  </option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <button @click="onAddCategory">
-                  +
-                </button>
-              </td>
-              <td>
-                <input v-model="newCategory.name">
-              </td>
-              <td>
-                <select v-model="newCategory.categoryGroupId">
-                  <option value="null">None</option>
-                  <option v-for="group in categoryGroups"
-                    :key="group.id"
-                    :value="group.id">
-                    {{group.name}}
-                  </option>
-                </select>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <h1>Categories</h1>
+    <Tree :nodes="categoryTree" />
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import Tree from 'vuejs-tree'
+//https://openbase.com/js/vuejs-tree/documentation
 
 export default {
   name: 'Categories',
-  computed: {
-    ...mapState(['categories']),
-  },
   data() {
     return {
-      newCategory: {
-        name: '',
-        categoryGroupId: null,
-      }
+      treeDisplayData: [
+        {
+          text: 'Root 1',
+          state: { checked: false, selected: false, expanded: false },
+          nodes: [
+            {
+              text: 'Child 1',
+              state: { checked: false, selected: false, expanded: false }
+            }
+          ]
+        },
+        {
+          text: 'Root 2',
+          state: { checked: false, selected: false, expanded: false }
+        }
+      ]
     }
+  },
+  components: {
+    'Tree': Tree
+  },
+  computed: {
+    ...mapState(['categories']),
+    categoryTree() {
+      this.categories.forEach(category => {
+        this.convertCategoryView(category)
+      });
+      return this.categories
+    },
   },
   methods: {
     ...mapActions(['addCategory']),
-    onAddCategory() {
-      this.addCategory(this.newCategory);
-      this.resetNewCategory();
-    },
-    resetNewCategory() {
-      this.newCategory = {
-        name: '',
-        categoryGroupId: null,
+    convertCategoryView(category) {
+      category.state = {
+        checked: false,
+        expanded: false,
+        selected: false,
       }
+      category.text = category.name
+      return category
     },
   }
 }

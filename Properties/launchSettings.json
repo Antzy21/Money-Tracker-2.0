@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "MoneyTracker2": {
+    "MoneyTracker": {
       "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "healthcheck",

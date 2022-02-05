@@ -1,20 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MoneyTracker.Data;
 using MoneyTracker.Models;
+using MoneyTracker.Models.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MoneyTracker2.Data.DataAccessLayers
+namespace MoneyTracker.Data.DataAccessLayers
 {
-    public class CategoryRepo
+    public class CategoryRepository
     {
         private readonly BankContext _context;
 
-        public CategoryRepo(BankContext context)
+        public CategoryRepository(BankContext context)
         {
             _context = context;
         }
+
         public async Task<CategoryView> GetCategory(int id)
         {
             var categoryEntity = await _context.Categories
@@ -22,12 +23,28 @@ namespace MoneyTracker2.Data.DataAccessLayers
 
             return new CategoryView(categoryEntity);
         }
-        public async Task<IList<CategoryView>> GetCategories()
+
+        private List<CategoryNodeView> BuildTree(List<Category> allCategories, int? parentId)
         {
-            return await _context.Categories
-                .Select(c => new CategoryView(c))
-                .ToListAsync();
+            var children = allCategories
+                .Where(c => c.ParentCategoryId == parentId)
+                .Select(c => new CategoryNodeView(c));
+
+            foreach (var node in children)
+            {
+                node.nodes = BuildTree(allCategories, node.Id);
+            }
+
+            return children.ToList();
         }
+
+        public async Task<IList<CategoryNodeView>> GetCategoriesTree()
+        {
+            var allCategories = await _context.Categories.ToListAsync();
+
+            return BuildTree(allCategories, null);
+        }
+
         public async Task<IList<CategoryView>> GetCategories(List<int> ids)
         {
             return await _context.Categories

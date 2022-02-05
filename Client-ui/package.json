@@ -16,6 +16,7 @@
     "sass-loader": "^10.2.1",
     "vue": "^3.2.27",
     "vue-router": "^4.0.12",
+    "vuejs-tree": "^3.0.1",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

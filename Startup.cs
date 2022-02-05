@@ -30,6 +30,7 @@ namespace MoneyTracker
             services.AddDbContext<BankContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BankContext")));
 
             services.AddScoped<TransactionRepository>();
+            services.AddScoped<CategoryRepository>();
 
             services.AddCors(options =>
             {
