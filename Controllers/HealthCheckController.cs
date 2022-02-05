@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace MoneyTracker2.Controllers
+namespace MoneyTracker.Controllers
 {
     [ApiController]
     [Route("[controller]")]

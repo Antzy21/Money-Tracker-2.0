@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MoneyTracker.Models;
-using MoneyTracker2.Data.DataAccessLayers;
+using MoneyTracker.Models.ViewModels;
+using MoneyTracker.Data.DataAccessLayers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

@@ -1,4 +1,4 @@
-﻿namespace MoneyTracker.Models
+﻿namespace MoneyTracker.Models.ViewModels
 {
     public class CategoryView
     {
