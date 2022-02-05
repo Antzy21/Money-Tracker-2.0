@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>MoneyTracker2</RootNamespace>
+    <RootNamespace>MoneyTracker</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

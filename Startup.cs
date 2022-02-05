@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MoneyTracker.Data;
 using MoneyTracker.Services;
-using MoneyTracker2.Data.DataAccessLayers;
+using MoneyTracker.Data.DataAccessLayers;
 
-namespace MoneyTracker2
+namespace MoneyTracker
 {
     public class Startup
     {

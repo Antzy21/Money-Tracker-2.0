@@ -4,10 +4,6 @@ namespace MoneyTracker.Models
 {
     public class TransactionView
     {
-        public TransactionView()
-        {
-        }
-
         public TransactionView(Transaction transaction)
         {
             Id = transaction.Id;

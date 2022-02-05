@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace MoneyTracker2
+namespace MoneyTracker
 {
     public class Program
     {

@@ -2,10 +2,6 @@
 {
     public class CategoryView
     {
-        public CategoryView()
-        {
-        }
-
         public CategoryView(Category category)
         {
             Id = category.Id;
