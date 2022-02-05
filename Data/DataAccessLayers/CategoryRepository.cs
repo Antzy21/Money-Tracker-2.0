@@ -24,25 +24,11 @@ namespace MoneyTracker.Data.DataAccessLayers
             return new CategoryView(categoryEntity);
         }
 
-        private List<CategoryNodeView> BuildTree(List<Category> allCategories, int? parentId)
+        public async Task<IList<CategoryView>> GetCategories()
         {
-            var children = allCategories
-                .Where(c => c.ParentCategoryId == parentId)
-                .Select(c => new CategoryNodeView(c));
-
-            foreach (var node in children)
-            {
-                node.nodes = BuildTree(allCategories, node.Id);
-            }
-
-            return children.ToList();
-        }
-
-        public async Task<IList<CategoryNodeView>> GetCategoriesTree()
-        {
-            var allCategories = await _context.Categories.ToListAsync();
-
-            return BuildTree(allCategories, null);
+            return await _context.Categories
+                .Select(c => new CategoryView(c))
+                .ToListAsync();
         }
 
         public async Task<IList<CategoryView>> GetCategories(List<int> ids)

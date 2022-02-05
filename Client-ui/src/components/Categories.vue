@@ -37,15 +37,30 @@ export default {
   },
   computed: {
     ...mapState(['categories']),
+    topLevelCategories() {
+      return this.categories.filter(category => 
+        category.parentCategoryId == 0
+      );
+    },
     categoryTree() {
-      this.categories.forEach(category => {
-        this.convertCategoryView(category)
+      return this.topLevelCategories.map(category => {
+        category.nodes = this.BuildTree(category)
+        category = this.convertCategoryView(category)
+        return category
       });
-      return this.categories
     },
   },
   methods: {
     ...mapActions(['addCategory']),
+    BuildTree(parentNode) {
+      var children = this.categories.filter(c => c.parentCategoryId == parentNode.id);
+      children.forEach(childNode => {
+        childNode.nodes = this.BuildTree(childNode);
+      });
+      return children.map(child => {
+        return this.convertCategoryView(child)
+      });
+    },
     convertCategoryView(category) {
       category.state = {
         checked: false,

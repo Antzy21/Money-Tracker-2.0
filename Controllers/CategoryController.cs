@@ -20,9 +20,9 @@ namespace MoneyTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryNodeView>>> Get()
+        public async Task<ActionResult<IEnumerable<CategoryView>>> Get()
         {
-            var categories = await _categoryRepo.GetCategoriesTree();
+            var categories = await _categoryRepo.GetCategories();
             
             return new JsonResult(categories.ToList());
         }
