@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using MoneyTracker.Data;
-using MoneyTracker.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using MoneyTracker2.Data;
+using MoneyTracker2.Models.EntityModels;
+using MoneyTracker2.Models.External;
 
-namespace MoneyTracker.Services
+namespace MoneyTracker2.Services
 {
     public class TransactionImportService
     {

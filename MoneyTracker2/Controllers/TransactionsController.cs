@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MoneyTracker.Models.ViewModels;
-using MoneyTracker.Data.DataAccessLayers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using MoneyTracker2.Data.DataAccessLayers;
+using MoneyTracker2.Models.ViewModels;
 
-namespace MoneyTracker.Controllers
+namespace MoneyTracker2.Controllers
 {
     [Route("[controller]")]
     [ApiController]

@@ -1,6 +1,7 @@
 ﻿using System;
+using MoneyTracker2.Models.EntityModels;
 
-namespace MoneyTracker.Models.ViewModels
+namespace MoneyTracker2.Models.ViewModels
 {
     public class TransactionView
     {

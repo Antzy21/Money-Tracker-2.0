@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MoneyTracker.Models
+namespace MoneyTracker2.Models.External
 {
     public class CsvTransaction
     {

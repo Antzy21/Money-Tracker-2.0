@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MoneyTracker.Models
+namespace MoneyTracker2.Models.EntityModels
 {
     public class Transaction
     {

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MoneyTracker.Services;
-using System.Linq;
+using MoneyTracker2.Services;
 
-namespace MoneyTracker.Controllers
+namespace MoneyTracker2.Controllers
 {
     [Route("[controller]")]
     [ApiController]

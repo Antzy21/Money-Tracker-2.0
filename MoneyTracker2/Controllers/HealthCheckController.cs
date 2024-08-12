@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 
-namespace MoneyTracker.Controllers
+namespace MoneyTracker2.Controllers
 {
     [ApiController]
     [Route("[controller]")]

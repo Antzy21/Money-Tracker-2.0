@@ -1,4 +1,6 @@
-﻿namespace MoneyTracker.Models.ViewModels
+﻿using MoneyTracker2.Models.EntityModels;
+
+namespace MoneyTracker2.Models.ViewModels
 {
     public class CategoryView
     {

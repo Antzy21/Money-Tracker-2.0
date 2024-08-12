@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MoneyTracker.Models;
+using MoneyTracker2.Models.EntityModels;
 
-namespace MoneyTracker.Data
+namespace MoneyTracker2.Data
 {
     public class BankContext : DbContext
     {
