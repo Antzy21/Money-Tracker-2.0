@@ -3,30 +3,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoneyTracker2.Services;
 
-namespace MoneyTracker2.Controllers
+namespace MoneyTracker2.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class UploadController(TransactionImportService transactionImportService) : ControllerBase
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class UploadController : ControllerBase
+    [HttpPost]
+    public ActionResult Post(IFormFile file)
     {
-        private readonly TransactionImportService _transactionImportService;
-
-        public UploadController(TransactionImportService transactionImportService)
+        if (file == null)
         {
-            _transactionImportService = transactionImportService;
+            return new JsonResult("Failed");
         }
 
-        [HttpPost]
-        public ActionResult Post(IFormFile file)
-        {
-            if (file == null)
-            {
-                return new JsonResult("Failed");
-            }
+        var newlyAddedTransactions = transactionImportService.ImportTransactionsFromFile(file).ToList();
 
-            var newlyAddedTransactions = _transactionImportService.ImportTransactionsFromFile(file).ToList();
-
-            return new JsonResult(newlyAddedTransactions);
-        }
+        return new JsonResult(newlyAddedTransactions);
     }
 }

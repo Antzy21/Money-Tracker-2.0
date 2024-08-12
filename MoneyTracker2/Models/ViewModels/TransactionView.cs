@@ -1,12 +1,12 @@
 ﻿using System;
 using MoneyTracker2.Models.EntityModels;
 
-namespace MoneyTracker2.Models.ViewModels
+namespace MoneyTracker2.Models.ViewModels;
+
+public class TransactionView
 {
-    public class TransactionView
+    public TransactionView(Transaction transaction)
     {
-        public TransactionView(Transaction transaction)
-        {
             Id = transaction.Id;
             Date = transaction.Date;
             Amount = transaction.Amount;
@@ -20,12 +20,11 @@ namespace MoneyTracker2.Models.ViewModels
             }
         }
 
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public float Amount { get; set; }
-        public string Contact { get; set; }
-        public string Reference { get; set; }
+    public int Id { get; set; }
+    public DateTime Date { get; set; }
+    public float Amount { get; set; }
+    public string Contact { get; set; }
+    public string Reference { get; set; }
 
-        public CategoryView Category { get; set; }
-    }
+    public CategoryView Category { get; set; }
 }

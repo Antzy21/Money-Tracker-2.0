@@ -5,16 +5,16 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
 
-namespace MoneyTracker2.Services
+namespace MoneyTracker2.Services;
+
+public class CsvService
 {
-    public class CsvService
+    public CsvService()
     {
-        public CsvService()
-        {
         }
 
-        public List<T> ReadCsvTo<T>(IFormFile file, LongLinePolicy longLinePolicy = LongLinePolicy.ThrowError) where T : new()
-        {
+    public List<T> ReadCsvTo<T>(IFormFile file, LongLinePolicy longLinePolicy = LongLinePolicy.ThrowError) where T : new()
+    {
             Stream stream = file.OpenReadStream();
             StreamReader streamReader = new StreamReader(stream);
 
@@ -71,8 +71,8 @@ namespace MoneyTracker2.Services
             return listOfObjects;
         }
 
-        private static T ConvertLineTo<T>(Dictionary<string, string> row) where T : new()
-        {
+    private static T ConvertLineTo<T>(Dictionary<string, string> row) where T : new()
+    {
             T obj = new T();
 
             var properties = typeof(T).GetProperties();
@@ -86,8 +86,8 @@ namespace MoneyTracker2.Services
             return obj;
         }
 
-        private static void AssignProperty<T>(T obj, PropertyInfo property, string value) where T : new()
-        {
+    private static void AssignProperty<T>(T obj, PropertyInfo property, string value) where T : new()
+    {
             if (property.PropertyType == typeof(float))
             {
                 float entry = float.Parse(value);
@@ -104,12 +104,11 @@ namespace MoneyTracker2.Services
                 property.SetValue(obj, entry);
             }
         }
-    }
+}
 
-    public enum LongLinePolicy
-    {
-        Ignore,
-        IncludeInLastLine,
-        ThrowError
-    }
+public enum LongLinePolicy
+{
+    Ignore,
+    IncludeInLastLine,
+    ThrowError
 }

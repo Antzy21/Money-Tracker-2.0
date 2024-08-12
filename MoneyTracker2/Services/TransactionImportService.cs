@@ -5,20 +5,20 @@ using MoneyTracker2.Data;
 using MoneyTracker2.Models.EntityModels;
 using MoneyTracker2.Models.External;
 
-namespace MoneyTracker2.Services
-{
-    public class TransactionImportService
-    {
-        private readonly CsvService _csvService = new CsvService();
-        private readonly BankContext _context;
+namespace MoneyTracker2.Services;
 
-        public TransactionImportService(BankContext context)
-        {
+public class TransactionImportService
+{
+    private readonly CsvService _csvService = new CsvService();
+    private readonly BankContext _context;
+
+    public TransactionImportService(BankContext context)
+    {
             _context = context;
         }
 
-        public IList<Transaction> ImportTransactionsFromFile(IFormFile file)
-        {
+    public IList<Transaction> ImportTransactionsFromFile(IFormFile file)
+    {
             var csvTransactions = _csvService.ReadCsvTo<CsvTransaction>(file, LongLinePolicy.IncludeInLastLine);
 
             var newTransactions = new List<Transaction>();
@@ -50,5 +50,4 @@ namespace MoneyTracker2.Services
             return _context.Transactions.Where(t => newTransactionIds.Contains(t.Id)).ToList();
         }
 
-    }
 }

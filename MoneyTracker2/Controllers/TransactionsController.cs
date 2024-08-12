@@ -5,46 +5,38 @@ using Microsoft.AspNetCore.Mvc;
 using MoneyTracker2.Data.DataAccessLayers;
 using MoneyTracker2.Models.ViewModels;
 
-namespace MoneyTracker2.Controllers
+namespace MoneyTracker2.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class TransactionsController(TransactionRepository transactionRepo) : ControllerBase
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class TransactionsController : ControllerBase
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<TransactionView>>> Get()
     {
-        private readonly TransactionRepository _transactionRepo;
+        var transactions = await transactionRepo.GetTransactions();
+        return new JsonResult(transactions.ToList());
+    }
 
-        public TransactionsController(TransactionRepository transactionRepo)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<TransactionView>> GetTransaction(int id)
+    {
+        var transaction = await transactionRepo.GetTransaction(id);
+        if (transaction == null)
         {
-            _transactionRepo = transactionRepo;
+            return NotFound();
         }
+        return transaction;
+    }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TransactionView>>> Get()
+    [HttpPut("{id}")]
+    public async Task<ActionResult<TransactionView>> PutTransaction(int id, TransactionView transaction)
+    {
+        if (id != transaction.Id)
         {
-            var transactions = await _transactionRepo.GetTransactions();
-            return new JsonResult(transactions.ToList());
+            return BadRequest();
         }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TransactionView>> GetTransaction(int id)
-        {
-            var transaction = await _transactionRepo.GetTransaction(id);
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-            return transaction;
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<TransactionView>> PutTransaction(int id, TransactionView transaction)
-        {
-            if (id != transaction.Id)
-            {
-                return BadRequest();
-            }
-            var savedTransaction = await _transactionRepo.SaveTransaction(transaction);
-            return new JsonResult(savedTransaction);
-        }
+        var savedTransaction = await transactionRepo.SaveTransaction(transaction);
+        return new JsonResult(savedTransaction);
     }
 }
