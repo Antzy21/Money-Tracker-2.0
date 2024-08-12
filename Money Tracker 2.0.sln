@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money Tracker 2.0", "Money Tracker 2.0.csproj", "{5DA13D0A-BC1C-48EE-8F3A-D1FA647BA888}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyTracker2.0", "MoneyTracker2.0\MoneyTracker2.0.csproj", "{32729DEF-6DA7-4847-83C3-AB5562B1E7D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D2091D32-3362-497E-B54E-16C041B2C499}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,10 +16,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5DA13D0A-BC1C-48EE-8F3A-D1FA647BA888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5DA13D0A-BC1C-48EE-8F3A-D1FA647BA888}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5DA13D0A-BC1C-48EE-8F3A-D1FA647BA888}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5DA13D0A-BC1C-48EE-8F3A-D1FA647BA888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32729DEF-6DA7-4847-83C3-AB5562B1E7D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32729DEF-6DA7-4847-83C3-AB5562B1E7D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32729DEF-6DA7-4847-83C3-AB5562B1E7D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32729DEF-6DA7-4847-83C3-AB5562B1E7D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
