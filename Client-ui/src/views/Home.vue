@@ -8,7 +8,6 @@
 import TransactionChartWrapper from '../components/charts/TransactionChartWrapper.vue'
 
 export default {
-  name: 'Home',
   components: {
     TransactionChartWrapper,
   }
