@@ -13,7 +13,7 @@ public class Category
 
     public int? ParentCategoryId { get; set; }
     [ForeignKey("ParentCategoryId")]
-    public Category ParentCategory { get; set; }
+    public Category? ParentCategory { get; set; }
 
     public List<Category> ChildCategories { get; set; }
 

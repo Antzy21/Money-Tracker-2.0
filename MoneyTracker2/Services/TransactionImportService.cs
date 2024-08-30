@@ -7,47 +7,39 @@ using MoneyTracker2.Models.External;
 
 namespace MoneyTracker2.Services;
 
-public class TransactionImportService
+public class TransactionImportService(MoneyTrackerContext context)
 {
     private readonly CsvService _csvService = new CsvService();
-    private readonly BankContext _context;
-
-    public TransactionImportService(BankContext context)
-    {
-            _context = context;
-        }
 
     public IList<Transaction> ImportTransactionsFromFile(IFormFile file)
     {
-            var csvTransactions = _csvService.ReadCsvTo<CsvTransaction>(file, LongLinePolicy.IncludeInLastLine);
+        var csvTransactions = _csvService.ReadCsvTo<CsvTransaction>(file, LongLinePolicy.IncludeInLastLine);
 
-            var newTransactions = new List<Transaction>();
+        var newTransactions = new List<Transaction>();
 
-            foreach (var ct in csvTransactions)
+        foreach (var ct in csvTransactions)
+        {
+            var transaction = new Transaction
             {
-                var transaction = new Transaction
-                {
-                    Amount = ct.Amount,
-                    Date = ct.Date,
-                };
+                Amount = ct.Amount,
+                Date = ct.Date,
+            };
 
-                var additionalInfo = ct.Memo.Split("  ");
-                additionalInfo = additionalInfo.Where(a => a.Length > 0).ToArray();
+            var additionalInfo = ct.Memo.Split("  ");
+            additionalInfo = additionalInfo.Where(a => a.Length > 0).ToArray();
 
-                transaction.Contact = additionalInfo[0].Trim();
-                transaction.Reference = additionalInfo[1].Trim();
+            transaction.Contact = additionalInfo[0].Trim();
+            transaction.Reference = additionalInfo[1].Trim();
 
-                newTransactions.Add(transaction);
-            }
-
-
-            _context.Transactions.AddRange(newTransactions);
-
-            _context.SaveChanges();
-
-            var newTransactionIds = newTransactions.Select(nt => nt.Id).ToList();
-
-            return _context.Transactions.Where(t => newTransactionIds.Contains(t.Id)).ToList();
+            newTransactions.Add(transaction);
         }
 
+        context.Transactions.AddRange(newTransactions);
+
+        context.SaveChanges();
+
+        var newTransactionIds = newTransactions.Select(nt => nt.Id).ToList();
+
+        return context.Transactions.Where(t => newTransactionIds.Contains(t.Id)).ToList();
+    }
 }

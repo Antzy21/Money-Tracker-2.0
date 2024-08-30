@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using MoneyTracker2.Data;
+using MoneyTracker2.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,15 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<MoneyTrackerContext>();
+builder.Services.AddSingleton<TransactionImportService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.MapSwagger();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();

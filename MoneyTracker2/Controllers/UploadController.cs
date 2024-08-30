@@ -14,7 +14,7 @@ public class UploadController(TransactionImportService transactionImportService)
     {
         if (file == null)
         {
-            return new JsonResult("Failed");
+            return new BadRequestResult();
         }
 
         var newlyAddedTransactions = transactionImportService.ImportTransactionsFromFile(file).ToList();
