@@ -6,14 +6,18 @@ import { ref, type Ref } from "vue";
 var categories: Ref<Category[]> = ref([])
 
 getCategories().then((data: any[]) => {
-  categories.value = data
+    categories.value = data
 })
 </script>
 
 <template>
     <h1>Categories</h1>
     <div>There are {{ categories.length }} categories</div>
-    <div v-for="category in categories">
-        {{ category.name }} {{ category.id }}
-    </div>
+    <table>
+        <tbody>
+            <tr v-for="category in categories">
+                <td>{{ category.name }}</td>
+            </tr>
+        </tbody>
+    </table>
 </template>
