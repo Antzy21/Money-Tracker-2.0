@@ -2,7 +2,7 @@ import {
     get,
     post,
     put,
-} from './ApiBase.js'
+} from './ApiBase'
 
 const controllerName =  'Categories'
 
@@ -13,11 +13,11 @@ function putCategory() {
     console.error('Not Implimented Exception');
     return;
 }
-function postCategory(data) {
+function postCategory(data: any) {
     return post(controllerName, data);
 }
 
-function linkCategory(Category, category) {
+function linkCategory(Category: any, category: any) {
     return put(controllerName, {'Category': Category, 'category': category})
 }
 

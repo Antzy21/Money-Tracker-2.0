@@ -10,15 +10,15 @@ function getTransactions() {
     return get(controllerName)
 }
 
-function getTransaction(id) {
+function getTransaction(id: number) {
     return get(`${controllerName}/${id}`)
 }
 
-function putTransaction(id, data) {
+function putTransaction(id: number, data: any) {
     return put(`${controllerName}/${id}`, data)
 }
 
-function postCsv(file) {
+function postCsv(file: any) {
     return postFile('Upload', file)
 }
 

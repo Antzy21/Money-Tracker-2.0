@@ -1,16 +1,6 @@
-<template>
-  <div class="home">
-    <TransactionChartWrapper />
-  </div>
-</template>
-
-<script>
-import TransactionChartWrapper from '../components/charts/TransactionChartWrapper.vue'
-
-export default {
-  name: 'Home',
-  components: {
-    TransactionChartWrapper,
-  }
-}
+<script setup lang="ts">
 </script>
+
+<template>
+  <h1>Home Page</h1>
+</template>

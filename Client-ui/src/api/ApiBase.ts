@@ -1,4 +1,4 @@
-function apifetch(url, method) {
+function apifetch(url: RequestInfo | URL, method: string) {
     return fetch(url, {
         method: method,
         mode: 'cors',
@@ -15,7 +15,7 @@ function apifetch(url, method) {
     });
 }
 
-function apifetchWithBody(url, method, data) {
+function apifetchWithBody(url: RequestInfo | URL, method: string, data: any) {
     const body = JSON.stringify(data);
     return fetch(url, {
         method: method,
@@ -34,7 +34,7 @@ function apifetchWithBody(url, method, data) {
     });
 }
 
-function apifetchWithFile(url, method, file) {
+function apifetchWithFile(url: RequestInfo | URL, method: string, file: string | Blob) {
     const formData = new FormData();
     formData.append('file', file);
     return fetch(url, {
@@ -53,27 +53,27 @@ function apifetchWithFile(url, method, file) {
     });
 }
 
-function get(url) {
+function get(url: string) {
     return apifetch(`${path}/${url}`, 'get')
 }
 
-function post(url, data) {
+function post(url: string, data: any) {
     console.log('post data', data)
     return apifetchWithBody(`${path}/${url}`, 'post', data)
 }
 
-function postFile(url, file) {
+function postFile(url: string, file: any) {
     console.log('post file', file)
     return apifetchWithFile(`${path}/${url}`, 'post', file)
 }
 
-function put(url, data) {
+function put(url: string, data: any) {
     console.log('put data', data)
     return apifetchWithBody(`${path}/${url}`, 'put', data)
 }
 
-const port = '5001'
-const path = `https://localhost:${port}`
+const port = '5283'
+const path = `http://localhost:${port}`
 
 export {
     get,
