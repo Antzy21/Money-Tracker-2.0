@@ -7,7 +7,7 @@ function healthcheck() {
     return get('healthcheck');
 }
 
-function posthealthcheck(file) {
+function posthealthcheck(file: any) {
     return post('healthcheck', file);
 }
 
