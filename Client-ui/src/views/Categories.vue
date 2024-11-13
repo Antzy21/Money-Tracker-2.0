@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { Category } from "@/types/category";
 import { getCategories } from "@/api/CategoriesApi"
+import { ref, type Ref } from "vue";
 
-var categories: Category[] = []
+var categories: Ref<Category[]> = ref([])
 
 getCategories().then((data: any[]) => {
-  categories = data
+  categories.value = data
 })
 </script>
 
