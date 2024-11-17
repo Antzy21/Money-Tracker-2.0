@@ -61,6 +61,8 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
                 Colour = category.Colour,
                 ParentCategoryId = category.ParentCategoryId,
             });
+
+            await context.SaveChangesAsync();
             
             return CreatedAtAction("GetCategory", new { id = newCategoryEntity.Entity.Id }, newCategoryEntity.Entity);
         }
