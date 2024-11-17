@@ -72,6 +72,10 @@ function put(url: string, data: any) {
     return apifetchWithBody(`${path}/${url}`, 'put', data)
 }
 
+function remove(url: string, id: number) {
+    return apifetch(`${path}/${url}/${id}`, "delete")
+}
+
 const port = '5283'
 const path = `http://localhost:${port}`
 
@@ -80,4 +84,5 @@ export {
     post,
     postFile,
     put,
+    remove,
 }
