@@ -2,6 +2,7 @@
 import type { Category } from "@/types/category";
 import { deleteCategory, getCategories, postCategory } from "@/api/CategoriesApi"
 import { ref, type Ref } from "vue";
+import CategoryItem from "@/components/CategoryItem.vue";
 
 var categories: Ref<Category[]> = ref([])
 var newCategoryName: string
@@ -22,6 +23,14 @@ function handleEnter(event: Event) {
         });
 }
 
+function handleUpdate(category: Category) {
+    postCategory(category)
+        .then((newCategory) => {
+            const index = categories.value.findIndex(c => c.id === category.id)
+            categories.value.splice(index, 1, newCategory)
+        });
+}
+
 function handleDelete(category: Category) {
     deleteCategory(category.id)
         .then(() => {
@@ -38,7 +47,7 @@ function handleDelete(category: Category) {
     <table>
         <tbody>
             <tr v-for="category in categories">
-                <td>{{ category.name }}</td>
+                <CategoryItem :category="category" @update="handleUpdate" />
                 <td>
                     <button v-on:click="handleDelete(category)">
                         Delete
