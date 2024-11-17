@@ -19,7 +19,9 @@ function toggleEditMode() {
 
     // wait for the input to be rendered before assigning focus
     nextTick(() => {
-        nameInput.value!.focus()
+        if(editMode.value) {
+            nameInput.value!.focus()
+        }
     })
 }
 
@@ -28,16 +30,16 @@ function updateCategory(event: Event) {
     const inputElement = (event.target as HTMLInputElement)
     inputElement.blur();
 
+    editMode.value = false;
     emit('update', category)
-    toggleEditMode()
 }
 
 </script>
 
 <template>
     <td v-if="editMode">
-        <input ref="name-input" v-model="category.name" v-on:keyup.enter="updateCategory($event)">
-
+        <input ref="name-input" v-model="category.name" v-on:keyup.enter="updateCategory($event)"
+            v-on:blur="toggleEditMode()">
     </td>
     <td v-else v-on:click="toggleEditMode()">
         {{ category.name }}
