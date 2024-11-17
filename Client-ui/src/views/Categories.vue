@@ -1,13 +1,27 @@
 <script setup lang="ts">
 import type { Category } from "@/types/category";
-import { getCategories } from "@/api/CategoriesApi"
+import { getCategories, postCategory } from "@/api/CategoriesApi"
 import { ref, type Ref } from "vue";
 
 var categories: Ref<Category[]> = ref([])
+var newCategoryName: string
 
 getCategories().then((data: any[]) => {
     categories.value = data
 })
+
+function handleEnter(event: Event) {
+    // Remove focus from textbox input
+    const inputElement = (event.target as HTMLInputElement)
+    inputElement.blur();
+
+    postCategory({name: newCategoryName})
+        .then((newCategory) => {
+            newCategoryName = ""
+            categories.value.push(newCategory)
+        });
+}
+
 </script>
 
 <template>
@@ -17,6 +31,11 @@ getCategories().then((data: any[]) => {
         <tbody>
             <tr v-for="category in categories">
                 <td>{{ category.name }}</td>
+            </tr>
+            <tr>
+                <td>
+                    <input placeholder="...new category" v-model="newCategoryName" v-on:keyup.enter="handleEnter($event)">
+                </td>
             </tr>
         </tbody>
     </table>
