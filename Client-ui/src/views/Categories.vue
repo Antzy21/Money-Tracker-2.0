@@ -35,10 +35,10 @@ function handleUpdate(category: Category) {
         });
 }
 
-function handleDelete(category: Category) {
-    deleteCategory(category.id)
+function handleDelete(categoryId: number) {
+    deleteCategory(categoryId)
         .then(() => {
-            const index = categories.value.findIndex(c => c.id === category.id)
+            const index = categories.value.findIndex(c => c.id === categoryId)
             categories.value.splice(index, 1)
         });
 }
@@ -59,14 +59,7 @@ function generateNewCategory() : Category {
     <div>There are {{ categories.length }} categories</div>
     <table>
         <tbody>
-            <tr v-for="category in categories">
-                <CategoryItem :category="category" @update="handleUpdate" />
-                <td>
-                    <button v-on:click="handleDelete(category)">
-                        Delete
-                    </button>
-                </td>
-            </tr>
+            <CategoryItem :category="category" v-for="category in categories" @update="handleUpdate" @delete="handleDelete"/>
             <tr>
                 <td>
                     <input placeholder="...new category" v-model="newCategory.name"
