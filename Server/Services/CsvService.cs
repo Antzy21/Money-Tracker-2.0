@@ -20,12 +20,12 @@ public class CsvService
 
             var listOfObjects = new List<T>();
 
-            string line = streamReader.ReadLine();
+            string line = streamReader.ReadLine()!;
 
             var headers = line.Split(',');
             var rows = new List<Dictionary<string, string>>();
 
-            line = streamReader.ReadLine();
+            line = streamReader.ReadLine()!;
             while (line != null)
             {
                 if (line.Trim().Length > 0)
@@ -60,7 +60,7 @@ public class CsvService
                         Console.WriteLine($"Error adding line: {line}");
                     }
                 }
-                line = streamReader.ReadLine();
+                line = streamReader.ReadLine()!;
             }
 
             foreach (var row in rows)

@@ -18,6 +18,9 @@ public class MoneyTrackerContext : DbContext
     {
         var appdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var environmentVariablePath = configuration.GetValue<string>("DatabasePath");
+        if (string.IsNullOrEmpty(environmentVariablePath))
+            throw new Exception("DatabasePath environment variable not set");
+        
         var databasePath = Path.Combine(appdataPath, "Antzy21", "MoneyTracker", environmentVariablePath);
         
         Directory.CreateDirectory(databasePath);

@@ -6,8 +6,8 @@ namespace MoneyTracker2.Models.EntityModels;
 public class CategoryRegex
 {
     [Key]
-    public string Regex { get; set; }
+    public required string Regex { get; set; }
 
     [ForeignKey("CategoryId")]
-    public Category Category { get; set; }
+    public required Category Category { get; set; }
 }

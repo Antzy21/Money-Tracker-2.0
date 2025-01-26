@@ -19,17 +19,16 @@ public class TransactionImportService(MoneyTrackerContext context)
 
         foreach (var ct in csvTransactions)
         {
+            var additionalInfo = ct.Memo.Split("  ");
+            additionalInfo = additionalInfo.Where(a => a.Length > 0).ToArray();
+
             var transaction = new Transaction
             {
                 Amount = ct.Amount,
                 Date = ct.Date,
+                Contact = additionalInfo[0].Trim(),
+                Reference = additionalInfo[1].Trim(),
             };
-
-            var additionalInfo = ct.Memo.Split("  ");
-            additionalInfo = additionalInfo.Where(a => a.Length > 0).ToArray();
-
-            transaction.Contact = additionalInfo[0].Trim();
-            transaction.Reference = additionalInfo[1].Trim();
 
             newTransactions.Add(transaction);
         }
