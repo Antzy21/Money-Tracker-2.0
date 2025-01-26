@@ -54,30 +54,28 @@ function apifetchWithFile(url: RequestInfo | URL, method: string, file: string |
 }
 
 function get(url: string) {
-    return apifetch(`${path}/${url}`, 'get')
+    return apifetch(`${API_URL}/${url}`, 'get')
 }
 
 function post(url: string, data: any) {
     console.log('post data', data)
-    return apifetchWithBody(`${path}/${url}`, 'post', data)
+    return apifetchWithBody(`${API_URL}/${url}`, 'post', data)
 }
 
 function postFile(url: string, file: any) {
     console.log('post file', file)
-    return apifetchWithFile(`${path}/${url}`, 'post', file)
+    return apifetchWithFile(`${API_URL}/${url}`, 'post', file)
 }
 
 function put(url: string, data: any) {
     console.log('put data', data)
-    return apifetchWithBody(`${path}/${url}`, 'put', data)
+    return apifetchWithBody(`${API_URL}/${url}`, 'put', data)
 }
 
 function remove(url: string, id: number) {
-    return apifetch(`${path}/${url}/${id}`, "delete")
+    return apifetch(`${API_URL}/${url}/${id}`, "delete")
 }
 
-const port = '5283'
-const path = `http://localhost:${port}`
 
 export {
     get,
