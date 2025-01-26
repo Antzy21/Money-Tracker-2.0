@@ -5,21 +5,25 @@ import { ref, type Ref } from "vue";
 import CategoryItem from "@/components/CategoryItem.vue";
 
 var categories: Ref<Category[]> = ref([])
-var newCategoryName: string
+var newCategory: Category = generateNewCategory()
 
 getCategories().then((data: any[]) => {
     categories.value = data
 })
 
 function handleEnter(event: Event) {
+    if (newCategory.name === "") {
+        return
+    }
+
     // Remove focus from textbox input
     const inputElement = (event.target as HTMLInputElement)
     inputElement.blur();
 
-    postCategory({ name: newCategoryName })
-        .then((newCategory) => {
-            newCategoryName = ""
-            categories.value.push(newCategory)
+    postCategory(newCategory)
+        .then((newCategoryResponse) => {
+            newCategory = generateNewCategory()
+            categories.value.push(newCategoryResponse)
         });
 }
 
@@ -39,6 +43,15 @@ function handleDelete(category: Category) {
         });
 }
 
+function generateNewCategory() : Category {
+    return {
+        id: 0,
+        name: "",
+        colour: "#ffffff",
+        regexes: [],
+    }
+}
+
 </script>
 
 <template>
@@ -56,7 +69,7 @@ function handleDelete(category: Category) {
             </tr>
             <tr>
                 <td>
-                    <input placeholder="...new category" v-model="newCategoryName"
+                    <input placeholder="...new category" v-model="newCategory.name"
                         v-on:keyup.enter="handleEnter($event)">
                 </td>
             </tr>

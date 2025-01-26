@@ -44,4 +44,10 @@ function updateCategory(event: Event) {
     <td v-else v-on:click="toggleEditMode()">
         {{ category.name }}
     </td>
+    <td>
+        {{ category.colour }}
+    </td>
+    <td>
+        {{ category.regexes.length }}
+    </td>
 </template>
