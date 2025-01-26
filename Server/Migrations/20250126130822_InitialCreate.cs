@@ -32,6 +32,23 @@ namespace MoneyTracker2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CategoryRegexes",
+                columns: table => new
+                {
+                    Regex = table.Column<string>(type: "TEXT", nullable: false),
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryRegexes", x => x.Regex);
+                    table.ForeignKey(
+                        name: "FK_CategoryRegexes_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
                 {
@@ -59,6 +76,11 @@ namespace MoneyTracker2.Migrations
                 column: "ParentCategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CategoryRegexes_CategoryId",
+                table: "CategoryRegexes",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_CategoryId",
                 table: "Transactions",
                 column: "CategoryId");
@@ -67,6 +89,9 @@ namespace MoneyTracker2.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CategoryRegexes");
+
             migrationBuilder.DropTable(
                 name: "Transactions");
 

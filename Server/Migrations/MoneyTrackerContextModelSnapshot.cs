@@ -39,6 +39,21 @@ namespace MoneyTracker2.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("MoneyTracker2.Models.EntityModels.CategoryRegex", b =>
+                {
+                    b.Property<string>("Regex")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Regex");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("CategoryRegexes");
+                });
+
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Transaction", b =>
                 {
                     b.Property<int>("Id")
@@ -76,6 +91,15 @@ namespace MoneyTracker2.Migrations
                     b.Navigation("ParentCategory");
                 });
 
+            modelBuilder.Entity("MoneyTracker2.Models.EntityModels.CategoryRegex", b =>
+                {
+                    b.HasOne("MoneyTracker2.Models.EntityModels.Category", "Category")
+                        .WithMany("Regexes")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Transaction", b =>
                 {
                     b.HasOne("MoneyTracker2.Models.EntityModels.Category", "Category")
@@ -88,6 +112,8 @@ namespace MoneyTracker2.Migrations
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Category", b =>
                 {
                     b.Navigation("ChildCategories");
+
+                    b.Navigation("Regexes");
 
                     b.Navigation("Transactions");
                 });
