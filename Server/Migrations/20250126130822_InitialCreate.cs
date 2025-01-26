@@ -17,8 +17,8 @@ namespace MoneyTracker2.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Colour = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Colour = table.Column<string>(type: "TEXT", nullable: false),
                     ParentCategoryId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -36,7 +36,7 @@ namespace MoneyTracker2.Migrations
                 columns: table => new
                 {
                     Regex = table.Column<string>(type: "TEXT", nullable: false),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: true)
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,7 +45,8 @@ namespace MoneyTracker2.Migrations
                         name: "FK_CategoryRegexes_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,8 +57,8 @@ namespace MoneyTracker2.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Amount = table.Column<float>(type: "REAL", nullable: false),
-                    Contact = table.Column<string>(type: "TEXT", nullable: true),
-                    Reference = table.Column<string>(type: "TEXT", nullable: true),
+                    Contact = table.Column<string>(type: "TEXT", nullable: false),
+                    Reference = table.Column<string>(type: "TEXT", nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
