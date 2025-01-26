@@ -11,8 +11,8 @@ using MoneyTracker2.Data;
 namespace MoneyTracker2.Migrations
 {
     [DbContext(typeof(MoneyTrackerContext))]
-    [Migration("20240818161344_NullableParentCategory")]
-    partial class NullableParentCategory
+    [Migration("20250126130822_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,21 @@ namespace MoneyTracker2.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("MoneyTracker2.Models.EntityModels.CategoryRegex", b =>
+                {
+                    b.Property<string>("Regex")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Regex");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("CategoryRegexes");
                 });
 
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Transaction", b =>
@@ -79,6 +94,15 @@ namespace MoneyTracker2.Migrations
                     b.Navigation("ParentCategory");
                 });
 
+            modelBuilder.Entity("MoneyTracker2.Models.EntityModels.CategoryRegex", b =>
+                {
+                    b.HasOne("MoneyTracker2.Models.EntityModels.Category", "Category")
+                        .WithMany("Regexes")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Transaction", b =>
                 {
                     b.HasOne("MoneyTracker2.Models.EntityModels.Category", "Category")
@@ -91,6 +115,8 @@ namespace MoneyTracker2.Migrations
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Category", b =>
                 {
                     b.Navigation("ChildCategories");
+
+                    b.Navigation("Regexes");
 
                     b.Navigation("Transactions");
                 });

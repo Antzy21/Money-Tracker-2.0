@@ -15,6 +15,8 @@ public class Category
     [ForeignKey("ParentCategoryId")]
     public Category? ParentCategory { get; set; }
 
+    public List<CategoryRegex> Regexes { get; set; }
+
     public List<Category> ChildCategories { get; set; }
 
     public List<Transaction> Transactions { get; set; }
