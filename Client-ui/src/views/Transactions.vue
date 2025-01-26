@@ -18,6 +18,7 @@ function onFileChanged($event: Event) {
         postCsv(target.files[0]).then(() =>
             loadTransactions()
         )
+        target.value = ""
     }
 }
     
