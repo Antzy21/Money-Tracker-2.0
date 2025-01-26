@@ -5,21 +5,25 @@ import { ref, type Ref } from "vue";
 import CategoryItem from "@/components/CategoryItem.vue";
 
 var categories: Ref<Category[]> = ref([])
-var newCategoryName: string
+var newCategory: Category = generateNewCategory()
 
 getCategories().then((data: any[]) => {
     categories.value = data
 })
 
 function handleEnter(event: Event) {
+    if (newCategory.name === "") {
+        return
+    }
+
     // Remove focus from textbox input
     const inputElement = (event.target as HTMLInputElement)
     inputElement.blur();
 
-    postCategory({ name: newCategoryName })
-        .then((newCategory) => {
-            newCategoryName = ""
-            categories.value.push(newCategory)
+    postCategory(newCategory)
+        .then((newCategoryResponse) => {
+            newCategory = generateNewCategory()
+            categories.value.push(newCategoryResponse)
         });
 }
 
@@ -31,12 +35,21 @@ function handleUpdate(category: Category) {
         });
 }
 
-function handleDelete(category: Category) {
-    deleteCategory(category.id)
+function handleDelete(categoryId: number) {
+    deleteCategory(categoryId)
         .then(() => {
-            const index = categories.value.findIndex(c => c.id === category.id)
+            const index = categories.value.findIndex(c => c.id === categoryId)
             categories.value.splice(index, 1)
         });
+}
+
+function generateNewCategory() : Category {
+    return {
+        id: 0,
+        name: "",
+        colour: "#ffffff",
+        regexes: [],
+    }
 }
 
 </script>
@@ -46,17 +59,11 @@ function handleDelete(category: Category) {
     <div>There are {{ categories.length }} categories</div>
     <table>
         <tbody>
-            <tr v-for="category in categories">
-                <CategoryItem :category="category" @update="handleUpdate" />
-                <td>
-                    <button v-on:click="handleDelete(category)">
-                        Delete
-                    </button>
-                </td>
-            </tr>
+            <CategoryItem :category="category" v-for="category in categories" @update="handleUpdate" @delete="handleDelete"/>
             <tr>
+                <td></td>
                 <td>
-                    <input placeholder="...new category" v-model="newCategoryName"
+                    <input placeholder="...new category" v-model="newCategory.name"
                         v-on:keyup.enter="handleEnter($event)">
                 </td>
             </tr>

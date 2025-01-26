@@ -17,11 +17,13 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
     public async Task<ActionResult<IEnumerable<CategoryView>>> Get()
     {
         var categories = await context.Categories
+            .Include(c => c.Regexes)
             .Select(c => new CategoryView
             {
                 Id = c.Id,
                 Name = c.Name,
                 Colour = c.Colour,
+                Regexes = c.Regexes.Select(r => r.Regex).ToList(),
                 ParentCategoryId = c.ParentCategoryId
             })
             .ToListAsync();
@@ -33,6 +35,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
     public async Task<ActionResult<CategoryView>> GetCategory(int id)
     {
         var category = await context.Categories
+            .Include(c => c.Regexes)
             .SingleOrDefaultAsync(c => c.Id == id);
         
         if (category == null)
@@ -43,6 +46,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
             Id = category.Id,
             Name = category.Name,
             Colour = category.Colour,
+            Regexes = category.Regexes.Select(r => r.Regex).ToList(),
             ParentCategoryId = category.ParentCategoryId
         };
     }
@@ -58,7 +62,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
             var newCategoryEntity = context.Categories.Add(new Category
             {
                 Name = category.Name,
-                Colour = category.Colour ?? "#FFFFFF",
+                Colour = category.Colour,
                 ParentCategoryId = null,
                 Regexes = [],
                 ChildCategories = [],
@@ -78,7 +82,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
 
         categoryEntity.Name = category.Name;
         categoryEntity.ParentCategoryId = category.ParentCategoryId;
-        categoryEntity.Colour = category.Colour ?? "#FFFFFF";
+        categoryEntity.Colour = category.Colour;
         
         context.Entry(categoryEntity).State = EntityState.Modified;
         await context.SaveChangesAsync();
