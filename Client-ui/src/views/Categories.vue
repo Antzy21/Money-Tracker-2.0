@@ -61,6 +61,7 @@ function generateNewCategory() : Category {
         <tbody>
             <CategoryItem :category="category" v-for="category in categories" @update="handleUpdate" @delete="handleDelete"/>
             <tr>
+                <td></td>
                 <td>
                     <input placeholder="...new category" v-model="newCategory.name"
                         v-on:keyup.enter="handleEnter($event)">
