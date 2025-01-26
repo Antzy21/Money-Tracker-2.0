@@ -10,6 +10,7 @@ public class MoneyTrackerContext : DbContext
 {
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<CategoryRegex> CategoryRegexes { get; set; }
 
     private string _dbPath { get; }
 
