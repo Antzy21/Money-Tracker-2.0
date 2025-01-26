@@ -82,7 +82,6 @@ function remove(url: string, id: number | string) {
     })
 }
 
-
 export {
     get,
     post,
