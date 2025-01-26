@@ -2,6 +2,7 @@
 
 namespace MoneyTracker2.Models.External;
 
+#nullable disable
 public class CsvTransaction
 {
     public string Number { get; set; }

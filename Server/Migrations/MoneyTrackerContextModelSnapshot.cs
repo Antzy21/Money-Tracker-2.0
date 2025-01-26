@@ -15,7 +15,7 @@ namespace MoneyTracker2.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
 
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Category", b =>
                 {
@@ -24,9 +24,11 @@ namespace MoneyTracker2.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Colour")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ParentCategoryId")
@@ -44,7 +46,7 @@ namespace MoneyTracker2.Migrations
                     b.Property<string>("Regex")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Regex");
@@ -67,12 +69,14 @@ namespace MoneyTracker2.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Contact")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Reference")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -95,7 +99,9 @@ namespace MoneyTracker2.Migrations
                 {
                     b.HasOne("MoneyTracker2.Models.EntityModels.Category", "Category")
                         .WithMany("Regexes")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });

@@ -58,8 +58,11 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
             var newCategoryEntity = context.Categories.Add(new Category
             {
                 Name = category.Name,
-                Colour = category.Colour,
-                ParentCategoryId = category.ParentCategoryId,
+                Colour = category.Colour ?? "#FFFFFF",
+                ParentCategoryId = null,
+                Regexes = [],
+                ChildCategories = [],
+                Transactions = []
             });
 
             await context.SaveChangesAsync();
@@ -75,7 +78,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
 
         categoryEntity.Name = category.Name;
         categoryEntity.ParentCategoryId = category.ParentCategoryId;
-        categoryEntity.Colour = category.Colour;
+        categoryEntity.Colour = category.Colour ?? "#FFFFFF";
         
         context.Entry(categoryEntity).State = EntityState.Modified;
         await context.SaveChangesAsync();

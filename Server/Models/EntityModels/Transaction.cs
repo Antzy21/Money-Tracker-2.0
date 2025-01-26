@@ -10,10 +10,10 @@ public class Transaction
     public int Id { get; init; }
     public DateTime Date { get; set; }
     public float Amount { get; set; }
-    public string Contact { get; set; }
-    public string Reference { get; set; }
+    public required string Contact { get; set; }
+    public required string Reference { get; set; }
 
     public int? CategoryId { get; set; }
     [ForeignKey("CategoryId")]
-    public Category Category { get; set; }
+    public Category? Category { get; set; }
 }
