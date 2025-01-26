@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -78,7 +78,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
 
         categoryEntity.Name = category.Name;
         categoryEntity.ParentCategoryId = category.ParentCategoryId;
-        categoryEntity.Colour = category.Colour ?? "#FFFFFF";
+        categoryEntity.Colour = category.Colour;
         
         context.Entry(categoryEntity).State = EntityState.Modified;
         await context.SaveChangesAsync();
