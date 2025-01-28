@@ -1,0 +1,21 @@
+name: money-tracker
+
+services:
+
+  server:
+    build:
+      context: Server/.
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  client:
+    build:
+      context: Client-ui/.
+      dockerfile: Dockerfile
+    ports:
+      - "5174:5174"
+    environment:
+      - NODE_ENV=development

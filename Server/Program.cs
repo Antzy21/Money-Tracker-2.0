@@ -12,14 +12,22 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<MoneyTrackerContext>();
 builder.Services.AddSingleton<TransactionImportService>();
 
-const string vueClientCorsPolicy = "vue_client";
+const string localhostCorsPolicy = "localhost_client";
+const string dockerCorsPolicy = "docker_client";
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: vueClientCorsPolicy,
+    options.AddPolicy(name: localhostCorsPolicy,
         policy  =>
         {
             policy.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    options.AddPolicy(name: dockerCorsPolicy,
+        policy  =>
+        {
+            policy.WithOrigins("http://client:5174")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -30,7 +38,8 @@ var app = builder.Build();
 app.MapSwagger();
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors(vueClientCorsPolicy);
+app.UseCors(localhostCorsPolicy);
+app.UseCors(dockerCorsPolicy);
 
 //app.UseHttpsRedirection();
 app.MapControllers();
