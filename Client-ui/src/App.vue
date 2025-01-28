@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import HealthCheck from './components/HealthCheck.vue'
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/categories">Categories</RouterLink>
       <RouterLink to="/transactions">Transactions</RouterLink>
+      <HealthCheck></HealthCheck>
     </nav>
   </header>
 
