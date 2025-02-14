@@ -1,17 +1,9 @@
-import {
-    get,
-    post,
-} from './ApiBase.js'
-
-function healthcheck() {
-    return get('healthcheck');
-}
-
-function posthealthcheck(file: any) {
-    return post('healthcheck', file);
-}
-
-export {
-    healthcheck,
-    posthealthcheck,
+export function healthcheck() {
+    return fetch(`${API_URL}/healthcheck`, {
+        method: 'get',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
 }

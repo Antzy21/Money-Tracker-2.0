@@ -5,7 +5,7 @@ import { ref } from 'vue';
 var healthStatus = ref("warning")
 
 healthcheck().then((response) => {
-    healthStatus.value = response.Status == 200 ? "ok" : "error"
+    healthStatus.value = response.status == 200 ? "ok" : "error"
 }).catch(() => {
     healthStatus.value = "error"
 })
