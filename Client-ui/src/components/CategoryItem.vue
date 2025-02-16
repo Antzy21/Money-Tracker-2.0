@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { addCategoryRegex } from "@/api/CategoriesApi";
 import type { Category } from "@/types/category";
 import { nextTick, reactive, ref, useTemplateRef, type Ref } from "vue";
 
@@ -12,17 +13,18 @@ const emit = defineEmits<{
 }>()
 
 const regexesToShow = reactive(() => {
-  if (showRegexes.value) {
-    return category.regexes
-  } else {
-    return []
-  }
+    if (showRegexes.value) {
+        return category.regexes
+    } else {
+        return []
+    }
 })
 
 const nameInput = useTemplateRef('name-input')
 
 var editMode: Ref<boolean> = ref(false);
 var showRegexes: Ref<boolean> = ref(false);
+var newCategoryRegex: string = "";
 
 function toggleEditMode() {
     editMode.value = !editMode.value;
@@ -50,6 +52,22 @@ function updateCategory(event: Event) {
 
 function deleteCategory(event: Event) {
     emit('delete', category.id)
+}
+
+function handleEnter(event: Event) {
+    if (newCategoryRegex === "") {
+        return
+    }
+
+    // Remove focus from textbox input
+    const inputElement = (event.target as HTMLInputElement)
+    inputElement.blur();
+
+    addCategoryRegex(newCategoryRegex, category.id)
+        .then((newCategoryRegexResponse) => {
+            newCategoryRegex = ""
+            category.regexes.push(newCategoryRegexResponse.regex)
+        });
 }
 
 </script>
@@ -84,6 +102,12 @@ function deleteCategory(event: Event) {
         <td></td>
         <td>
             {{ regex }}
+        </td>
+    </tr>
+    <tr v-if="showRegexes">
+        <td></td>
+        <td>
+            <input placeholder="...new regex" v-model="newCategoryRegex" v-on:keyup.enter="handleEnter($event)">
         </td>
     </tr>
 </template>

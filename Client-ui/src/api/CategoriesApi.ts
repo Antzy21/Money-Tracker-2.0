@@ -26,10 +26,15 @@ function linkCategory(Category: any, category: any) {
     return put(controllerName, {'Category': Category, 'category': category})
 }
 
+function addCategoryRegex(regex: string, categoryId: number) {
+    return post(controllerName + "/AddRegex", { regex, categoryId });
+}
+
 export {
     getCategories,
     putCategory,
     postCategory,
     deleteCategory,
     linkCategory,
+    addCategoryRegex,
 }
