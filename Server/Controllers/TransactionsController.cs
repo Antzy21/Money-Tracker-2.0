@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +16,11 @@ public class TransactionsController(MoneyTrackerContext context) : ControllerBas
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TransactionView>>> Get()
     {
+        var categories = await context.Categories
+            .Include(c => c.Regexes)
+            .ToListAsync();
+
         var transactions = await context.Transactions
-            .Include(t => t.Category)
             .Select(t => new TransactionView
             {
                 Id = t.Id,
@@ -24,9 +28,25 @@ public class TransactionsController(MoneyTrackerContext context) : ControllerBas
                 Amount = t.Amount,
                 Contact = t.Contact,
                 Reference = t.Reference,
-                //Category = transaction.CategoryId != null ? new CategoryView(transaction.Category) : null,
             })
             .ToListAsync();
+
+        foreach (var transaction in transactions)
+        {
+            transaction.Categories = categories
+                .Where(c => c.Regexes.Any(r => {
+                    var regex = new Regex(r.Regex);
+                    return regex.IsMatch(transaction.Reference) || regex.IsMatch(transaction.Contact);
+                }))
+                .Select(c => new CategoryView()
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Colour = c.Colour
+                })
+                .ToList();
+        }
+
         return new JsonResult(transactions);
     }
 
@@ -35,10 +55,10 @@ public class TransactionsController(MoneyTrackerContext context) : ControllerBas
     {
         var transaction = await context.Transactions
             .SingleOrDefaultAsync(t => t.Id == id);
-        
+
         if (transaction == null)
             return NotFound();
-        
+
         return new TransactionView
         {
             Id = transaction.Id,
@@ -46,7 +66,6 @@ public class TransactionsController(MoneyTrackerContext context) : ControllerBas
             Amount = transaction.Amount,
             Contact = transaction.Contact,
             Reference = transaction.Reference,
-            //Category = transaction.CategoryId != null ? new CategoryView(transaction.Category) : null,
         };
     }
 
@@ -55,7 +74,7 @@ public class TransactionsController(MoneyTrackerContext context) : ControllerBas
     {
         var transactionEntity = await context.Transactions
             .SingleOrDefaultAsync(t => t.Id == transaction.Id);
-        
+
         if (transactionEntity is null)
             return NotFound();
 
@@ -63,7 +82,6 @@ public class TransactionsController(MoneyTrackerContext context) : ControllerBas
         transactionEntity.Date = transaction.Date;
         transactionEntity.Reference = transaction.Reference;
         transactionEntity.Contact = transaction.Contact;
-        transactionEntity.CategoryId = transaction.Category?.Id;
 
         context.Entry(transactionEntity).State = EntityState.Modified;
         await context.SaveChangesAsync();

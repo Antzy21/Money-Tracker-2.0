@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MoneyTracker2.Models.ViewModels;
 
@@ -10,5 +11,5 @@ public class TransactionView
     public required string Contact { get; set; }
     public required string Reference { get; set; }
 
-    public CategoryView? Category { get; set; }
+    public List<CategoryView> Categories { get; set; } = [];
 }
