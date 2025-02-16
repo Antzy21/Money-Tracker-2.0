@@ -90,6 +90,28 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
         return Ok(category);
     }
 
+    [HttpPost("AddRegex")]
+    public async Task<ActionResult> AddCategoryRegex([FromBody] CategoryRegexView categoryRegexView)
+    {
+        var category = await context.Categories
+            .Include(c => c.Regexes)
+            .SingleOrDefaultAsync(c => c.Id == categoryRegexView.CategoryId);
+
+        if (category == null)
+            return NotFound();
+
+        var categoryRegex = new CategoryRegex
+        {
+            Regex = categoryRegexView.Regex,
+            Category = category
+        };
+
+        category.Regexes.Add(categoryRegex);
+        await context.SaveChangesAsync();
+
+        return Ok(categoryRegexView);
+    }
+
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteCategory(int id)
     {
@@ -101,6 +123,21 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
         
         context.Categories.Remove(categoryEntity);
         await context.SaveChangesAsync();
+        return Ok();
+    }
+
+    [HttpDelete("DeleteRegex/{regex}")]
+    public async Task<ActionResult> DeleteCategoryRegex(string regex)
+    {
+        var categoryRegex = await context.CategoryRegexes
+            .SingleOrDefaultAsync(cr => cr.Regex == regex);
+
+        if (categoryRegex == null)
+            return NotFound();
+
+        context.CategoryRegexes.Remove(categoryRegex);
+        await context.SaveChangesAsync();
+
         return Ok();
     }
 }
