@@ -72,7 +72,7 @@ function put(url: string, data: any) {
     return apifetchWithBody(`${API_URL}/${url}`, 'put', data)
 }
 
-function remove(url: string, id: number) {
+function remove(url: string, id: number | string) {
     return apifetch(`${API_URL}/${url}/${id}`, "delete")
 }
 

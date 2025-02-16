@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { addCategoryRegex } from "@/api/CategoriesApi";
+import { addCategoryRegex, deleteCategoryRegex } from "@/api/CategoriesApi";
 import type { Category } from "@/types/category";
 import { nextTick, reactive, ref, useTemplateRef, type Ref } from "vue";
+import CategoryRegexItem from "./CategoryRegexItem.vue";
 
 const { category } = defineProps<{
     category: Category,
@@ -70,6 +71,14 @@ function handleEnter(event: Event) {
         });
 }
 
+function handleRegexDelete(regex: string) {
+    deleteCategoryRegex(regex)
+        .then(() => {
+            const index = category.regexes.findIndex(r => r === regex)
+            category.regexes.splice(index, 1)
+        });
+}
+
 </script>
 
 <template>
@@ -98,12 +107,7 @@ function handleEnter(event: Event) {
             </button>
         </td>
     </tr>
-    <tr v-for="regex in regexesToShow()">
-        <td></td>
-        <td>
-            {{ regex }}
-        </td>
-    </tr>
+    <CategoryRegexItem :regex="regex" v-for="regex in regexesToShow()" @delete="handleRegexDelete"></CategoryRegexItem>
     <tr v-if="showRegexes">
         <td></td>
         <td>

@@ -125,4 +125,19 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
         await context.SaveChangesAsync();
         return Ok();
     }
+
+    [HttpDelete("DeleteRegex/{regex}")]
+    public async Task<ActionResult> DeleteCategoryRegex(string regex)
+    {
+        var categoryRegex = await context.CategoryRegexes
+            .SingleOrDefaultAsync(cr => cr.Regex == regex);
+
+        if (categoryRegex == null)
+            return NotFound();
+
+        context.CategoryRegexes.Remove(categoryRegex);
+        await context.SaveChangesAsync();
+
+        return Ok();
+    }
 }

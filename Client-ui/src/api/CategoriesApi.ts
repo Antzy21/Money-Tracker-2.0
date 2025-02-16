@@ -30,6 +30,10 @@ function addCategoryRegex(regex: string, categoryId: number) {
     return post(controllerName + "/AddRegex", { regex, categoryId });
 }
 
+function deleteCategoryRegex(regex: string) {
+    return remove(controllerName + "/DeleteRegex", regex);
+}
+
 export {
     getCategories,
     putCategory,
@@ -37,4 +41,5 @@ export {
     deleteCategory,
     linkCategory,
     addCategoryRegex,
+    deleteCategoryRegex,
 }
