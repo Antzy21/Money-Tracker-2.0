@@ -6,5 +6,5 @@ export type Transaction = {
     amount: number,
     contact: string,
     reference: string,
-    category: Category,
+    categories: Category[],
 }
