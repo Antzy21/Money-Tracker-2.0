@@ -16,6 +16,15 @@ var editableModel: any = model.value;
 
 var editMode: Ref<boolean> = ref(false);
 
+function onBlur(event: Event) {
+    if (inputType == 'color') {
+        update(event)
+    }
+    else {
+    toggleEditMode()
+}
+}
+
 function toggleEditMode() {
     editMode.value = !editMode.value;
     editableModel = model;
@@ -44,7 +53,7 @@ function update(event: Event) {
 <template>
     <div v-if="editMode">
         <input ref="model-input" v-model="editableModel" v-on:keyup.enter="update($event)" :type="inputType"
-            v-on:blur="toggleEditMode()">
+            v-on:blur="onBlur($event)">
     </div>
     <div v-else v-on:click="toggleEditMode()">
         {{ model }}
