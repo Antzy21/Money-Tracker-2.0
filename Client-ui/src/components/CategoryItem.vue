@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { addCategoryRegex, deleteCategoryRegex } from "@/api/CategoriesApi";
 import type { Category } from "@/types/category";
-import { nextTick, reactive, ref, useTemplateRef, type Ref } from "vue";
+import {  reactive, ref, type Ref } from "vue";
 import CategoryRegexItem from "./CategoryRegexItem.vue";
+import Editable from "./Editable.vue";
 
 const { category } = defineProps<{
     category: Category,
@@ -21,33 +22,15 @@ const regexesToShow = reactive(() => {
     }
 })
 
-const nameInput = useTemplateRef('name-input')
-
-var editMode: Ref<boolean> = ref(false);
 var showRegexes: Ref<boolean> = ref(false);
 var newCategoryRegex: string = "";
-
-function toggleEditMode() {
-    editMode.value = !editMode.value;
-
-    // wait for the input to be rendered before assigning focus
-    nextTick(() => {
-        if (editMode.value) {
-            nameInput.value!.focus()
-        }
-    })
-}
 
 function toggleShowRegexes() {
     showRegexes.value = !showRegexes.value;
 }
 
-function updateCategory(event: Event) {
-    // Remove focus from textbox input
-    const inputElement = (event.target as HTMLInputElement)
-    inputElement.blur();
-
-    editMode.value = false;
+function updateCategoryName(categoryName: any) {
+    category.name = categoryName
     emit('update', category)
 }
 
@@ -88,12 +71,8 @@ function handleRegexDelete(regex: string) {
                 {{ showRegexes ? "Hide" : "Show" }}
             </button>
         </td>
-        <td v-if="editMode">
-            <input ref="name-input" v-model="category.name" v-on:keyup.enter="updateCategory($event)"
-                v-on:blur="toggleEditMode()">
-        </td>
-        <td v-else v-on:click="toggleEditMode()">
-            {{ category.name }}
+        <td>
+            <Editable :model="category.name" @update="updateCategoryName"></Editable>
         </td>
         <td>
             {{ category.colour }}
