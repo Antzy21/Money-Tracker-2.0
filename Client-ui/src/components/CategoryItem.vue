@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { addCategoryRegex, deleteCategoryRegex } from "@/api/CategoriesApi";
 import type { Category } from "@/types/category";
-import { reactive, ref, type Ref } from "vue";
+import { computed, ref, type Ref } from "vue";
 import CategoryRegexItem from "./CategoryRegexItem.vue";
 import Editable from "./Editable.vue";
 import ColouredBadge from "./ColouredBadge.vue";
@@ -15,7 +15,7 @@ const emit = defineEmits<{
     (e: 'delete', id: number): void,
 }>()
 
-const regexesToShow = reactive(() => {
+const regexesToShow = computed(() => {
     if (showRegexes.value) {
         return category.regexes
     } else {
@@ -98,7 +98,7 @@ function handleRegexDelete(regex: string) {
             </button>
         </td>
     </tr>
-    <CategoryRegexItem :regex="regex" v-for="regex in regexesToShow()" @delete="handleRegexDelete"></CategoryRegexItem>
+    <CategoryRegexItem :regex="regex" v-for="regex in regexesToShow" @delete="handleRegexDelete"></CategoryRegexItem>
     <tr v-if="showRegexes">
         <td></td>
         <td>

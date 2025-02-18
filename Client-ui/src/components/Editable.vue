@@ -20,9 +20,7 @@ function onBlur(event: Event) {
     if (inputType == 'color') {
         update(event)
     }
-    else {
-        toggleEditMode()
-    }
+    toggleEditMode()
 }
 
 function toggleEditMode() {
@@ -38,14 +36,12 @@ function toggleEditMode() {
 }
 
 function update(event: Event) {
-    // Remove focus from textbox input
-    const inputElement = (event.target as HTMLInputElement)
-    inputElement.blur();
-
-    editMode.value = false;
     if (editableModel !== model) {
         emit('update', editableModel)
     }
+    // Remove focus from textbox input
+    const inputElement = (event.target as HTMLInputElement)
+    inputElement.blur();
 }
 
 </script>
