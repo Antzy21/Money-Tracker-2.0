@@ -22,9 +22,17 @@ const { transaction } = defineProps<{
     </td>
     <td>
         <span v-for="category in transaction.categories">
-            <span :style="{ color: category.colour }">
+            <span class="badge" :style="{ 'background-color': category.colour }">
                 {{ category.name }}
             </span>
         </span>
     </td>
 </template>
+
+<style scoped>
+    .badge {
+        margin-right: 5px;
+        color: black;
+        border: 1px solid black;
+    }
+</style>
