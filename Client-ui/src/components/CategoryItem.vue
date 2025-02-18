@@ -77,19 +77,19 @@ function handleRegexDelete(regex: string) {
                 {{ showRegexes ? "Hide" : "Show" }}
             </button>
         </td>
-        <td>
+        <td class="align-middle">
             <Editable :model="category.name" @update="updateCategoryName">
                 {{ category.name }}
             </Editable>
         </td>
-        <td>
+        <td class="align-middle">
             <Editable :model="category.colour" @update="updateCategoryColour" input-type="color">
                 <ColouredBadge :colour="category.colour">
                     {{ category.colour }}
                 </ColouredBadge>
             </Editable>
         </td>
-        <td>
+        <td class="align-middle">
             {{ category.regexes.length }}
         </td>
         <td>
