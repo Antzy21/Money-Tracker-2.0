@@ -21,8 +21,8 @@ function onBlur(event: Event) {
         update(event)
     }
     else {
-    toggleEditMode()
-}
+        toggleEditMode()
+    }
 }
 
 function toggleEditMode() {
@@ -56,6 +56,7 @@ function update(event: Event) {
             v-on:blur="onBlur($event)">
     </div>
     <div v-else v-on:click="toggleEditMode()">
-        {{ model }}
+        <slot>
+        </slot>
     </div>
 </template>
