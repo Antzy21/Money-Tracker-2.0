@@ -73,7 +73,13 @@ function put(url: string, data: any) {
 }
 
 function remove(url: string, id: number | string) {
-    return apifetch(`${API_URL}/${url}/${id}`, "delete")
+    return fetch(`${API_URL}/${url}/${id}`, {
+        method: "delete",
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
 }
 
 
