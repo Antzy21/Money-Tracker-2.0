@@ -21,19 +21,26 @@ function onFileChanged($event: Event) {
         target.value = ""
     }
 }
-    
+
 loadTransactions()
 
 </script>
 
 <template>
     <h1>Transactions</h1>
-    <div>
-        Upload Transactions
-        <input type="file" @change="onFileChanged($event)" accept=".csv*" capture />
+    <div class="py-4">
+        <h3>Upload Transactions</h3>
+        <input type="file" @change="onFileChanged($event)" accept=".csv*" capture class="form-control" />
     </div>
-    <div>There are {{ transactions.length }} transactions</div>
-    <table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Contact</th>
+                <th>Reference</th>
+                <th>Amount</th>
+                <th>Categories</th>
+            </tr>
+        </thead>
         <tbody>
             <tr v-for="transaction in transactions">
                 <TransactionsItem :transaction="transaction" />

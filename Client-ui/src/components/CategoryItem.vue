@@ -84,7 +84,7 @@ function handleRegexDelete(regex: string) {
 <template>
     <tr>
         <td width="55px">
-            <button v-on:click="toggleShowRegexes()">
+            <button v-on:click="toggleShowRegexes()" class="btn btn-primary">
                 {{ showRegexes ? "Hide" : "Show" }}
             </button>
         </td>
@@ -102,7 +102,7 @@ function handleRegexDelete(regex: string) {
             {{ category.regexes.length }}
         </td>
         <td>
-            <button v-on:click="deleteCategory($event)">
+            <button v-on:click="deleteCategory($event)" class="btn btn-danger">
                 Delete
             </button>
         </td>
@@ -111,7 +111,8 @@ function handleRegexDelete(regex: string) {
     <tr v-if="showRegexes">
         <td></td>
         <td>
-            <input placeholder="...new regex" v-model="newCategoryRegex" v-on:keyup.enter="handleEnter($event)">
+            <input placeholder="...new regex" v-model="newCategoryRegex" v-on:keyup.enter="handleEnter($event)"
+                class="form-control">
         </td>
     </tr>
 </template>

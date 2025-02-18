@@ -21,7 +21,7 @@ function deleteRegex(event: Event) {
             {{ regex }}
         </td>
         <td>
-            <button v-on:click="deleteRegex($event)">
+            <button v-on:click="deleteRegex($event)" class="btn btn-danger">
                 Delete
             </button>
         </td>

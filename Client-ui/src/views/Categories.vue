@@ -43,7 +43,7 @@ function handleDelete(categoryId: number) {
         });
 }
 
-function generateNewCategory() : Category {
+function generateNewCategory(): Category {
     return {
         id: 0,
         name: "",
@@ -56,15 +56,15 @@ function generateNewCategory() : Category {
 
 <template>
     <h1>Categories</h1>
-    <div>There are {{ categories.length }} categories</div>
-    <table>
+    <table class="table">
         <tbody>
-            <CategoryItem :category="category" v-for="category in categories" @update="handleUpdate" @delete="handleDelete"/>
+            <CategoryItem :category="category" v-for="category in categories" @update="handleUpdate"
+                @delete="handleDelete" />
             <tr>
                 <td></td>
                 <td>
                     <input placeholder="...new category" v-model="newCategory.name"
-                        v-on:keyup.enter="handleEnter($event)">
+                        v-on:keyup.enter="handleEnter($event)" class="form-control">
                 </td>
             </tr>
         </tbody>
