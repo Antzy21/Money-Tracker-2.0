@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Transaction } from "@/types/transaction";
+import ColouredBadge from "./ColouredBadge.vue";
 
 const { transaction } = defineProps<{
     transaction: Transaction,
@@ -22,9 +23,9 @@ const { transaction } = defineProps<{
     </td>
     <td>
         <span v-for="category in transaction.categories">
-            <span class="badge" :style="{ 'background-color': category.colour }">
-                {{ category.name }}
-            </span>
+            <ColouredBadge :colour="category.colour">
+                {{ category.name }} 
+            </ColouredBadge>
         </span>
     </td>
 </template>
