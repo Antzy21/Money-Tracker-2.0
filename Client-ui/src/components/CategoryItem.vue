@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { addCategoryRegex, deleteCategoryRegex } from "@/api/CategoriesApi";
 import type { Category } from "@/types/category";
-import {  reactive, ref, type Ref } from "vue";
+import { reactive, ref, type Ref } from "vue";
 import CategoryRegexItem from "./CategoryRegexItem.vue";
 import Editable from "./Editable.vue";
+import ColouredBadge from "./ColouredBadge.vue";
 
 const { category } = defineProps<{
     category: Category,
@@ -31,6 +32,11 @@ function toggleShowRegexes() {
 
 function updateCategoryName(categoryName: any) {
     category.name = categoryName
+    emit('update', category)
+}
+
+function updateCategoryColour(categoryColour: any) {
+    category.colour = categoryColour
     emit('update', category)
 }
 
@@ -72,10 +78,16 @@ function handleRegexDelete(regex: string) {
             </button>
         </td>
         <td>
-            <Editable :model="category.name" @update="updateCategoryName"></Editable>
+            <Editable :model="category.name" @update="updateCategoryName">
+                {{ category.name }}
+            </Editable>
         </td>
         <td>
-            {{ category.colour }}
+            <Editable :model="category.colour" @update="updateCategoryColour" input-type="color">
+                <ColouredBadge :colour="category.colour">
+                    {{ category.colour }}
+                </ColouredBadge>
+            </Editable>
         </td>
         <td>
             {{ category.regexes.length }}
