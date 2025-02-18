@@ -6,6 +6,11 @@
   font-weight: normal;
 }
 
+.table > :not(caption) > * > * {
+  background-color: var(--color-background);
+  border-bottom-width: 0;
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(222, 100%, 37%, 0.2);

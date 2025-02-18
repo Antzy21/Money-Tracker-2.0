@@ -32,7 +32,7 @@ loadTransactions()
         <h3>Upload Transactions</h3>
         <input type="file" @change="onFileChanged($event)" accept=".csv*" capture class="form-control" />
     </div>
-    <table class="table">
+    <table class="table table-dark">
         <thead>
             <tr>
                 <th>Contact</th>
