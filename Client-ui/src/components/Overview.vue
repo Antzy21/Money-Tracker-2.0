@@ -14,7 +14,6 @@ const selectedCategoryIds: Ref<number[]> = ref([]);
 
 const filteredTransactions = computed(() => {
     return transactions.value.filter(transaction => {
-        console.log(selectedCategoryIds)
         if (transaction.categories.length === 0) {
             return selectedCategoryIds.value.includes(Uncategorized.id)
         }
