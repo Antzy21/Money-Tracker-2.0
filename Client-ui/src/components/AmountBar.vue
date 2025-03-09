@@ -2,23 +2,16 @@
 import type { CategoryAmount } from '@/types/categoryAmount';
 import { type ComputedRef, computed } from 'vue';
 import { type Transaction } from '@/types/transaction';
-import { type Category } from '@/types/category';
+import { Uncategorized, type Category } from '@/types/category';
 
 const { transactions } = defineProps<{
     transactions: Transaction[],
 }>()
 
-const Uncategorized: Category = {
-    id: 0,
-    name: "Uncategorized",
-    colour: "#ffffff",
-    regexes: [],
-}
-
 const transactionsByCategory: ComputedRef<CategoryAmount[]> = computed(() => {
     const groups: CategoryAmount[] = [];
     transactions.forEach(transaction => {
-        let category = transaction.categories[0] ?? Uncategorized;
+        let category: Category = transaction.categories[0] ?? Uncategorized;
         let group = groups.find(c => c.category.name == category.name)
         if (!group) {
             group = { amount: 0, category: category }
