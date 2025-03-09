@@ -1,36 +1,89 @@
 <script setup lang="ts">
 import { getTransactions } from '@/api/TransactionsApi';
-import type { Category } from '@/types/category';
-import type { CategoryAmount } from '@/types/categoryAmount';
+import { getCategories } from '@/api/CategoriesApi';
 import type { Transaction } from '@/types/transaction';
+import { Uncategorized, type Category } from '@/types/category';
 import { type Ref, ref, computed } from 'vue';
 import AmountBar from './AmountBar.vue';
+import CategoryFilter from './CategoryFilter.vue';
 
 var transactions: Ref<Transaction[]> = ref([])
+var categories: Ref<Category[]> = ref([])
+const selectedTimespan: Ref<string> = ref('month');
+const selectedCategoryIds: Ref<number[]> = ref([]);
+
+const filteredTransactions = computed(() => {
+    return transactions.value.filter(transaction => {
+        if (transaction.categories.length === 0) {
+            return selectedCategoryIds.value.includes(Uncategorized.id)
+        }
+        return transaction.categories.some(category => selectedCategoryIds.value.includes(category.id))
+    });
+});
 
 const groupedTransactions = computed(() => {
     const groups: { [key: string]: Transaction[] } = {};
-    transactions.value.forEach(transaction => {
-        const month = new Date(transaction.date).toLocaleString('default', { month: 'long', year: 'numeric' });
-        if (!groups[month]) {
-            groups[month] = [];
+    filteredTransactions.value.forEach(transaction => {
+        let groupKey = 'month';
+        const date = new Date(transaction.date);
+        if (selectedTimespan.value === 'week') {
+            const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()));
+            groupKey = startOfWeek.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
+        } else if (selectedTimespan.value === 'month') {
+            groupKey = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+        } else if (selectedTimespan.value === 'year') {
+            groupKey = date.getFullYear().toString();
         }
-        groups[month].push(transaction);
+        if (!groups[groupKey]) {
+            groups[groupKey] = [];
+        }
+        groups[groupKey].push(transaction);
     });
-    return groups
+    return groups;
 });
 
-function loadTransactions() {
+function loadData() {
     getTransactions().then((data: any[]) => {
         transactions.value = data
+        // TODO: handle concurrency issues - For now, load categories after transactions
+        getCategories().then((data: any[]) => {
+            categories.value = data.concat(Uncategorized)
+            selectedCategoryIds.value = categories.value.map(c => c.id)
+        })
     })
 }
 
-loadTransactions()
+loadData()
 
 </script>
 
 <template>
+    <div class="text-center">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="timespan" id="week" value="week"
+                v-model="selectedTimespan">
+            <label class="form-check-label" for="week">
+                Week
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="timespan" id="month" value="month"
+                v-model="selectedTimespan" checked>
+            <label class="form-check-label" for="month">
+                Month
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="timespan" id="year" value="year"
+                v-model="selectedTimespan">
+            <label class="form-check-label" for="year">
+                Year
+            </label>
+        </div>
+        <CategoryFilter class="ms-5 d-inline" :categories="categories"
+            @update:selectedCategories="selectedCategoryIds = $event" />
+    </div>
+    <hr />
     <table class="table table-dark">
         <tbody v-for="(transactions, month) in groupedTransactions" :key="month">
             <tr>
