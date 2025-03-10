@@ -44,7 +44,7 @@ function doubleClickCategory(categoryId: number) {
     }
     else {
         if (clickedCategories.value.has(categoryId) && clickedCategories.value.size == 1) {
-            clickedCategories.value = new Set(categories.filter(c => c.id !== categoryId).map(c => c.id));
+            clickedCategories.value = new Set(categories.map(c => c.id));
         }
         else {
             clickedCategories.value.clear();
