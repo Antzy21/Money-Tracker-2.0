@@ -32,16 +32,35 @@ function toggleCategory(categoryId: number) {
     emit('update:selectedCategories', Array.from(selectedCategories.value));
 }
 
+function doubleClickCategory(categoryId: number) {
+    if (selectedDefault) {
+        if (!clickedCategories.value.has(categoryId) && clickedCategories.value.size == categories.length - 1) {
+            clickedCategories.value.clear();
+        }
+        else {
+            clickedCategories.value = new Set(categories.filter(c => c.id !== categoryId).map(c => c.id));
+            clickedCategories.value.delete(categoryId);
+        }
+    }
+    else {
+        if (clickedCategories.value.has(categoryId) && clickedCategories.value.size == 1) {
+            clickedCategories.value = new Set(categories.map(c => c.id));
+        }
+        else {
+            clickedCategories.value.clear();
+            clickedCategories.value.add(categoryId);
+        }
+    }
+    emit('update:selectedCategories', Array.from(selectedCategories.value));
+}
+
 </script>
 
 <template>
     <div>
-        <ColouredBadge
-            v-for="category in categories"
-            :key="category.id"
-            :colour="category.colour"
-            :disabled="!selectedCategories.has(category.id)"
-            @click="toggleCategory(category.id)">
+        <ColouredBadge v-for="category in categories" :key="category.id" :colour="category.colour"
+            :disabled="!selectedCategories.has(category.id)" @click="toggleCategory(category.id)"
+            @dblclick="doubleClickCategory(category.id)">
             {{ category.name }}
         </ColouredBadge>
     </div>
