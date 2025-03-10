@@ -3,12 +3,19 @@ import { healthcheck } from '@/api/HealthCheckApi';
 import { ref } from 'vue';
 
 var healthStatus = ref("warning")
+var healthcheckInterval = 30 * 1000
 
-healthcheck().then((response) => {
-    healthStatus.value = response.status == 200 ? "ok" : "error"
-}).catch(() => {
-    healthStatus.value = "error"
-})
+runHealthCheck()
+
+setInterval(() => runHealthCheck(), healthcheckInterval)
+
+function runHealthCheck() {
+    healthcheck().then((response) => {
+        healthStatus.value = response.status == 200 ? "ok" : "error"
+    }).catch(() => {
+        healthStatus.value = "error"
+    })
+}
 
 </script>
 

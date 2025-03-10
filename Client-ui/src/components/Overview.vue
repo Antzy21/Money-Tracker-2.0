@@ -3,14 +3,24 @@ import { getTransactions } from '@/api/TransactionsApi';
 import { getCategories } from '@/api/CategoriesApi';
 import type { Transaction } from '@/types/transaction';
 import { Uncategorized, type Category } from '@/types/category';
-import { type Ref, ref, computed } from 'vue';
+import { type Ref, ref, computed, type ComputedRef } from 'vue';
 import AmountBar from './AmountBar.vue';
 import CategoryFilter from './CategoryFilter.vue';
 
 var transactions: Ref<Transaction[]> = ref([])
-var categories: Ref<Category[]> = ref([])
 const selectedTimespan: Ref<string> = ref('month');
 const selectedCategoryIds: Ref<number[]> = ref([]);
+
+const categories: ComputedRef<Category[]> = computed(() => {
+    return transactions.value.reduce((categories, transaction) => {
+        transaction.categories.forEach(category => {
+            if (!categories.some(c => c.id === category.id)) {
+                categories.push(category)
+            }
+        })
+        return categories;
+    }, [Uncategorized]);
+});
 
 const filteredTransactions = computed(() => {
     return transactions.value.filter(transaction => {
@@ -45,11 +55,7 @@ const groupedTransactions = computed(() => {
 function loadData() {
     getTransactions().then((data: any[]) => {
         transactions.value = data
-        // TODO: handle concurrency issues - For now, load categories after transactions
-        getCategories().then((data: any[]) => {
-            categories.value = data.concat(Uncategorized)
-            selectedCategoryIds.value = categories.value.map(c => c.id)
-        })
+        selectedCategoryIds.value = categories.value.map(c => c.id)
     })
 }
 
