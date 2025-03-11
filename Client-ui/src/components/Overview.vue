@@ -97,7 +97,7 @@ loadData()
                     {{ month }}
                 </td>
                 <td>
-                    <AmountBar :transactions="transactions" />
+                    <AmountBar :transactions="transactions" :scale="1000"/>
                 </td>
             </tr>
         </tbody>

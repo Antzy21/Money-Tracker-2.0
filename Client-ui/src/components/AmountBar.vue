@@ -4,8 +4,9 @@ import { type ComputedRef, computed } from 'vue';
 import { type Transaction } from '@/types/transaction';
 import { Uncategorized, type Category } from '@/types/category';
 
-const { transactions } = defineProps<{
+const { transactions, scale } = defineProps<{
     transactions: Transaction[],
+    scale: number
 }>()
 
 const transactionsByCategory: ComputedRef<CategoryAmount[]> = computed(() => {
