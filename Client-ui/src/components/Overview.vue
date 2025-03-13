@@ -22,7 +22,7 @@ const categories: ComputedRef<Category[]> = computed(() => {
     }, [Uncategorized]);
 });
 
-const filteredTransactions = computed(() => {
+const filteredTransactions: ComputedRef<Transaction[]> = computed(() => {
     return transactions.value.filter(transaction => {
         if (transaction.categories.length === 0) {
             return selectedCategoryIds.value.includes(Uncategorized.id)
@@ -31,7 +31,7 @@ const filteredTransactions = computed(() => {
     });
 });
 
-const groupedTransactions = computed(() => {
+const groupedTransactions: ComputedRef<{ [key: string]: Transaction[] }> = computed(() => {
     const groups: { [key: string]: Transaction[] } = {};
     filteredTransactions.value.forEach(transaction => {
         let groupKey = 'month';
@@ -50,6 +50,22 @@ const groupedTransactions = computed(() => {
         groups[groupKey].push(transaction);
     });
     return groups;
+});
+
+const maxAbsAmount: ComputedRef<number> = computed(() => {
+    var maxPositiveValue = Object.values(groupedTransactions.value)
+        .map(ts => 
+            ts.filter(t => t.amount > 0)
+            .reduce((acc, t) => acc + t.amount, 0)
+        )
+        .reduce((curMax, sum) => Math.max(curMax, sum), 0);
+    var maxNegativeValue = Object.values(groupedTransactions.value)
+        .map(ts => 
+            ts.filter(t => t.amount < 0)
+            .reduce((acc, t) => acc + t.amount, 0)
+        )
+        .reduce((curMax, sum) => Math.min(curMax, sum), 0);
+    return Math.max(maxPositiveValue, Math.abs(maxNegativeValue));
 });
 
 function loadData() {
@@ -93,11 +109,11 @@ loadData()
     <table class="table table-dark">
         <tbody v-for="(transactions, month) in groupedTransactions" :key="month">
             <tr>
-                <td class="d-inline-block">
+                <td width="10%">
                     {{ month }}
                 </td>
                 <td>
-                    <AmountBar :transactions="transactions" />
+                    <AmountBar :transactions="transactions" :scale="maxAbsAmount"/>
                 </td>
             </tr>
         </tbody>
