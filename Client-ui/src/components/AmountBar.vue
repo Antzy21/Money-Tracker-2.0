@@ -25,28 +25,28 @@ const transactionsByCategory: ComputedRef<CategoryAmount[]> = computed(() => {
 });
 
 const totalWidth: ComputedRef<number> = computed(() => {
-    return transactionsByCategory.value
-        .reduce((acc, t) => acc + normaliseValues(t.amount), 0);
+    const totalWidth = transactionsByCategory.value
+        .reduce((acc, t) => acc + Math.abs(t.amount), 0)
+    return normaliseValues(totalWidth);
 });
 
 const negativePadding: ComputedRef<number> = computed(() => {
     const totalNegative = transactionsByCategory.value
         .filter(t => t.amount < 0)
-        .reduce((acc, t) => acc + normaliseValues(t.amount), 0);
-    return 500 - totalNegative;
+        .reduce((acc, t) => acc + Math.abs(t.amount), 0);
+    return 500 - normaliseValues(totalNegative);
 });
 
 function normaliseValues(amount: number): number {
-    return Math.min(Math.abs(amount) / 10, 200);
+    return Math.abs(amount) / scale * 500;
 }
 
 </script>
 
 <template>
-    <div class="progress-stacked" :style="{'margin-left': negativePadding+'px', 'width': totalWidth+'px'}">
+    <div class="progress-stacked" :style="{ 'margin-left': negativePadding + 'px', 'width': totalWidth+'px'}">
         <div v-for="categoryAmount in transactionsByCategory" class="progress"
-            :style="{ 'width': normaliseValues(categoryAmount.amount)+'px'}"
-            :title="categoryAmount.category.name">
+            :style="{ 'width': normaliseValues(categoryAmount.amount)+'px'}" :title="categoryAmount.category.name">
             <div class="progress-bar" :style="{ 'background-color': categoryAmount.category.colour, 'color': 'black'}"></div>
         </div>
     </div>
