@@ -5,6 +5,7 @@ import { ref, type Ref, computed, type ComputedRef } from "vue";
 import TransactionsItem from "@/components/TransactionItem.vue";
 import CategoryFilter from "@/components/CategoryFilter.vue";
 import { Uncategorized, type Category } from "@/types/category";
+import type { TransactionUploadResponse } from "@/types/responses/transaction-upload-response";
 
 var transactions: Ref<Transaction[]> = ref([]);
 const selectedCategoryIds: Ref<number[]> = ref([]);
@@ -42,7 +43,9 @@ function loadTransactions() {
 function onFileChanged($event: Event) {
     const target = $event.target as HTMLInputElement;
     if (target && target.files) {
-        postCsv(target.files[0]).then(() => loadTransactions());
+        postCsv(target.files[0]).then((response: TransactionUploadResponse) =>
+            loadTransactions()
+        );
         target.value = "";
     }
 }

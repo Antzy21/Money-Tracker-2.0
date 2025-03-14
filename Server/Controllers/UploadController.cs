@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoneyTracker2.Services;
 
@@ -17,8 +16,8 @@ public class UploadController(TransactionImportService transactionImportService)
             return new BadRequestResult();
         }
 
-        var newlyAddedTransactions = transactionImportService.ImportTransactionsFromFile(file).ToList();
+        var response = transactionImportService.ImportTransactionsFromFile(file);
 
-        return new JsonResult(newlyAddedTransactions);
+        return new JsonResult(response);
     }
 }
