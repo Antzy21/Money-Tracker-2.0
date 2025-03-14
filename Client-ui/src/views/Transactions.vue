@@ -3,6 +3,7 @@ import type { Transaction } from "@/types/transaction";
 import { getTransactions, postCsv } from "@/api/TransactionsApi";
 import { ref, type Ref, computed, type ComputedRef } from "vue";
 import TransactionsItem from "@/components/TransactionItem.vue";
+import FadeAnimation from "@/components/FadeAnimation.vue";
 import CategoryFilter from "@/components/CategoryFilter.vue";
 import { Uncategorized, type Category } from "@/types/category";
 import type { TransactionUploadResponse } from "@/types/responses/transaction-upload-response";
@@ -47,15 +48,6 @@ function onFileChanged($event: Event) {
         postCsv(target.files[0]).then((response: TransactionUploadResponse) => {
             transactionUploadResponse.value = response;
             loadTransactions();
-            setTimeout(() => {
-                const alertElement = document.querySelector('.alert');
-                if (alertElement) {
-                    alertElement.classList.add('fade-out');
-                    setTimeout(() => {
-                        transactionUploadResponse.value = null;
-                    }, 990); // Match the duration of the fade-out animation
-                }
-            }, 5000); // Hide alert after 15 seconds
         });
         target.value = "";
     }
@@ -70,9 +62,12 @@ loadTransactions();
     <div class="py-4">
         <h3>Upload Transactions</h3>
         <input type="file" @change="onFileChanged($event)" accept=".csv*" capture class="form-control" />
-        <div v-if="transactionUploadResponse" class="mt-2 alert alert-success fade-in" role="alert">
-            File uploaded successfully. {{ transactionUploadResponse.transactions.length }} transactions added. {{ transactionUploadResponse.duplicatesCount }} duplicates ignored.
-        </div>
+        <FadeAnimation :condition="transactionUploadResponse != null" @clear="transactionUploadResponse = null">
+            <div v-if="transactionUploadResponse" class="mt-2 alert alert-success" role="alert">
+                File uploaded successfully. {{ transactionUploadResponse.transactions.length }} transactions added. 
+                {{ transactionUploadResponse.duplicatesCount }} duplicates ignored.
+            </div>
+        </FadeAnimation>
     </div>
     <div class="text-center mb-3">
         <CategoryFilter :categories="categories" @update:selectedCategories="selectedCategoryIds = $event" />
@@ -93,23 +88,3 @@ loadTransactions();
         </tbody>
     </table>
 </template>
-
-<style scoped>
-.fade-in {
-    animation: fadeIn 1s;
-}
-
-.fade-out {
-    animation: fadeOut 1s;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-</style>
