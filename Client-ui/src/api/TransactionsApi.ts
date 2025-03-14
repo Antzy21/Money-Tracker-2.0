@@ -1,3 +1,4 @@
+import type { TransactionUploadResponse } from '@/types/responses/transaction-upload-response.js'
 import {
     get,
     put,
@@ -18,7 +19,7 @@ function putTransaction(id: number, data: any) {
     return put(`${controllerName}/${id}`, data)
 }
 
-function postCsv(file: any) {
+function postCsv(file: any): Promise<TransactionUploadResponse> {
     return postFile('Upload', file)
 }
 
