@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using MoneyTracker2.Data;
@@ -34,7 +34,18 @@ public class TransactionImportService(MoneyTrackerContext context)
             newTransactions.Add(transaction);
         }
 
-        context.Transactions.AddRange(newTransactions);
+        var duplicates = newTransactions
+            .Where(nt => context.Transactions.Any(t => 
+                t.Date == nt.Date &&
+                t.Amount == nt.Amount &&
+                t.Contact == nt.Contact &&
+                t.Reference == nt.Reference
+            ))
+            .ToList();
+
+        var uniqueNew = newTransactions.Except(duplicates).ToList();
+
+        context.Transactions.AddRange(uniqueNew);
 
         context.SaveChanges();
 
@@ -42,6 +53,7 @@ public class TransactionImportService(MoneyTrackerContext context)
 
         return new TransactionUploadResponse(
             Transactions: context.Transactions.Where(t => newTransactionIds.Contains(t.Id)).ToList(),
+            DuplicatesCount: duplicates.Count
         );
     }
 }
