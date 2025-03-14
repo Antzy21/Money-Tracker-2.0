@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { getTransactions } from '@/api/TransactionsApi';
-import { getCategories } from '@/api/CategoriesApi';
 import type { Transaction } from '@/types/transaction';
 import { Uncategorized, type Category } from '@/types/category';
 import { type Ref, ref, computed, type ComputedRef } from 'vue';
@@ -12,14 +11,17 @@ const selectedTimespan: Ref<string> = ref('month');
 const selectedCategoryIds: Ref<number[]> = ref([]);
 
 const categories: ComputedRef<Category[]> = computed(() => {
-    return transactions.value.reduce((categories, transaction) => {
+    return transactions.value.reduce((categories: Category[], transaction) => {
+        if (transaction.categories.length === 0 && !categories.some(c => c.id === Uncategorized.id)) {
+            categories.push(Uncategorized)
+        }
         transaction.categories.forEach(category => {
             if (!categories.some(c => c.id === category.id)) {
                 categories.push(category)
             }
         })
         return categories;
-    }, [Uncategorized]);
+    }, []);
 });
 
 const filteredTransactions: ComputedRef<Transaction[]> = computed(() => {
