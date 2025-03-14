@@ -1,5 +1,6 @@
 import type { Transaction } from "../transaction"
 
 export type TransactionUploadResponse = {
-    transactions: Transaction[]
+    transactions: Transaction[],
+    duplicatesCount: number,
 }

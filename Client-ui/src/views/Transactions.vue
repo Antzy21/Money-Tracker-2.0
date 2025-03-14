@@ -9,6 +9,7 @@ import type { TransactionUploadResponse } from "@/types/responses/transaction-up
 
 var transactions: Ref<Transaction[]> = ref([]);
 const selectedCategoryIds: Ref<number[]> = ref([]);
+const transactionUploadResponse: Ref<TransactionUploadResponse | null> = ref(null);
 
 const filteredTransactions = computed(() => {
     return transactions.value.filter(transaction => {
@@ -43,9 +44,10 @@ function loadTransactions() {
 function onFileChanged($event: Event) {
     const target = $event.target as HTMLInputElement;
     if (target && target.files) {
-        postCsv(target.files[0]).then((response: TransactionUploadResponse) =>
+        postCsv(target.files[0]).then((response: TransactionUploadResponse) => {
+            transactionUploadResponse.value = response
             loadTransactions()
-        );
+        });
         target.value = "";
     }
 }
@@ -59,6 +61,9 @@ loadTransactions();
     <div class="py-4">
         <h3>Upload Transactions</h3>
         <input type="file" @change="onFileChanged($event)" accept=".csv*" capture class="form-control" />
+        <div v-if="transactionUploadResponse" class="mt-2 alert alert-success" role="alert">
+            File uploaded successfully. {{ transactionUploadResponse.transactions.length }} transactions added. {{ transactionUploadResponse.duplicatesCount }} duplicates ignored.
+        </div>
     </div>
     <div class="text-center mb-3">
         <CategoryFilter :categories="categories" @update:selectedCategories="selectedCategoryIds = $event" />
