@@ -9,6 +9,7 @@ import HealthCheck from './components/HealthCheck.vue'
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/categories">Categories</RouterLink>
       <RouterLink to="/transactions">Transactions</RouterLink>
+      <RouterLink to="/admin">Admin</RouterLink>
       <HealthCheck></HealthCheck>
     </nav>
   </header>
