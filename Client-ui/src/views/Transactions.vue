@@ -45,8 +45,17 @@ function onFileChanged($event: Event) {
     const target = $event.target as HTMLInputElement;
     if (target && target.files) {
         postCsv(target.files[0]).then((response: TransactionUploadResponse) => {
-            transactionUploadResponse.value = response
-            loadTransactions()
+            transactionUploadResponse.value = response;
+            loadTransactions();
+            setTimeout(() => {
+                const alertElement = document.querySelector('.alert');
+                if (alertElement) {
+                    alertElement.classList.add('fade-out');
+                    setTimeout(() => {
+                        transactionUploadResponse.value = null;
+                    }, 990); // Match the duration of the fade-out animation
+                }
+            }, 5000); // Hide alert after 15 seconds
         });
         target.value = "";
     }
@@ -61,7 +70,7 @@ loadTransactions();
     <div class="py-4">
         <h3>Upload Transactions</h3>
         <input type="file" @change="onFileChanged($event)" accept=".csv*" capture class="form-control" />
-        <div v-if="transactionUploadResponse" class="mt-2 alert alert-success" role="alert">
+        <div v-if="transactionUploadResponse" class="mt-2 alert alert-success fade-in" role="alert">
             File uploaded successfully. {{ transactionUploadResponse.transactions.length }} transactions added. {{ transactionUploadResponse.duplicatesCount }} duplicates ignored.
         </div>
     </div>
@@ -84,3 +93,23 @@ loadTransactions();
         </tbody>
     </table>
 </template>
+
+<style scoped>
+.fade-in {
+    animation: fadeIn 1s;
+}
+
+.fade-out {
+    animation: fadeOut 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+</style>
