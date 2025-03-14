@@ -19,14 +19,17 @@ const filteredTransactions = computed(() => {
 });
 
 const categories: ComputedRef<Category[]> = computed(() => {
-    return transactions.value.reduce((categories, transaction) => {
+    return transactions.value.reduce((categories: Category[], transaction) => {
+        if (transaction.categories.length === 0 && !categories.some(c => c.id === Uncategorized.id)) {
+            categories.push(Uncategorized)
+        }
         transaction.categories.forEach(category => {
             if (!categories.some(c => c.id === category.id)) {
                 categories.push(category)
             }
         })
         return categories;
-    }, [Uncategorized]);
+    }, []);
 });
 
 function loadTransactions() {
