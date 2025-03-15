@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Category } from "@/types/category";
 import { ref, type Ref, computed, type ComputedRef } from "vue";
-import { defineEmits } from "vue";
 import ColouredBadge from "@/components/ColouredBadge.vue";
 
 const { categories, selectedDefault = true } = defineProps<{
