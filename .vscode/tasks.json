@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "vite",
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "options": {
+        "cwd": "${workspaceFolder}/Client-ui"
+      },
+      "problemMatcher": [
+        {
+          "owner": "typescript",
+          "source": "ts",
+          "applyTo": "closedDocuments",
+          "fileLocation": ["relative", "${cwd}"],
+          "pattern": "$tsc",
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": {
+              "regexp": ".*"
+            },
+            "endsPattern": {
+              "regexp": ".*compiled successfully.*"
+            }
+          }
+        }
+      ],
+    },
+    {
+      "label": "build:server",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/Server"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+          "close": true
+      }
+    }
+  ]
+}
