@@ -1,0 +1,57 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Dev Client",
+            "type": "msedge",
+            "request": "launch",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMapPathOverrides": {
+              "webpack:///src/*": "${webRoot}/*"
+            }
+        },
+        {
+            "name": "Dev Server",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/Server/bin/Debug/net9.0/MoneyTracker2.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Server",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        {
+            "name": "Prod Client",
+            "type": "msedge",
+            "request": "launch",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMapPathOverrides": {
+              "webpack:///src/*": "${webRoot}/*"
+            }
+        },
+        {
+            "name": "Prod Server",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/Server/bin/Debug/net9.0/MoneyTracker2.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Server",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Production"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Dev Client & Server",
+            "configurations": ["Dev Client", "Dev Server"]
+        },
+        {
+            "name": "Prod Client & Server",
+            "configurations": ["Prod Client", "Prod Server"]
+        }
+    ]
+}
