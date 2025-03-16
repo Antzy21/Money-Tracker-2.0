@@ -78,6 +78,7 @@ loadTransactions();
                 <th>Contact</th>
                 <th>Reference</th>
                 <th>Amount</th>
+                <th>Date</th>
                 <th>Categories</th>
             </tr>
         </thead>
