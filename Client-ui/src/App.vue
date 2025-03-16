@@ -29,10 +29,9 @@ nav {
 
 nav a.router-link-exact-active {
   color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-text);
+  background-color: var(--color-background-mute);
 }
 
 nav a {
@@ -41,7 +40,4 @@ nav a {
   color: var(--color-text);
 }
 
-nav a:first-of-type {
-  border: 0;
-}
 </style>
