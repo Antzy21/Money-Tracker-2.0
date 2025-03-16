@@ -35,6 +35,7 @@ nav a.router-link-exact-active {
 }
 
 nav a {
+  text-decoration-line: none;
   display: inline-block;
   padding: 1rem;
   color: var(--color-text);
