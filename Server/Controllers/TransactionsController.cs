@@ -29,6 +29,7 @@ public class TransactionsController(MoneyTrackerContext context) : ControllerBas
                 Contact = t.Contact,
                 Reference = t.Reference,
             })
+            .OrderByDescending(t => t.Date)
             .ToListAsync();
 
         foreach (var transaction in transactions)

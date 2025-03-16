@@ -72,7 +72,7 @@ const maxAbsAmount: ComputedRef<number> = computed(() => {
 
 function loadData() {
     getTransactions().then((data: any[]) => {
-        transactions.value = data
+        transactions.value = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         selectedCategoryIds.value = categories.value.map(c => c.id)
     })
 }
