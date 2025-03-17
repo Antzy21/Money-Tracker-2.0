@@ -24,7 +24,6 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
                 Name = c.Name,
                 Colour = c.Colour,
                 Regexes = c.Regexes.Select(r => r.Regex).ToList(),
-                ParentCategoryId = c.ParentCategoryId
             })
             .ToListAsync();
             
@@ -47,7 +46,6 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
             Name = category.Name,
             Colour = category.Colour,
             Regexes = category.Regexes.Select(r => r.Regex).ToList(),
-            ParentCategoryId = category.ParentCategoryId
         };
     }
 
@@ -63,9 +61,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
             {
                 Name = category.Name,
                 Colour = category.Colour,
-                ParentCategoryId = null,
                 Regexes = [],
-                ChildCategories = [],
                 Transactions = []
             });
 
@@ -81,7 +77,6 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
             return NotFound();
 
         categoryEntity.Name = category.Name;
-        categoryEntity.ParentCategoryId = category.ParentCategoryId;
         categoryEntity.Colour = category.Colour;
         
         context.Entry(categoryEntity).State = EntityState.Modified;
