@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneyTracker2.Data;
 
@@ -10,9 +11,11 @@ using MoneyTracker2.Data;
 namespace MoneyTracker2.Migrations
 {
     [DbContext(typeof(MoneyTrackerContext))]
-    partial class MoneyTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20250317220429_remove-category-inter-relations")]
+    partial class removecategoryinterrelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
