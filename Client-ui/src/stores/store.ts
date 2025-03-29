@@ -1,35 +1,23 @@
+import { getCategories } from '@/api/CategoriesApi';
 import { getTransactions } from '@/api/TransactionsApi';
 import { Uncategorized, type Category } from '@/types/category';
 import type { Transaction } from '@/types/transaction';
 import { defineStore } from 'pinia'
-import { computed, ref, type ComputedRef, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 
 export const useStore = defineStore('store', () => {
 
     const transactions: Ref<Transaction[]> = ref([]);
-    const selectedCategoryIds: Ref<number[]> = ref([]);
+    const categories: Ref<Category[]> = ref([]);
+    const selectedCategoryIds: Ref<Set<number>> = ref(new Set());
 
     const transactionsFilteredBySelectedCategoryIds = computed(() => {
         return transactions.value.filter(transaction => {
             if (transaction.categories.length === 0) {
-                return selectedCategoryIds.value.includes(Uncategorized.id);
+                return selectedCategoryIds.value.has(Uncategorized.id);
             }
-            return transaction.categories.some(category => selectedCategoryIds.value.includes(category.id));
+            return transaction.categories.some(category => selectedCategoryIds.value.has(category.id));
         });
-    });
-
-    const categoriesFromTransactions: ComputedRef<Category[]> = computed(() => {
-        return transactions.value.reduce((categories: Category[], transaction) => {
-            if (transaction.categories.length === 0 && !categories.some(c => c.id === Uncategorized.id)) {
-                categories.push(Uncategorized)
-            }
-            transaction.categories.forEach(category => {
-                if (!categories.some(c => c.id === category.id)) {
-                    categories.push(category)
-                }
-            })
-            return categories;
-        }, []);
     });
 
     function loadTransactions() {
@@ -38,13 +26,22 @@ export const useStore = defineStore('store', () => {
         });
     }
 
-    loadTransactions();
+    function loadCategories() {
+        getCategories().then((data: any[]) => {
+            categories.value = data
+            selectedCategoryIds.value = new Set(data.map(category => category.id).concat(Uncategorized.id));
+            loadTransactions();
+        })
+    }
+
+    loadCategories();
 
     return {
         transactions,
+        categories,
         selectedCategoryIds,
-        categoriesFromTransactions,
         transactionsFilteredBySelectedCategoryIds,
-        loadTransactions
+        loadTransactions,
+        loadCategories,
     }
 })

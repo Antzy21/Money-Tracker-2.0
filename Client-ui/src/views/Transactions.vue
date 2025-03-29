@@ -9,11 +9,7 @@ import { storeToRefs } from "pinia";
 import { ref, type Ref } from "vue";
 
 const store = useStore();
-const {
-    selectedCategoryIds,
-    categoriesFromTransactions,
-    transactionsFilteredBySelectedCategoryIds
-} = storeToRefs(store)
+const { transactionsFilteredBySelectedCategoryIds } = storeToRefs(store)
 
 const transactionUploadResponse: Ref<TransactionUploadResponse | null> = ref(null);
 
@@ -43,7 +39,7 @@ function onFileChanged($event: Event) {
         </FadeAnimation>
     </div>
     <div class="text-center mb-3">
-        <CategoryFilter :categories="categoriesFromTransactions"/>
+        <CategoryFilter/>
     </div>
     <table class="table table-dark">
         <thead>

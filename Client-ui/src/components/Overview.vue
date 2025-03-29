@@ -7,7 +7,7 @@ import { useStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
 
 const store = useStore();
-const { transactionsFilteredBySelectedCategoryIds, categoriesFromTransactions } = storeToRefs(store);
+const { transactionsFilteredBySelectedCategoryIds } = storeToRefs(store);
 
 const selectedTimespan: Ref<string> = ref('month');
 
@@ -73,14 +73,14 @@ const maxAbsAmount: ComputedRef<number> = computed(() => {
                 Year
             </label>
         </div>
-        <CategoryFilter class="ms-5 d-inline" :categories="categoriesFromTransactions"/>
+        <CategoryFilter class="ms-5 d-inline"/>
     </div>
     <hr />
     <table class="table table-dark">
-        <tbody v-for="(transactions, month) in groupedTransactions" :key="month">
+        <tbody v-for="(transactions, timespan) in groupedTransactions" :key="timespan">
             <tr>
                 <td width="10%">
-                    {{ month }}
+                    {{ timespan }}
                 </td>
                 <td>
                     <AmountBar :transactions="transactions" :scale="maxAbsAmount"/>
