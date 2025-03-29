@@ -12,6 +12,4 @@ public class Category
     public required string Colour { get; set; }
 
     public required List<CategoryRegex> Regexes { get; set; }
-
-    public required List<Transaction> Transactions { get; set; }
 }

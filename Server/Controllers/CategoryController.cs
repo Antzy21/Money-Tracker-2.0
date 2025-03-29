@@ -62,7 +62,6 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
                 Name = category.Name,
                 Colour = category.Colour,
                 Regexes = [],
-                Transactions = []
             });
 
             await context.SaveChangesAsync();
