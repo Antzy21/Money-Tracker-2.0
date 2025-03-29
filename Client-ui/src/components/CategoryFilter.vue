@@ -2,14 +2,13 @@
 import type { Category } from "@/types/category";
 import { ref, type Ref, computed, type ComputedRef } from "vue";
 import ColouredBadge from "@/components/ColouredBadge.vue";
+import { useStore } from "@/stores/store";
+
+const store = useStore();
 
 const { categories, selectedDefault = true } = defineProps<{
     categories: Category[],
     selectedDefault?: boolean
-}>();
-
-const emit = defineEmits<{
-    (e: 'update:selectedCategories', selectedCategoryIds: number[]): void;
 }>();
 
 const clickedCategories = ref<Set<number>>(new Set([]));
@@ -28,7 +27,7 @@ function toggleCategory(categoryId: number) {
     } else {
         clickedCategories.value.add(categoryId);
     }
-    emit('update:selectedCategories', Array.from(selectedCategories.value));
+    store.selectedCategoryIds = Array.from(selectedCategories.value);
 }
 
 function doubleClickCategory(categoryId: number) {
@@ -50,7 +49,7 @@ function doubleClickCategory(categoryId: number) {
             clickedCategories.value.add(categoryId);
         }
     }
-    emit('update:selectedCategories', Array.from(selectedCategories.value));
+    store.selectedCategoryIds = Array.from(selectedCategories.value);
 }
 
 </script>

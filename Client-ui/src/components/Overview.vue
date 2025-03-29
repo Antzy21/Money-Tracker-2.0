@@ -104,8 +104,7 @@ loadData()
                 Year
             </label>
         </div>
-        <CategoryFilter class="ms-5 d-inline" :categories="categories"
-            @update:selectedCategories="selectedCategoryIds = $event" />
+        <CategoryFilter class="ms-5 d-inline" :categories="categories"/>
     </div>
     <hr />
     <table class="table table-dark">

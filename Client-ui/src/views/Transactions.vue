@@ -43,7 +43,7 @@ function onFileChanged($event: Event) {
         </FadeAnimation>
     </div>
     <div class="text-center mb-3">
-        <CategoryFilter :categories="categoriesFromTransactions" @update:selectedCategories="selectedCategoryIds = $event" />
+        <CategoryFilter :categories="categoriesFromTransactions"/>
     </div>
     <table class="table table-dark">
         <thead>
