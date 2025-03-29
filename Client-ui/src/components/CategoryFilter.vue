@@ -1,64 +1,39 @@
 <script setup lang="ts">
-import type { Category } from "@/types/category";
-import { ref, type Ref, computed, type ComputedRef } from "vue";
 import ColouredBadge from "@/components/ColouredBadge.vue";
+import { useStore } from "@/stores/store";
+import { Uncategorized } from "@/types/category";
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
 
-const { categories, selectedDefault = true } = defineProps<{
-    categories: Category[],
-    selectedDefault?: boolean
-}>();
+const store = useStore();
+const { categories } = storeToRefs(store);
 
-const emit = defineEmits<{
-    (e: 'update:selectedCategories', selectedCategoryIds: number[]): void;
-}>();
-
-const clickedCategories = ref<Set<number>>(new Set([]));
-
-const selectedCategories: ComputedRef<Set<number>> = computed(() => {
-    if (selectedDefault) {
-        return new Set(categories.filter(c => !clickedCategories.value.has(c.id)).map(c => c.id));
-    } else {
-        return clickedCategories.value;
-    }
-});
+const categoriesIncludingUncategorised = computed(() => [...categories.value, Uncategorized]);
 
 function toggleCategory(categoryId: number) {
-    if (clickedCategories.value.has(categoryId)) {
-        clickedCategories.value.delete(categoryId);
+    if (store.selectedCategoryIds.has(categoryId)) {
+        store.selectedCategoryIds.delete(categoryId);
     } else {
-        clickedCategories.value.add(categoryId);
+        store.selectedCategoryIds.add(categoryId);
     }
-    emit('update:selectedCategories', Array.from(selectedCategories.value));
 }
 
 function doubleClickCategory(categoryId: number) {
-    if (selectedDefault) {
-        if (!clickedCategories.value.has(categoryId) && clickedCategories.value.size == categories.length - 1) {
-            clickedCategories.value.clear();
-        }
-        else {
-            clickedCategories.value = new Set(categories.filter(c => c.id !== categoryId).map(c => c.id));
-            clickedCategories.value.delete(categoryId);
-        }
+    if (store.selectedCategoryIds.has(categoryId) && store.selectedCategoryIds.size == 1) {
+        store.selectedCategoryIds = new Set(categoriesIncludingUncategorised.value.map(c => c.id));
     }
     else {
-        if (clickedCategories.value.has(categoryId) && clickedCategories.value.size == 1) {
-            clickedCategories.value = new Set(categories.map(c => c.id));
-        }
-        else {
-            clickedCategories.value.clear();
-            clickedCategories.value.add(categoryId);
-        }
+        store.selectedCategoryIds.clear();
+        store.selectedCategoryIds.add(categoryId);
     }
-    emit('update:selectedCategories', Array.from(selectedCategories.value));
 }
 
 </script>
 
 <template>
     <div>
-        <ColouredBadge v-for="category in categories" :key="category.id" :colour="category.colour"
-            :disabled="!selectedCategories.has(category.id)" @click="toggleCategory(category.id)"
+        <ColouredBadge v-for="category in categoriesIncludingUncategorised" :key="category.id" :colour="category.colour"
+            :disabled="!store.selectedCategoryIds.has(category.id)" @click="toggleCategory(category.id)"
             @dblclick="doubleClickCategory(category.id)">
             {{ category.name }}
         </ColouredBadge>

@@ -1,41 +1,19 @@
 <script setup lang="ts">
-import { getTransactions } from '@/api/TransactionsApi';
 import type { Transaction } from '@/types/transaction';
-import { Uncategorized, type Category } from '@/types/category';
 import { type Ref, ref, computed, type ComputedRef } from 'vue';
 import AmountBar from './AmountBar.vue';
 import CategoryFilter from './CategoryFilter.vue';
+import { useStore } from '@/stores/store';
+import { storeToRefs } from 'pinia';
 
-var transactions: Ref<Transaction[]> = ref([])
+const store = useStore();
+const { transactionsFilteredBySelectedCategoryIds } = storeToRefs(store);
+
 const selectedTimespan: Ref<string> = ref('month');
-const selectedCategoryIds: Ref<number[]> = ref([]);
-
-const categories: ComputedRef<Category[]> = computed(() => {
-    return transactions.value.reduce((categories: Category[], transaction) => {
-        if (transaction.categories.length === 0 && !categories.some(c => c.id === Uncategorized.id)) {
-            categories.push(Uncategorized)
-        }
-        transaction.categories.forEach(category => {
-            if (!categories.some(c => c.id === category.id)) {
-                categories.push(category)
-            }
-        })
-        return categories;
-    }, []);
-});
-
-const filteredTransactions: ComputedRef<Transaction[]> = computed(() => {
-    return transactions.value.filter(transaction => {
-        if (transaction.categories.length === 0) {
-            return selectedCategoryIds.value.includes(Uncategorized.id)
-        }
-        return transaction.categories.some(category => selectedCategoryIds.value.includes(category.id))
-    });
-});
 
 const groupedTransactions: ComputedRef<{ [key: string]: Transaction[] }> = computed(() => {
     const groups: { [key: string]: Transaction[] } = {};
-    filteredTransactions.value.forEach(transaction => {
+    transactionsFilteredBySelectedCategoryIds.value.forEach(transaction => {
         let groupKey = 'month';
         const date = new Date(transaction.date);
         if (selectedTimespan.value === 'week') {
@@ -70,15 +48,6 @@ const maxAbsAmount: ComputedRef<number> = computed(() => {
     return Math.max(maxPositiveValue, Math.abs(maxNegativeValue));
 });
 
-function loadData() {
-    getTransactions().then((data: any[]) => {
-        transactions.value = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        selectedCategoryIds.value = categories.value.map(c => c.id)
-    })
-}
-
-loadData()
-
 </script>
 
 <template>
@@ -104,15 +73,14 @@ loadData()
                 Year
             </label>
         </div>
-        <CategoryFilter class="ms-5 d-inline" :categories="categories"
-            @update:selectedCategories="selectedCategoryIds = $event" />
+        <CategoryFilter class="ms-5 d-inline"/>
     </div>
     <hr />
     <table class="table table-dark">
-        <tbody v-for="(transactions, month) in groupedTransactions" :key="month">
+        <tbody v-for="(transactions, timespan) in groupedTransactions" :key="timespan">
             <tr>
                 <td width="10%">
-                    {{ month }}
+                    {{ timespan }}
                 </td>
                 <td>
                     <AmountBar :transactions="transactions" :scale="maxAbsAmount"/>

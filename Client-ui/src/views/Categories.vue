@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import type { Category } from "@/types/category";
-import { deleteCategory, getCategories, postCategory } from "@/api/CategoriesApi"
-import { ref, type Ref } from "vue";
+import { deleteCategory, postCategory } from "@/api/CategoriesApi"
 import CategoryItem from "@/components/CategoryItem.vue";
+import { useStore } from "@/stores/store";
+import { storeToRefs } from "pinia";
 
-var categories: Ref<Category[]> = ref([])
+const store = useStore()
+const { categories } = storeToRefs(store)
+
 var newCategory: Category = generateNewCategory()
-
-getCategories().then((data: any[]) => {
-    categories.value = data
-})
 
 function handleEnter(event: Event) {
     if (newCategory.name === "") {
