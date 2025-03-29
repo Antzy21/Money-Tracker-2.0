@@ -36,7 +36,7 @@ public class TransactionsController(MoneyTrackerContext context) : ControllerBas
         {
             transaction.Categories = categories
                 .Where(c => c.Regexes.Any(r => {
-                    var regex = new Regex(r.Regex);
+                    var regex = new Regex(r.Regex, RegexOptions.IgnoreCase);
                     return regex.IsMatch(transaction.Reference) || regex.IsMatch(transaction.Contact);
                 }))
                 .Select(c => new CategoryView()
