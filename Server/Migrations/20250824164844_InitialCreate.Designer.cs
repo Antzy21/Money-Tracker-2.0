@@ -11,7 +11,7 @@ using MoneyTracker2.Data;
 namespace MoneyTracker2.Migrations
 {
     [DbContext(typeof(MoneyTrackerContext))]
-    [Migration("20250126155311_InitialCreate")]
+    [Migration("20250824164844_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -34,12 +34,7 @@ namespace MoneyTracker2.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ParentCategoryId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -68,9 +63,6 @@ namespace MoneyTracker2.Migrations
                     b.Property<float>("Amount")
                         .HasColumnType("REAL");
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Contact")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -84,18 +76,7 @@ namespace MoneyTracker2.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("Transactions");
-                });
-
-            modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Category", b =>
-                {
-                    b.HasOne("MoneyTracker2.Models.EntityModels.Category", "ParentCategory")
-                        .WithMany("ChildCategories")
-                        .HasForeignKey("ParentCategoryId");
-
-                    b.Navigation("ParentCategory");
                 });
 
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.CategoryRegex", b =>
@@ -109,22 +90,9 @@ namespace MoneyTracker2.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Transaction", b =>
-                {
-                    b.HasOne("MoneyTracker2.Models.EntityModels.Category", "Category")
-                        .WithMany("Transactions")
-                        .HasForeignKey("CategoryId");
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Category", b =>
                 {
-                    b.Navigation("ChildCategories");
-
                     b.Navigation("Regexes");
-
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

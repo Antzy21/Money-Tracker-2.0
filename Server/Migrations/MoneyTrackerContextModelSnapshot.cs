@@ -60,9 +60,6 @@ namespace MoneyTracker2.Migrations
                     b.Property<float>("Amount")
                         .HasColumnType("REAL");
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Contact")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -75,8 +72,6 @@ namespace MoneyTracker2.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Transactions");
                 });
@@ -92,18 +87,9 @@ namespace MoneyTracker2.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Transaction", b =>
-                {
-                    b.HasOne("MoneyTracker2.Models.EntityModels.Category", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("CategoryId");
-                });
-
             modelBuilder.Entity("MoneyTracker2.Models.EntityModels.Category", b =>
                 {
                     b.Navigation("Regexes");
-
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }
