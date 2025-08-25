@@ -12,11 +12,11 @@ public class TransactionImportService(MoneyTrackerContext context, CsvService cs
 {
     public TransactionUploadResponse ImportTransactionsFromFile(IFormFile file)
     {
-        var csvTransactions = csvService.ReadCsvTo<CsvTransaction>(file, LongLinePolicy.IncludeInLastLine);
+        var csvTransactions = csvService.ReadCsvTo<CsvTransaction>(file, mergeRemainingLinesIntoLast: true);
 
         var newTransactions = new List<Transaction>();
 
-        foreach (var ct in csvTransactions)
+        foreach (var ct in csvTransactions.Where(r => r.IsSuccess).Select(r => r.Value!))
         {
             var additionalInfo = ct.Memo.Split("  ");
             additionalInfo = additionalInfo.Where(a => a.Length > 0).ToArray();
@@ -51,7 +51,8 @@ public class TransactionImportService(MoneyTrackerContext context, CsvService cs
 
         return new TransactionUploadResponse(
             Transactions: context.Transactions.Where(t => newTransactionIds.Contains(t.Id)).ToList(),
-            DuplicatesCount: duplicates.Count
+            DuplicatesCount: duplicates.Count,
+            FailedCount: csvTransactions.Where(r => !r.IsSuccess).Count()
         );
     }
 }
