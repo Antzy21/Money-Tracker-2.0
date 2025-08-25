@@ -26,7 +26,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
                 Regexes = c.Regexes.Select(r => r.Regex).ToList(),
             })
             .ToListAsync();
-            
+
         return new JsonResult(categories);
     }
 
@@ -36,10 +36,10 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
         var category = await context.Categories
             .Include(c => c.Regexes)
             .SingleOrDefaultAsync(c => c.Id == id);
-        
+
         if (category == null)
             return NotFound();
-        
+
         return new CategoryView
         {
             Id = category.Id,
@@ -65,7 +65,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
             });
 
             await context.SaveChangesAsync();
-            
+
             return CreatedAtAction("GetCategory", new { id = newCategoryEntity.Entity.Id }, newCategoryEntity.Entity);
         }
 
@@ -77,10 +77,10 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
 
         categoryEntity.Name = category.Name;
         categoryEntity.Colour = category.Colour;
-        
+
         context.Entry(categoryEntity).State = EntityState.Modified;
         await context.SaveChangesAsync();
-        
+
         return Ok(category);
     }
 
@@ -114,7 +114,7 @@ public class CategoriesController(MoneyTrackerContext context) : ControllerBase
 
         if (categoryEntity is null)
             return NotFound();
-        
+
         context.Categories.Remove(categoryEntity);
         await context.SaveChangesAsync();
         return Ok();

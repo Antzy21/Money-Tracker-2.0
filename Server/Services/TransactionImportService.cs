@@ -35,7 +35,7 @@ public class TransactionImportService(MoneyTrackerContext context)
         }
 
         var duplicates = newTransactions
-            .Where(nt => context.Transactions.Any(t => 
+            .Where(nt => context.Transactions.Any(t =>
                 t.Date == nt.Date &&
                 t.Amount == nt.Amount &&
                 t.Contact == nt.Contact &&
