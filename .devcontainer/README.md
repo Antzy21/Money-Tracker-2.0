@@ -12,3 +12,8 @@ Then it installs node and ef-core.
 
 The `postCreateScript.sh` is run in the `postCreateCommand` section.  
 It installs npm packages and sets up the ef database.
+
+### Issues
+
+Sometimes C# dev kit doesn't work when first (re)building the dev container.  
+Restarting VS Code fixed this. It doesn't rebuild the container, just restarts it. The C# Extension errors are still visible in the terminal, but the intellisense works.
