@@ -8,13 +8,11 @@ using MoneyTracker2.Models.Responses;
 
 namespace MoneyTracker2.Services;
 
-public class TransactionImportService(MoneyTrackerContext context)
+public class TransactionImportService(MoneyTrackerContext context, CsvService csvService)
 {
-    private readonly CsvService _csvService = new CsvService();
-
     public TransactionUploadResponse ImportTransactionsFromFile(IFormFile file)
     {
-        var csvTransactions = _csvService.ReadCsvTo<CsvTransaction>(file, LongLinePolicy.IncludeInLastLine);
+        var csvTransactions = csvService.ReadCsvTo<CsvTransaction>(file, LongLinePolicy.IncludeInLastLine);
 
         var newTransactions = new List<Transaction>();
 
