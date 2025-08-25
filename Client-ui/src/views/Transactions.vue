@@ -36,6 +36,9 @@ function onFileChanged($event: Event) {
                 File uploaded successfully. {{ transactionUploadResponse.transactions.length }} transactions added. 
                 {{ transactionUploadResponse.duplicatesCount }} duplicates ignored.
             </div>
+            <div v-if="transactionUploadResponse?.failedCount ?? 0 > 0" class="alert alert-danger" role="alert">
+                {{transactionUploadResponse?.failedCount}} failed rows uploaded
+            </div>
         </FadeAnimation>
     </div>
     <div class="text-center mb-3">

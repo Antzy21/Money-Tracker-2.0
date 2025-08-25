@@ -12,6 +12,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<MoneyTrackerContext>();
 builder.Services.AddSingleton<TransactionImportService>();
 
+builder.Services.AddSingleton<CsvService>();
+
 const string vueClientCorsPolicy = "vue_client";
 
 builder.Services.AddCors(options =>

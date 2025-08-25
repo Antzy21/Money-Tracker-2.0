@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
+using MoneyTracker2.Utility;
 
 namespace MoneyTracker2.Services;
 
@@ -13,12 +14,12 @@ public class CsvService
     {
     }
 
-    public List<T> ReadCsvTo<T>(IFormFile file, LongLinePolicy longLinePolicy = LongLinePolicy.ThrowError) where T : new()
+    public List<Result<T>> ReadCsvTo<T>(IFormFile file, bool mergeRemainingLinesIntoLast = true) where T : new()
     {
         Stream stream = file.OpenReadStream();
         StreamReader streamReader = new StreamReader(stream);
 
-        var listOfObjects = new List<T>();
+        var listOfObjects = new List<Result<T>>();
 
         string line = streamReader.ReadLine()!;
 
@@ -36,18 +37,7 @@ public class CsvService
                     var cells = line.Split(',');
                     if (cells.Length != headers.Length)
                     {
-                        switch (longLinePolicy)
-                        {
-                            case LongLinePolicy.Ignore:
-                                cells = cells.Take(6).ToArray();
-                                break;
-                            case LongLinePolicy.IncludeInLastLine:
-                                cells = line.Split(',', 6);
-                                break;
-                            case LongLinePolicy.ThrowError:
-                                Console.WriteLine($"Line too long: {line}");
-                                throw new ArgumentException($"Line too long: {line}");
-                        }
+                        cells = line.Split(',', headers.Length);
                     }
                     foreach (var cell in cells.Select((l, i) => new { element = l, idx = i }))
                     {
@@ -71,7 +61,7 @@ public class CsvService
         return listOfObjects;
     }
 
-    private static T ConvertLineTo<T>(Dictionary<string, string> row) where T : new()
+    private static Result<T> ConvertLineTo<T>(Dictionary<string, string> row) where T : new()
     {
         T obj = new T();
 
@@ -80,10 +70,17 @@ public class CsvService
         foreach (var property in properties)
         {
             string value = row[property.Name];
-            AssignProperty(obj, property, value);
+            try
+            {
+                AssignProperty(obj, property, value);
+            }
+            catch (Exception ex)
+            {
+                return Result<T>.Failure($"Error assigning property {property.Name} with value {value}: {ex.Message}");
+            }
         }
 
-        return obj;
+        return Result<T>.Success(obj);
     }
 
     private static void AssignProperty<T>(T obj, PropertyInfo property, string value) where T : new()
@@ -104,11 +101,4 @@ public class CsvService
             property.SetValue(obj, entry);
         }
     }
-}
-
-public enum LongLinePolicy
-{
-    Ignore,
-    IncludeInLastLine,
-    ThrowError
 }

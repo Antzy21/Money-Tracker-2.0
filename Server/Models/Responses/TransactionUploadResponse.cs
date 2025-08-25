@@ -5,5 +5,6 @@ namespace MoneyTracker2.Models.Responses;
 
 public record TransactionUploadResponse(
     List<Transaction> Transactions,
-    int DuplicatesCount
+    int DuplicatesCount,
+    int FailedCount
 );
