@@ -32,7 +32,7 @@ function doubleClickCategory(categoryId: number) {
 
 <template>
     <div>
-        <ColouredBadge v-for="category in categoriesIncludingUncategorised" :key="category.id" :colour="category.colour"
+        <ColouredBadge v-for="category in categoriesIncludingUncategorised" class="m-1" :key="category.id" :colour="category.colour"
             :disabled="!store.selectedCategoryIds.has(category.id)" @click="toggleCategory(category.id)"
             @dblclick="doubleClickCategory(category.id)">
             {{ category.name }}
