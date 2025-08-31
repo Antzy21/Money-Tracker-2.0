@@ -55,7 +55,7 @@ function generateNewCategory(): Category {
 
 <template>
     <h1>Categories</h1>
-    <table class="table table-dark">
+    <table class="table">
         <tbody>
             <CategoryItem :category="category" v-for="category in categories" @update="handleUpdate"
                 @delete="handleDelete" />

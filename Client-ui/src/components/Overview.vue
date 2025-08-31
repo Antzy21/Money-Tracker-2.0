@@ -76,7 +76,7 @@ const maxAbsAmount: ComputedRef<number> = computed(() => {
         <CategoryFilter class="ms-5 d-inline"/>
     </div>
     <hr />
-    <table class="table table-dark">
+    <table class="table">
         <tbody v-for="(transactions, timespan) in groupedTransactions" :key="timespan">
             <tr>
                 <td width="10%">
