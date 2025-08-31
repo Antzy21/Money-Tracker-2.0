@@ -22,9 +22,6 @@ import HealthCheck from './components/HealthCheck.vue'
         <HealthCheck></HealthCheck>
       </div>
     </nav>
-
-
-    
   </header>
 
   <RouterView />
