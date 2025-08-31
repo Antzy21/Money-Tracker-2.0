@@ -24,7 +24,8 @@
 		"vscode": {
 			"extensions": [
 				"Vue.volar",
-				"ms-dotnettools.csdevkit"
+				"ms-dotnettools.csdevkit",
+				"mechatroner.rainbow-csv"
 			]
 		}
 	},
